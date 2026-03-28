@@ -1,0 +1,41 @@
+- Projetos
+	- Abrir
+	- Fechar
+	- Exportar
+	- Importar
+- Configurações
+	- Posição da Taskbar
+	- Configuração de Horário
+	- Câmera ou Spawnado
+- Lista
+	* Paginação
+	- Selecionar
+	- Alterar o index da item
+ 	- Deletar (sem selecionar)
+- Grupos
+	- Criar Grupo Individual
+	- Deletar Grupo
+	- Adicionar item no grupo
+	- Remover item do Grupo
+	- Deletar todos os itens do grupo
+	- Mover todos
+- Criação
+	- Text
+	- Sprite
+	- Models
+- Copiar
+- Deletar
+- Posição
+- Text-Size
+- Letter-Size
+- Text
+- Alinhamento
+- Proporção
+- Outline
+- Shadow
+- Color
+- BG Color
+- Box Color
+- Selecionável
+- Player/Global
+- Reverter

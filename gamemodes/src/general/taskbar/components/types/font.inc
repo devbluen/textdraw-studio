@@ -1,0 +1,10 @@
+
+// if need TEXT_DRAW_FONT
+enum E_TYPEFONT {
+    E_TYPEFONT_0 = 0,
+    E_TYPEFONT_1 = 1,
+    E_TYPEFONT_2 = 2,
+    E_TYPEFONT_3 = 3,
+    E_TYPEFONT_SPRITE = 4,
+    E_TYPEFONT_MODEL = 5
+};

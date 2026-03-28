@@ -1,0 +1,5 @@
+
+enum E_TYPEMODE {
+    E_TYPEMODE_PLAYER = 0,
+    E_TYPEMODE_GLOBAL = 1
+};

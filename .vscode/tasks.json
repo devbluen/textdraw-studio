@@ -1,0 +1,75 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Normal",
+            "type": "shell",
+            "command": "${workspaceRoot}/qawno/pawncc",
+            "runOptions": {
+                "instanceLimit": 1,
+            },
+            "args": [
+                "${file}",
+                "'-i${workspaceFolder}/qawno/include'",
+                "'-D${fileDirname}'",
+                "'-;+'",
+                "'-(+'",
+                "'-d3'"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": false,
+            "presentation": {
+                "reveal": "always",
+                "clear": true
+            },
+            "problemMatcher": "$pawncc"
+        },
+        {
+            "label": "Build PowerShell",
+            "type": "shell",
+            "command": "powershell",
+            "runOptions": {
+                "instanceLimit": 1,
+            },
+            "args": [
+                "-ExecutionPolicy", "Bypass",
+                "-File", "${workspaceFolder}/.vscode/powershell/compile.ps1",
+                "-file", "${file}",
+                "-include", "${workspaceFolder}/qawno/include",
+                "-dir", "${fileDirname}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "focus": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Size Photoshop",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-ExecutionPolicy", "Bypass",
+                "-File", "${workspaceFolder}/.vscode/powershell/size_photoshop.ps1"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "focus": true
+            },
+            "problemMatcher": []
+        }
+    ],
+}
