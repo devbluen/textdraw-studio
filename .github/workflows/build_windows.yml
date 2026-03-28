@@ -1,149 +1,40 @@
 name: Build Gamemode (Windows Runner)
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [main]
-    paths: &code_paths
-      - 'gamemodes/**'
-      - 'filterscripts/**'
-      - 'plugins/**'
-      - 'qawno/include/**'
-      - 'components/**'
-      - '**.pwn'
-      - '**.inc'
-      - 'config.json'
-      - 'mysql.ini'
-
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
+    
     permissions:
       contents: write
-    env:
-      GAMEMODE_MAIN_NAME: "main"
-      OMP_VERSION: "v1.5.8.3079"
-      CORE_LIBS: "amxsscanf libmariadb log-core"
-      CORE_CONFIG: "mysql.ini config.json"
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download open.mp Compiler (v3.10.11)
-        shell: powershell
-        run: |
-          Invoke-WebRequest -Uri "https://github.com/openmultiplayer/compiler/releases/download/v3.10.11/pawnc-3.10.11-windows.zip" -OutFile "compiler.zip"
-          Expand-Archive -Path "compiler.zip" -DestinationPath "omp-compiler"
+      - name: Build Gamemode using Custom Action
+        uses: devbluen/openmp-build-action@v2
+        with:
+          gamemode_name: 'main'
+          core_libs: 'amxsscanf libmariadb log-core'
+          extra_data_folders: 'scriptfiles/database'
 
-      - name: Compile Gamemode
-        shell: cmd
-        run: |
-          for /f "delims=" %%i in ('dir /s /b omp-compiler\pawncc.exe') do set "PAWNCC_PATH=%%i"
-          echo Compiler found in: %PAWNCC_PATH%
-
-          "%PAWNCC_PATH%" "%CD%\gamemodes\%GAMEMODE_MAIN_NAME%.pwn" ^
-            "-i%CD%\qawno\include" ^
-            "-D%CD%\gamemodes" ^
-            "-;+" "-(+" "-d3" ^
-            "-o:%CD%\gamemodes\%GAMEMODE_MAIN_NAME%.amx"
-
-      - name: Verify Build
-        shell: powershell
-        run: |
-          if (!(Test-Path "gamemodes\$($env:GAMEMODE_MAIN_NAME).amx")) {
-            Write-Error "ERROR: The AMX file was not generated."
-            exit 1
-          }
-
-      - name: Prepare Windows Build
-        shell: powershell
-        run: |
-          New-Item -ItemType Directory -Force -Path "deploy_win\gamemodes", "deploy_win\plugins", "deploy_win\components", "deploy_win\scriptfiles\database"
-          Copy-Item "gamemodes\$($env:GAMEMODE_MAIN_NAME).amx" "deploy_win\gamemodes\"
-          
-          if (Test-Path "plugins\*.dll") { Copy-Item "plugins\*.dll" "deploy_win\plugins\" }
-          if (Test-Path "components\*.dll") { Copy-Item "components\*.dll" "deploy_win\components\" }
-          if (Test-Path "scriptfiles\database\*") { Copy-Item -Recurse "scriptfiles\database\*" "deploy_win\scriptfiles\database\" }
-          if (Test-Path "omp-server.exe") { Copy-Item "omp-server.exe" "deploy_win\" }
-
-          foreach ($lib in $env:CORE_LIBS.Split(" ")) {
-            if (Test-Path "$lib.dll") { Copy-Item "$lib.dll" "deploy_win\" }
-          }
-          foreach ($config in $env:CORE_CONFIG.Split(" ")) {
-            if (Test-Path "$config") { Copy-Item "$config" "deploy_win\" }
-          }
-
-      - name: Prepare Linux Builds
-        shell: powershell
-        run: |
-          $linux_dirs = "deploy_linux", "deploy_linux_dyn"
-          foreach ($dir in $linux_dirs) {
-              New-Item -ItemType Directory -Force -Path "$dir\gamemodes", "$dir\plugins", "$dir\components", "$dir\scriptfiles\database"
-          }
-          
-          Invoke-WebRequest -Uri "https://github.com/openmultiplayer/open.mp/releases/download/$($env:OMP_VERSION)/open.mp-linux-x86.tar.gz" -OutFile "linux_std.tar.gz"
-          tar -xzf linux_std.tar.gz
-          Copy-Item "Server\omp-server" "deploy_linux\"
-          Copy-Item -Recurse "Server\components\*" "deploy_linux\components\"
-          
-          Invoke-WebRequest -Uri "https://github.com/openmultiplayer/open.mp/releases/download/$($env:OMP_VERSION)/open.mp-linux-x86-dynssl.tar.gz" -OutFile "linux_dyn.tar.gz"
-          tar -xzf linux_dyn.tar.gz
-          Copy-Item "Server\omp-server" "deploy_linux_dyn\"
-          Copy-Item -Recurse "Server\components\*" "deploy_linux_dyn\components\"
-
-          foreach ($dir in $linux_dirs) {
-              Copy-Item "gamemodes\$($env:GAMEMODE_MAIN_NAME).amx" "$dir\gamemodes\"
-      
-              if (Test-Path "scriptfiles\database\*") { Copy-Item -Recurse "scriptfiles\database\*" "$dir\scriptfiles\database\" }
-              if (Test-Path "components\*.so") { Get-Item "components\*.so" | Copy-Item -Destination "$dir\components\" }
-              if (Test-Path "plugins\*.so") { Get-Item "plugins\*.so" | Copy-Item -Destination "$dir\plugins\" }
-              
-              foreach ($lib in $env:CORE_LIBS.Split(" ")) {
-                if (Test-Path "$lib.so") { Copy-Item "$lib.so" "$dir\" }
-              }
-              foreach ($config in $env:CORE_CONFIG.Split(" ")) {
-                if (Test-Path "$config") { Copy-Item "$config" "$dir\" }
-              }
-          }
-          Remove-Item -Recurse -Force "Server", "linux_std.tar.gz", "linux_dyn.tar.gz"
-
-      - name: Package for Release
-        shell: powershell
-        run: |
-          Compress-Archive -Path "deploy_win\*" -DestinationPath "build-windows.zip" -Force
-          tar -czf build-linux-standard.tar.gz -C deploy_linux .
-          tar -czf build-linux-dynssl.tar.gz -C deploy_linux_dyn .
-
-      - name: Upload Artifact Windows
+      - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-windows
           path: deploy_win/
 
-      - name: Upload Artifact Linux Standard
+      - name: Upload Linux Standard Artifact
         uses: actions/upload-artifact@v4
         with:
           name: build-linux-standard
           path: deploy_linux/
 
-      - name: Upload Artifact Linux DYNSSL
+      - name: Upload Linux Dynamic Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: build-linux-dynssl
+          name: build-linux-dynamic
           path: deploy_linux_dyn/
-
-      - name: Create GitHub Release
-        if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'release')
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.1.${{ github.run_number }}
-          name: "v1.1.${{ github.run_number }}"
-          files: |
-            build-windows.zip
-            build-linux-standard.tar.gz
-            build-linux-dynssl.tar.gz
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
