@@ -2,10 +2,11 @@
             // Components
                 // Types
 #include "src/general/taskbar/components/types/align.inc"
-#include "src/general/taskbar/components/types/buttons.inc"
+#include "src/general/taskbar/components/types/button.inc"
 #include "src/general/taskbar/components/types/font.inc"
-#include "src/general/taskbar/components/types/itemType.inc"
+#include "src/general/taskbar/components/types/type.inc"
 #include "src/general/taskbar/components/types/mode.inc"
+#include "src/general/taskbar/components/types/key.inc"
                 //
 #include "src/general/taskbar/components/header.inc"
 
@@ -39,6 +40,10 @@ hook OnUserLogout(playerid) {
 */
 
 PlayerTextDrawClick:TaskBar_Buttons(playerid, E_TYPETASKBUTTON:type) {
+
+    if(!TaskBarButton_Enabled(playerid, type)) return;
+    if(!TaskBarButton_IsDisplayed(playerid, type)) return;
+
     CallLocalFunction("OnPlayerTaskBarButton", "ii", playerid, _:type);
 }
 
@@ -57,7 +62,7 @@ PlayerTextDrawClick:TaskBar_Buttons(playerid, E_TYPETASKBUTTON:type) {
 */
 
 stock TaskBar_Create(playerid) {
-    TextBarView_Create(playerid);
+    TaskBarView_Create(playerid);
     TaskBar_Cursor(playerid, true);
 }
 
@@ -83,10 +88,25 @@ static stock TaskBar_Reset(playerid) {
             // Components
                 // Functions
 #include "src/general/taskbar/components/functions/buttons.inc"
+#include "src/general/taskbar/components/functions/textdraw.inc"
+#include "src/general/taskbar/components/functions/key.inc"
                 // Events
-#include "src/general/taskbar/components/events/projects.inc"
-#include "src/general/taskbar/components/events/list.inc"
+                    // Buttons
+#include "src/general/taskbar/components/events/buttons/projects.inc"
+#include "src/general/taskbar/components/events/buttons/list.inc"
+#include "src/general/taskbar/components/events/buttons/position_and_size.inc"
+#include "src/general/taskbar/components/events/buttons/create.inc"
+#include "src/general/taskbar/components/events/buttons/delete.inc"
+#include "src/general/taskbar/components/events/buttons/mode.inc"
+#include "src/general/taskbar/components/events/buttons/font.inc"
+#include "src/general/taskbar/components/events/buttons/text.inc"
+#include "src/general/taskbar/components/events/buttons/align.inc"
+#include "src/general/taskbar/components/events/buttons/proportion.inc"
+#include "src/general/taskbar/components/events/buttons/box.inc"
+#include "src/general/taskbar/components/events/buttons/selectable.inc"
+                    //
+#include "src/general/taskbar/components/events/moviment.inc"
+#include "src/general/taskbar/components/events/update.inc"
 
             // Views
 #include "src/general/taskbar/views/default.inc"
-

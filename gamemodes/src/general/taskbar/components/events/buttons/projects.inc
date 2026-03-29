@@ -6,7 +6,7 @@ static const MAX_TASKBAR_PROJECT_VIEW = 10;
 #include <YSI_Coding\y_hooks>
 
 static enum E_DATA {
-    E_DATA_PAGE_UNIQUE_ID,
+    E_DATA_UNIQUE_ID,
     E_DATA_PAGE,
     E_DATA_PAGES
 };
@@ -90,6 +90,8 @@ static stock TaskBarEvent_ProjectPage(playerid, page) {
             if(page && page <= (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
             if(page >= 1) DialogMod_Add(playerid, "<<", -1337);
 
+            DialogMod_Add(playerid, " ", -1333);
+
             new 
                 id,
                 name[45 + 1],
@@ -125,7 +127,7 @@ static stock TaskBarEvent_Create(playerid) {
 }
 
 static stock TaskBarEvent_OpenProject(uniqueId) {
-    Session_SetId(uniqueId);
+    Session_Create(uniqueId);
 }
 
 static stock TaskBarEvent_ProjectOptions(playerid, uniqueId) {
@@ -245,7 +247,7 @@ Dialog:D_TASKBAR_PROJECTS(playerid, response, listitem) {
                 if(!Session_Has())
                     return SendMessage(playerid, -1, ""#MESSAGE_RED"There are no open projects.");
 
-                Session_Close();
+                Session_Destroy();
             }
         }
     }
@@ -268,6 +270,7 @@ DialogMod:D_TASKBAR_PROJECTS(playerid, response, inputtext[], params) {
     if(response) {
 
         switch(params) {
+            case -1333: TaskBarEvent_ProjectPage(playerid, TaskBarEvent_GetPage(playerid));
             case -1337: TaskBarEvent_ProjectPage(playerid, TaskBarEvent_GetPage(playerid) - 1);
             case -1338: TaskBarEvent_ProjectPage(playerid, TaskBarEvent_GetPage(playerid) + 1);
             default: TaskBarEvent_ProjectOptions(playerid, params);

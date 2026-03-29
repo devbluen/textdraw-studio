@@ -12,16 +12,15 @@ hook OnPlayerSpawn(playerid) {
     SetPlayerPos(playerid, 1923.5066, -2547.8245, 14.0469);
     SetPlayerFacingAngle(playerid, 89.9278);
     SetCameraBehindPlayer(playerid);
-
-    // TogglePlayerSpectating(playerid, true);
+    TogglePlayerControllable(playerid, true);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerConnect(playerid) {
 
     Iter_Add(Users, playerid);
-    SpawnPlayer(playerid);
     Util_ClearChat(playerid);
+    SpawnPlayer(playerid);
 
     CallLocalFunction("OnUserLogin", "i", playerid);
     return Y_HOOKS_CONTINUE_RETURN_1;

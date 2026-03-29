@@ -4,6 +4,8 @@
 
             // Forwards
 forward OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type);
+forward OnPlayerTaskBarDrawSelected(playerid, index);
+forward OnPlayerTaskBarDrawUnSelected(playerid);
 
 enum E_TASKBAR {
     E_TASKBAR_CREATED,

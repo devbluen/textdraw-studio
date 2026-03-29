@@ -7,8 +7,7 @@ static const MAX_TASKBAR_LIST_VIEW = 10;
 
 static enum E_DATA {
     E_DATA_PAGE_UNIQUE_ID,
-    E_DATA_PAGE,
-    E_DATA_SELECTED_INDEX
+    E_DATA_PAGE
 };
 
 static
@@ -39,12 +38,17 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
 static stock TaskBarEvent_Page(playerid, page) {
 
-    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT count(*) AS amount FROM textdraws");
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT count(*) AS count FROM textdraws");
 
     if(cache)
     {
-        new amount = DB_GetFieldIntByName(cache, "amount");
+        new count = DB_GetFieldIntByName(cache, "count");
         DB_FreeResultSet(cache);
+
+        if(!count) {
+            SendMessage(playerid, -1, ""#MESSAGE_RED"No items created to be displayed.");
+            return;
+        }
 
         new pages = Util_GetPages(count, MAX_TASKBAR_LIST_VIEW);
 
@@ -53,7 +57,7 @@ static stock TaskBarEvent_Page(playerid, page) {
 
         TaskBarEvent_SetPage(playerid, page);
 
-        using inline TaskBarEvent_ListItems() {
+        inline TaskBarEvent_ListItems() {
 
             DialogMod_Add(playerid, "ID\tVariable\tName\tType");
 
@@ -62,7 +66,7 @@ static stock TaskBarEvent_Page(playerid, page) {
                                                     `text`, \
                                                     mode \
                                                 FROM textdraws \
-                                                LIMIT %i OFFSET %i"
+                                                LIMIT %i OFFSET %i",
 
                                                 MAX_TASKBAR_LIST_VIEW,
                                                 page * MAX_TASKBAR_LIST_VIEW
@@ -73,20 +77,22 @@ static stock TaskBarEvent_Page(playerid, page) {
                 if(page && page <= (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
                 if(page >= 1) DialogMod_Add(playerid, "<<", -1337);
 
+                DialogMod_Add(playerid, " ", -1333);
+
                 new
                     index,
                     text[1024],
                     E_TYPEMODE:mode,
-                    currentIndex = TaskBarEvent_GetIndex(playerid)
+                    currentIndex = TaskBarTextdraw_GetSelected(playerid)
                 ;
 
                 do
                 {
                     index = DB_GetFieldIntByName(IDConnection, "index");
-                    mode = _:DB_GetFieldIntByName(IDConnection, "mode");
+                    mode = E_TYPEMODE:DB_GetFieldIntByName(IDConnection, "mode");
                     DB_GetFieldStringByName(IDConnection, "text", text);
 
-                    DialogMod_Add(playerid, "%d\t%s\t{%s}%s\t%s", index, index, "...", currentIndex == index ? "FF0000" : "CCCCCC" , name, "...");
+                    DialogMod_Add(playerid, "%d\t%s\t{%s}%s\t%s", index, index, "...", currentIndex == index ? "FF0000" : "CCCCCC", text, "...");
                 }
                 while(DB_SelectNextRow(cache));
 
@@ -99,13 +105,8 @@ static stock TaskBarEvent_Page(playerid, page) {
 }
 
 static stock TaskBarEvent_SelectIndex(playerid, index) {
-    e_Data[playerid][E_DATA_SELECTED_INDEX] = index;
-
-    
+    TaskBarTextdraw_Select(playerid, index);
 }
-
-static stock TaskBarEvent_GetIndex(playerid)
-    return e_Data[playerid][E_DATA_SELECTED_INDEX];
 
 static stock TaskBarEvent_GetPage(playerid)
     return e_Data[playerid][E_DATA_PAGE];
@@ -138,6 +139,7 @@ DialogMod:D_TASKBAR_LIST(playerid, response, inputtext[], index) {
     if(response) {
 
         switch(index) {
+            case -1333: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid));
             case -1337: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) - 1);
             case -1338: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) + 1);
             default: TaskBarEvent_SelectIndex(playerid, index);

@@ -13,112 +13,100 @@
 
 */
 
-stock SessionTextdraw_Load(playerid) {
-
-    foreach(new i: SessionDraws)
-        SessionTextdraw_Create(playerid, i);
-}
-
-stock SessionTextdraw_Unload(playerid) {
-
-    foreach(new i: SessionDraws)
-        SessionTextdraw_Destroy(playerid, i);  
-}
-
-stock SessionTextdraw_Create(playerid, index) {
-
-    new
-        E_TYPEITEM:type,
-        string[1024 + 1],
-        Float:position[2],
-        Float:size[2],
-        Float:letterSize[2],
-        align,
-        font,
-        outline,
-        shadow,
-        color,
-        colorBackground,
-        colorBox,
-        bool:proportional,
-        bool:box,
-        model,
-        model_colors[2],
-        Float:model_rotation[4]
-    ;
-
-    // Get Data
-    SessionTextdrawData_GetString(index, string);
-    SessionTextdrawData_GetPosition(index, position[0], position[1]);
-    SessionTextdrawData_GetSize(index, size[0], size[1]);
-    SessionTextdrawData_GetLettSize(index, letterSize[0], letterSize[1]);
-
-    // Get Data Models
-    model = SessionTextdrawData_GetModel(index);
-    SessionTextdrawData_GetModelRot(index, model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3]);
-    SessionTextdrawData_GetModelCol(index, model_colors[0], model_colors[1]);
-
-    // Get Data Misc
-    type = SessionTextdrawData_GetType(index);
-    align = _:SessionTextdrawData_GetAlign(index);
-    color = SessionTextdrawData_GetColor(index);
-    shadow = SessionTextdrawData_GetShadow(index);
-    outline = SessionTextdrawData_GetOutline(index);
-    colorBackground = SessionTextdrawData_GetColorBG(index);
-    colorBox = SessionTextdrawData_GetColorBox(index);
-    font = _:SessionTextdrawData_GetFont(index);
-    proportional = SessionTextdrawData_GetPropor(index);
-    box = SessionTextdrawData_GetBox(index);
+stock SessionTextdraw_Create(index) {
 
     // Creation
-    new PlayerText:drawId = CreatePlayerTextDraw(playerid, position[0], position[1], string);
-    PlayerTextDrawTextSize(playerid, drawId, size[0], size[1]);
-    PlayerTextDrawAlignment(playerid, drawId, TEXT_DRAW_ALIGN:align);
-    PlayerTextDrawColour(playerid, drawId, color);
-    PlayerTextDrawSetShadow(playerid, drawId, shadow);
-    PlayerTextDrawSetOutline(playerid, drawId, outline);
-    PlayerTextDrawBackgroundColour(playerid, drawId, colorBackground);
-    PlayerTextDrawFont(playerid, drawId, TEXT_DRAW_FONT:font);
-    PlayerTextDrawSetProportional(playerid, drawId, proportional);
+    new 
+        string[1024 + 1],
+        Float:position[2],
+        Float:size[2]
+    ;
 
-    switch(type) {
+    SessionTextdrawData_GetString(index, string);
+    SessionTextdrawData_GetPosition(index, position[0], position[1]);
+    e_SessionDraw[index][E_SESSIONDRAW_DRAW] = TextDrawCreate(position[0], position[1], string);
+
+    // Set Informations
+    SessionTextdrawData_GetSize(index, size[0], size[1]);
+    SessionTextdrawData_SetSize     (index,      size[0], size[1],                        false);
+    SessionTextdrawData_SetAlign    (index,      SessionTextdrawData_GetAlign(index),     false);
+    SessionTextdrawData_SetColor    (index,      SessionTextdrawData_GetColor(index),     false);
+    SessionTextdrawData_SetShadow   (index,      SessionTextdrawData_GetShadow(index),    false);
+    SessionTextdrawData_SetOutline  (index,      SessionTextdrawData_GetOutline(index),   false);
+    SessionTextdrawData_SetColorBG  (index,      SessionTextdrawData_GetColorBG(index),   false);
+    SessionTextdrawData_SetFont     (index,      SessionTextdrawData_GetFont(index),      false);
+    SessionTextdrawData_SetPropor   (index,      SessionTextdrawData_GetPropor(index),    false);
+    SessionTextdrawData_SetSelect   (index,      SessionTextdrawData_GetSelect(index),    false);
+    
+    switch(SessionTextdrawData_GetType(index)) {
         case E_TYPEITEM_TEXT: {
-            PlayerTextDrawLetterSize(playerid, drawId, letterSize[0], letterSize[1]);
-            PlayerTextDrawUseBox(playerid, drawId, box);
-            PlayerTextDrawBoxColour(playerid, drawId, colorBox);
+
+            new Float:letterSize[2];
+
+            SessionTextdrawData_GetLettSize(index, letterSize[0], letterSize[1]);
+            SessionTextdrawData_SetLettSize (index,     letterSize[0], letterSize[1],               false);
+            SessionTextdrawData_SetBox      (index,     SessionTextdrawData_GetBox(index),          false);
+            SessionTextdrawData_SetColorBox (index,     SessionTextdrawData_GetColorBox(index),     false);
         }
 
         case E_TYPEITEM_MODEL: {
-            PlayerTextDrawSetPreviewModel(playerid, drawId, model);
-            PlayerTextDrawSetPreviewRot(playerid, drawId, model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3]);
-            PlayerTextDrawSetPreviewVehicleColours(playerid, drawId, model_colors[0], model_colors[1]); 
+
+            new 
+                Float:model_rotation[4], 
+                model_colors[2]
+            ;
+
+            SessionTextdrawData_SetModel    (index,     SessionTextdrawData_GetModel(index),                                            false);
+
+            SessionTextdrawData_GetModelRot(index, model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3]);
+            SessionTextdrawData_SetModelRot (index,     model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3],     false);
+
+            SessionTextdrawData_GetModelCol(index, model_colors[0], model_colors[1]);
+            SessionTextdrawData_SetModelCol (index,     model_colors[0], model_colors[1],                                               false);
         }
     }
-
-    // Set Player Informations
-    e_SessionPlayer[playerid][E_SESSIONPLAYER_DRAW][index] = drawId;
+    
+    SessionTextdrawData_Show(index);
 }
 
-stock SessionTextdraw_Destroy(playerid, index) {
+stock SessionTextdraw_Destroy(index, bool:resetHeader = true) {
 
-    PlayerTextDrawDestroy(playerid, e_SessionPlayer[playerid][E_SESSIONPLAYER_DRAW][index]);
-    e_SessionPlayer[playerid][E_SESSIONPLAYER_DRAW][index] = INVALID_PLAYER_TEXT_DRAW; 
+    TextDrawDestroy(e_SessionDraw[index][E_SESSIONDRAW_DRAW]);
+    e_SessionDraw[index][E_SESSIONDRAW_DRAW] = INVALID_TEXT_DRAW;
+
+    if(resetHeader) {
+
+        static const e_Clear[E_SESSIONDRAW];
+        e_SessionDraw[index] = e_Clear;
+
+        foreach(new i: SessionDrawsPlayers[index])
+            TaskBarTextdraw_UnSelect(i);
+
+        Iter_Clear(SessionDrawsPlayers[index]);
+        Iter_Remove(SessionDraws, index);
+    }
 }
 
-stock SessionTextdraw_Update(playerid, index) {
+stock SessionTextdraw_DestroyAll() {
 
-    SessionTextdraw_Destroy(playerid, index);
-    SessionTextdraw_Create(playerid, index);
+    foreach(new i: SessionDraws)
+        SessionTextdraw_Destroy(i);
 }
 
-stock SessionTextdraw_UpdateAll(index) {
+stock SessionTextdraw_UpdateButton(index) {
+
+    foreach(new i: SessionDrawsPlayers[index])
+        TaskBarEventUpdate_Sprite(i, index);
+}
+
+stock SessionTextdraw_UpdateButtonAll() {
 
     foreach(new i: Users)
-        SessionTextdraw_Update(i, index);
+        TaskBarEventUpdate_Buttons(i);
 }
 
-stock SessionTextdraw_DestroyAll(index) {
+stock SessionTextdraw_SetSelect(playerid, index)
+    Iter_Add(SessionDrawsPlayers[index], playerid);
 
-    foreach(new i: Users)
-        SessionTextdraw_Destroy(i, index);
-}
+stock SessionTextdraw_RemoveSelect(playerid, index)
+    Iter_Remove(SessionDrawsPlayers[index], playerid);

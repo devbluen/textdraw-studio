@@ -41,7 +41,8 @@ stock TaskBarButton_Hide(playerid, E_TYPETASKBUTTON:type) {
 
 stock TaskBarButton_Disable(playerid, E_TYPETASKBUTTON:type) {
     e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_STATUS] = false;
-    PlayerTextDrawColour(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], 0x101010CC);
+    PlayerTextDrawColour(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], 0x303030CC);
+    PlayerTextDrawSetSelectable(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], false);
 
     if(TaskBarButton_IsDisplayed(playerid, type))
         TaskBarButton_Show(playerid, type);
@@ -51,23 +52,27 @@ stock TaskBarButton_Enable(playerid, E_TYPETASKBUTTON:type) {
 
     e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_STATUS] = true;
     PlayerTextDrawColour(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], -1);
+    PlayerTextDrawSetSelectable(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], true);
 
     if(TaskBarButton_IsDisplayed(playerid, type))
         TaskBarButton_Show(playerid, type);
 }
 
+stock bool:TaskBarButton_Enabled(playerid, E_TYPETASKBUTTON:type)
+    return e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_STATUS];
+
 stock TaskBarButton_HideAll(playerid) {
     foreach(new i: TaskBarButtons[playerid])
         TaskBarButton_Hide(playerid, E_TYPETASKBUTTON:i);
 
-    TextBarView_Hide(playerid);
+    TaskBarView_Hide(playerid);
 }
 
 stock TaskBarButton_ShowAll(playerid) {
     foreach(new i: TaskBarButtons[playerid])
         TaskBarButton_Show(playerid, E_TYPETASKBUTTON:i);
 
-    TextBarView_Show(playerid);
+    TaskBarView_Show(playerid);
 }
 
 stock TaskBarButton_DisableAll(playerid) {
@@ -80,8 +85,6 @@ stock TaskBarButton_EnableAll(playerid) {
         TaskBarButton_Enable(playerid, E_TYPETASKBUTTON:i);
 }
 
-stock TaskBarButton_SetImage(playerid, const sprite[]) {
-    PlayerTextDrawSetString(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], "textureStudio:%s", sprite);
+stock TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON:type, const sprite[]) {
+    PlayerTextDrawSetString(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], "textdrawStudio:%s", sprite);
 }
-
-// stock TaskBarButton_

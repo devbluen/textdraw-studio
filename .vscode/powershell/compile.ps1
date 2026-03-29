@@ -100,14 +100,14 @@ if ($LASTEXITCODE -eq 0) {
     powershell -c "[System.Media.SystemSounds]::Asterisk.Play()"
 
     # Variables
-    $timeout = 5 # Seconds
+    $timeout = 60 # Seconds
     $counter = 0
     $keyPressed = $false
     $key = $null
 
     # Quick Action Menu
     Write-Host " [?] ACTION: " -NoNewline -ForegroundColor Cyan
-    Write-Host "Press " -NoNewline -ForegroundColor Gray; Write-Host "[S]" -ForegroundColor Yellow -NoNewline
+    Write-Host "Press " -NoNewline -ForegroundColor Gray; Write-Host "[ENTER]" -ForegroundColor Yellow -NoNewline
     Write-Host " to launch server (Auto-exit in $timeout s)..." -ForegroundColor Gray
     
     while ($counter -lt ($timeout * 10)) {
@@ -123,7 +123,7 @@ if ($LASTEXITCODE -eq 0) {
         # }
     }
 
-    if ($keyPressed -and ($key.Character -eq 's' -or $key.Character -eq 'S')) {
+    if ($keyPressed -and ($key.Key -eq 'Enter' -or $key.Character -eq [char]13)) {
         try {
             $fullPath = (Resolve-Path $server -ErrorAction Stop).Path
             $serverDir = Split-Path $fullPath

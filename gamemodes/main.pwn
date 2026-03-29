@@ -42,7 +42,6 @@
 #include "src/general/auth/auth.inc"
 #include "src/general/taskbar/taskbar.inc"
 #include "src/general/session/session.inc"
-#include "src/general/interactions/interactions.inc"
                 // Misc
 #include "src/general/misc/logger/logger.inc"
 #include "src/general/misc/message/message.inc"
