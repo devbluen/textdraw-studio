@@ -9,7 +9,7 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 Clear-Host
 
 # Compiler and Server
-$compiler = ".\pawno\pawncc.exe"
+$compiler = ".\qawno\pawncc.exe"
 $server   = "omp-server.exe"
 
 # Variables Global
@@ -22,8 +22,6 @@ $cursorFindPath = $currentPath;
 $currentFile = $(Split-Path $file -Leaf)
 
 # Variables Paths [Book]
-$searchingForName = [System.IO.Path]::GetFileName($currentPath)
-$searchingForBase = [System.IO.Path]::GetFileNameWithoutExtension($currentPath)
 $projectRoot = $currentPath -replace "\\(gamemodes|filterscripts)\\.*", ""
 $visited = @($currentPath)
 
@@ -85,14 +83,10 @@ while ($true) {
             break
         }
 
-        $searchingForName = [System.IO.Path]::GetFileName($cursorPath)
-        $searchingForBase = [System.IO.Path]::GetFileNameWithoutExtension($cursorPath)
-        continue;
+        continue
     }
-    else 
-    {
-        $cursorPath = $parentDir
-    }
+
+    $cursorPath = $parentDir
 }
 
 if (-not $foundRoot) {

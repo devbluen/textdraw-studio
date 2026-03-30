@@ -38,7 +38,7 @@
                 "-ExecutionPolicy", "Bypass",
                 "-File", "${workspaceFolder}/.vscode/powershell/compile.ps1",
                 "-file", "${file}",
-                "-include", "${workspaceFolder}/pawno/include",
+                "-include", "${workspaceFolder}/qawno/include",
                 "-dir", "${fileDirname}"
             ],
             "group": {
