@@ -4,19 +4,24 @@
 
 hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
-    if(type != E_TYPETASKBUTTON_TEXT)
+    if(type != E_TYPETASKBUTTON_SHADOW)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
     new 
-        index = TaskBarTextDraw_GetSelected(playerid),
-        string[1024 * 4],
-        dialog[54 + sizeof string + 1]
+        dialog[57 * 5],
+        index = TaskBarTextDraw_GetSelected(playerid)
     ;
 
-    SessionTextDrawData_GetString(index, string);
-    format(dialog, sizeof dialog, "Which text do you want?\n\n{f52746}Current:\n{FFFFFF} %s", string);
+    format(dialog, sizeof dialog, "{FFFFFF}Set the desired value for your shadow below.\n\n \
+                                    \
+                                    Current: {"#HEX_DEFAULT"}%d{FFFFFF}\n\n \
+                                    \
+                                    Entering a value of {"#HEX_INFO"}0{FFFFFF} disables it.", 
 
-    Dialog_Show(playerid, D_ITEM_TEXT, DIALOG_STYLE_INPUT, "Change Text", dialog, "Change", "Cancel");
+                                    SessionTextDrawData_GetShadow(index)
+                                );
+
+    Dialog_Show(playerid, D_ITEM_SHADOW, DIALOG_STYLE_INPUT, "Shadow", dialog, "Change", "Cancel");
     return Y_HOOKS_BREAK_RETURN_1;
 }
 
@@ -34,12 +39,16 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
 */
 
-Dialog:D_ITEM_TEXT(playerid, response, listitem, inputtext[]) {
+Dialog:D_ITEM_SHADOW(playerid, response, listitem, inputtext[]) {
 
     if(response && !isnull(inputtext)) {
 
+        new shadow;
+        if(sscanf(inputtext, "d", shadow))
+            return Dialog_ReShow(playerid, "Only put numbers");
+
         new index = TaskBarTextDraw_GetSelected(playerid);
-        SessionTextDrawData_SetString(index, inputtext);
+        SessionTextDrawData_SetShadow(index, shadow);
     }
     return true;
 }

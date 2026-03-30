@@ -1,12 +1,11 @@
 /*
     RGB.inc
-    File Version: 2.5.0
-
-    Copyright 2022 Abyss Morgan. All rights reserved.
+    File Version: 2.5.1
+    Copyright © 2022 Abyss Morgan. All rights reserved.
 
     Functions:
-        RGB::HexToRGBA(color,&red,&green,&blue,&alpha);
-        RGB::HexToRGB(color,&red,&green,&blue);
+        RGB::RGBToHexA(color,&red,&green,&blue,&alpha);
+        RGB::RGBToHex(color,&red,&green,&blue);
         RGB::RGBAToHex(red,green,blue,alpha);
         RGB::ARGBToHex(red,green,blue,alpha);
         RGB::RGBToHex(red,green,blue);
@@ -16,18 +15,19 @@
         RGB::ARGBToRGB(color);
         RGB::RGBAToARGB(color);
         RGB::ARGBToRGBA(color);
-        RGB::GetRFromRGBA(color);                       // RGBA:0xFAB0A0FF R:0xFA000000
-        RGB::GetGFromRGBA(color);                       // RGBA:0xFAB0A0FF G:0x00B00000
-        RGB::GetBFromRGBA(color);                       // RGBA:0xFAB0A0FF B:0x0000A000
-        RGB::GetAFromRGBA(color);                       // RGBA:0xFAB0A0FF A:0x000000FF
-        RGB::GetRHexFromRGBA(color);                    // RGBA:0xFAB0A0FF R:0xFA
-        RGB::GetGHexFromRGBA(color);                    // RGBA:0xFAB0A0FF G:0xB0
-        RGB::GetBHexFromRGBA(color);                    // RGBA:0xFAB0A0FF B:0xA0
-        RGB::GetAHexFromRGBA(color);                    // RGBA:0xFAB0A0FF A:0xFF
-        RGB::GetColorRGBA(color);                       // Return {RGB}
-        RGB::GetColorRGB(color);                        // Return {RGB}
-        RGB::GetColorARGB(color);                       // Return {RGB}
+        RGB::GetRFromRGBA(color);                               //  RGBA:0xFAB0A0FF R:0xFA000000
+        RGB::GetGFromRGBA(color);                               //  RGBA:0xFAB0A0FF G:0x00B00000
+        RGB::GetBFromRGBA(color);                               //  RGBA:0xFAB0A0FF B:0x0000A000
+        RGB::GetAFromRGBA(color);                               //  RGBA:0xFAB0A0FF A:0x000000FF
+        RGB::GetRHexFromRGBA(color);                            //  RGBA:0xFAB0A0FF R:0xFA
+        RGB::GetGHexFromRGBA(color);                            //  RGBA:0xFAB0A0FF G:0xB0
+        RGB::GetBHexFromRGBA(color);                            //  RGBA:0xFAB0A0FF B:0xA0
+        RGB::GetAHexFromRGBA(color);                            //  RGBA:0xFAB0A0FF A:0xFF
+        RGB::GetColorRGBA(color);                               //  return -> {RGB}
+        RGB::GetColorRGB(color);                                //  return -> {RGB}
+        RGB::GetColorARGB(color);                               //  return -> {RGB}
         RGB::AdjustColorLuminance(color,Float:adjust);
+
 */
 
 #if defined _rgb_function
@@ -63,29 +63,29 @@
 #define RGB_GetBHexFromRGBA(%0)			(((%0) >>> 8) & 0xFF)
 #define RGB_GetAHexFromRGBA(%0)			((%0) & 0xFF)
 
-stock RGB::GetColorRGBA(color) {
+stock RGB::GetColorRGBA(color){
     new rgb_string[10];
     format(rgb_string,sizeof(rgb_string),"{%06x}",RGB::RGBAToRGB(color));
     return rgb_string;
 }
 
-stock RGB::GetColorARGB(color) {
+stock RGB::GetColorARGB(color){
     new rgb_string[10];
     format(rgb_string,sizeof(rgb_string),"{%06x}",RGB::ARGBToRGB(color));
     return rgb_string;
 }
 
-stock RGB::GetColorRGB(color) {
+stock RGB::GetColorRGB(color){
     new rgb_string[10];
     format(rgb_string,sizeof(rgb_string),"{%06x}",(color & 0x00FFFFFF));
     return rgb_string;
 }
 
-stock RGB::AdjustColorLuminance(color, Float:adjust) {
+stock RGB::AdjustColorLuminance(color,Float:adjust){
 	new rgb_r,rgb_g,rgb_b,rgb_a; 
-	RGB::HexToRGBA(color,rgb_r,rgb_g,rgb_b,rgb_a);
+	RGB::RGBToHexA(color,rgb_r,rgb_g,rgb_b,rgb_a);
 	rgb_r = (floatround(rgb_r*adjust) & 0xFF);
 	rgb_g = (floatround(rgb_g*adjust) & 0xFF);
 	rgb_b = (floatround(rgb_b*adjust) & 0xFF);
-	return RGB::HexToRGBA(rgb_r,rgb_g,rgb_b,rgb_a);
+	return RGB::RGBAToHex(rgb_r,rgb_g,rgb_b,rgb_a);
 }

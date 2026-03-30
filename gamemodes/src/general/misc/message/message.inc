@@ -15,15 +15,17 @@
 
 stock SendMessage(playerid, color, const message[], {Float, _}:...) {
 
-    Util_ClearChat(playerid);
-
     new message_buff[148 + 1];
     format(message_buff, sizeof message_buff, message, ___(3));
 
-    if(playerid == INVALID_PLAYER_ID)
-        foreach(new i: Users)
+    if(playerid == INVALID_PLAYER_ID) {
+        foreach(new i: Users) {
+            Util_ClearChat(i);
             SendClientMessage(i, color, message_buff);
-    else
+        }
+    } else {
+        Util_ClearChat(playerid);
         SendClientMessage(playerid, color, message_buff);
+    }
     return true;
 }

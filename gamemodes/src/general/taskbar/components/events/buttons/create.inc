@@ -37,12 +37,12 @@ Dialog:D_CREATION(playerid, response, listitem, inputtext[]) {
         new index;
 
         switch(listitem) {
-            case 0: index = SessionTextdrawData_Create(E_TYPEITEM_TEXT);
-            case 1: index = SessionTextdrawData_Create(E_TYPEITEM_SPRITE);
-            case 2: index = SessionTextdrawData_Create(E_TYPEITEM_MODEL);
+            case 0: index = SessionTextDrawData_Create(E_TYPEITEM_TEXT);
+            case 1: index = SessionTextDrawData_Create(E_TYPEITEM_SPRITE);
+            case 2: index = SessionTextDrawData_Create(E_TYPEITEM_MODEL);
         }
     
-        TaskBarTextdraw_Select(playerid, index);
+        TaskBarTextDraw_Select(playerid, index);
     }
     return true;
 }

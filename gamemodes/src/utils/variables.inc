@@ -2,9 +2,17 @@
 #define     STUDIO_VERSION     "v1.0.0"
 
     // Custom Tags
+        // Messages
 #define     MESSAGE_RED     "{f72d2d}[!]: {FFFFFF}"
 #define     MESSAGE_GREEN   "{52b8f2}[!]: {FFFFFF}"
+
+        // Colors
 #define     TEXTDRAW_HOVER  0x303030FF
+#define     HEX_DEFAULT     "badc58"    // d4af37
+#define     HEX_INFO        "f24f1d"
+
+        // Custons
+#define     DIALOG_LINE     "==============================="
 
 new
     DB:IDConnection,

@@ -89,10 +89,12 @@ static stock TaskBar_Reset(playerid) {
                 // Functions
 #include "src/general/taskbar/components/functions/buttons.inc"
 #include "src/general/taskbar/components/functions/textdraw.inc"
+#include "src/general/taskbar/components/functions/textdrawUpdate.inc"
 #include "src/general/taskbar/components/functions/key.inc"
+#include "src/general/taskbar/components/functions/message.inc"
                 // Events
                     // Buttons
-#include "src/general/taskbar/components/events/buttons/projects.inc"
+#include "src/general/taskbar/components/events/buttons/projects/projects.inc"
 #include "src/general/taskbar/components/events/buttons/list.inc"
 #include "src/general/taskbar/components/events/buttons/position_and_size.inc"
 #include "src/general/taskbar/components/events/buttons/create.inc"
@@ -104,6 +106,12 @@ static stock TaskBar_Reset(playerid) {
 #include "src/general/taskbar/components/events/buttons/proportion.inc"
 #include "src/general/taskbar/components/events/buttons/box.inc"
 #include "src/general/taskbar/components/events/buttons/selectable.inc"
+#include "src/general/taskbar/components/events/buttons/colors.inc"
+#include "src/general/taskbar/components/events/buttons/copy.inc"
+#include "src/general/taskbar/components/events/buttons/outline.inc"
+#include "src/general/taskbar/components/events/buttons/shadow.inc"
+#include "src/general/taskbar/components/events/buttons/model.inc"
+#include "src/general/taskbar/components/events/buttons/groups.inc"
                     //
 #include "src/general/taskbar/components/events/moviment.inc"
 #include "src/general/taskbar/components/events/update.inc"

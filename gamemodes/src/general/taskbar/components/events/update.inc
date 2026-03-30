@@ -33,7 +33,7 @@ hook OnPlayerTaskBarDrawUnSelected(playerid) {
 
 stock TaskBarEventUpdate_Buttons(playerid) {
 
-    new index = TaskBarTextdraw_GetSelected(playerid);
+    new index = TaskBarTextDraw_GetSelected(playerid);
     
     TaskBarButton_DisableAll(playerid);                         // disable all buttons
     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_PROJECT);   // aways enabled
@@ -47,7 +47,7 @@ stock TaskBarEventUpdate_Buttons(playerid) {
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ITENS);
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_CREATE);
 
-            switch(TaskBarTextdraw_Selected(playerid))
+            switch(TaskBarTextDraw_Selected(playerid))
             {
                 case true:
                 {
@@ -60,7 +60,7 @@ stock TaskBarEventUpdate_Buttons(playerid) {
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ROLLBACK);
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_POSITION);
 
-                    switch(SessionTextdrawData_GetType(index)) 
+                    switch(SessionTextDrawData_GetType(index)) 
                     {
                         case E_TYPEITEM_TEXT: 
                         {
@@ -94,40 +94,40 @@ stock TaskBarEventUpdate_Buttons(playerid) {
 
 stock TaskBarEventUpdate_Sprite(playerid, index) {
 
-    if(index >= 0 && SessionTextdrawData_GetType(index) == E_TYPEITEM_TEXT) {
-        if(SessionTextdrawData_GetBox(index))
+    if(index >= 0 && SessionTextDrawData_GetType(index) == E_TYPEITEM_TEXT) {
+        if(SessionTextDrawData_GetBox(index))
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR_BOX);
         else
             TaskBarButton_Disable(playerid, E_TYPETASKBUTTON_COLOR_BOX);
     }
 
     TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON_BOX, 
-        index >= 0 && SessionTextdrawData_GetBox(index) ? "boxChecked" : "boxUnchecked"
+        index >= 0 && SessionTextDrawData_GetBox(index) ? "boxChecked" : "boxUnchecked"
     );
 
     TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON_ALIGN, 
         TaskBarTypeAlign_GetSprite(
-            index >= 0 ? SessionTextdrawData_GetAlign(index) : E_TYPEALIGNMENT_LEFT
+            index >= 0 ? SessionTextDrawData_GetAlign(index) : E_TYPEALIGNMENT_LEFT
         )
     );
 
     TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON_FONT, 
         TaskBarTypeFont_GetSprite(
-            index >= 0 ? SessionTextdrawData_GetFont(index) : E_TYPEFONT_0
+            index >= 0 ? SessionTextDrawData_GetFont(index) : E_TYPEFONT_0
         )
     );
 
     TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON_PROPORTION, 
-        index >= 0 && SessionTextdrawData_GetPropor(index) ? "proportionChecked" : "proportionUnchecked"
+        index >= 0 && SessionTextDrawData_GetPropor(index) ? "proportionChecked" : "proportionUnchecked"
     );
 
     TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON_MODE, 
         TaskBarTypeMode_GetSprite(
-            index >= 0 ? SessionTextdrawData_GetMode(index) : E_TYPEMODE_PLAYER
+            index >= 0 ? SessionTextDrawData_GetMode(index) : E_TYPEMODE_PLAYER
         )
     );
 
     TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON_SELECTABLE, 
-        index >= 0 && SessionTextdrawData_GetSelect(index) ? "selectable" : "selectableUnabled"
+        index >= 0 && SessionTextDrawData_GetSelect(index) ? "selectable" : "selectableUnabled"
     );
 }

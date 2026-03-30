@@ -4,11 +4,13 @@
 
             // Forwards
 forward OnTaskBarMovimentUpdate(playerid);
-forward OnTaskBarMovimentKillInfo(playerid);
 
 static enum E_DATA {
-    E_DATA_TIMER,
     E_DATA_TIMER_KEY,
+    E_DATA_DELAY,
+    E_DATA_COLUMN,
+    E_DATA_COLUMN_MAX,
+    Float:E_DATA_OFFSET[2],
     bool:E_DATA_SHOW_TIPS,
     Float:E_DATA_SPEED
 };
@@ -64,18 +66,18 @@ public OnTaskBarMovimentUpdate(playerid) {
 
     GetPlayerKeys(playerid, keys, updown, leftright);
 
-    if(!keys && !updown && !leftright) return;
-
     if(keys & KEY_SECONDARY_ATTACK) TaskBarEventMoviment_Close(playerid);
-    else if(keys & KEY_YES) TaskBarEventMoviment_SetTips(playerid, !TaskBarEventMoviment_GetTips(playerid));
-
+    else if(keys & KEY_YES && !TaskBarEventMoviment_HasDelay(playerid)) {
+        TaskBarEventMoviment_SetTips(playerid, !TaskBarEventMoviment_GetTips(playerid));
+        TaskBarEventMoviment_SetDelay(playerid, 500);
+    }
     else if(keys & KEY_CTRL_BACK) {
 
         new dialog[186 + 1];
-        format(dialog, sizeof dialog, "{FFFFFF}The current speed is {f52746}%0.1f{FFFFFF}\n\n \
+        format(dialog, sizeof dialog, "{FFFFFF}The current speed is {"#HEX_INFO"}%0.1f{FFFFFF}\n\n \
                                         \
                                         [!] Enter the desired new speed below.\n \
-                                        Remember that you can use small values like {d4af37}0.03{FFFFFF} or {d4af37}0.3", 
+                                        Remember that you can use small values like {"#HEX_DEFAULT"}0.03{FFFFFF} or {"#HEX_DEFAULT"}0.3", 
 
                                         TaskBarEventMoviment_GetSpeed(playerid)
                                     );
@@ -86,88 +88,223 @@ public OnTaskBarMovimentUpdate(playerid) {
     else if(keys & KEY_NO) {
         
         new 
-            Float:position[2],
-            E_TYPEKEY:type = TaskBarKey_GetType(playerid),
-            index = TaskBarTextdraw_GetSelected(playerid)
+            E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
+            index = TaskBarTextDraw_GetSelected(playerid)
         ;
 
-        if(type == E_TYPEKEY_SIZE) SessionTextdrawData_GetSize(index, position[0], position[1]);
-        else if(type == E_TYPEKEY_POSITION) SessionTextdrawData_GetPosition(index, position[0], position[1]);
-        else if(type == E_TYPEKEY_LETTER_SIZE) SessionTextdrawData_GetLettSize(index, position[0], position[1]);
-        else return;
+        if(typeKey == E_TYPEKEY_SIZE || typeKey == E_TYPEKEY_POSITION || typeKey == E_TYPEKEY_LETTER_SIZE) {
 
-        new dialog[256 + 1];
-        format(dialog, sizeof dialog, "{FFFFFF}Enter the values below to set:\n\n \
-                                        X: {d4af37}%0.3f{FFFFFF}\n \
-                                        Y: {d4af37}%0.3f{FFFFFF}\n\n \
-                                        \
-                                        For {CCCCCC}X-axis{FFFFFF} editing use\n \
-                                        value {d4af37}0.0{FFFFFF}\n\n \
-                                        \
-                                        For {CCCCCC}Y-axis{FFFFFF} editing use\n \
-                                        {d4af37}0.0{FFFFFF} value", 
+            new 
+                dialog[256 + 1],
+                Float:position[2],
+                E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey)
+            ;
 
-                                        position[0], 
-                                        position[1]
-                                    );
+            TaskBarTextDrawUpdate_GetPos(typeButton, index, position[0], position[1]);
 
-        Dialog_Show(playerid, D_MOVIMENT_EDIT, DIALOG_STYLE_INPUT, "Edit Data", dialog, "Confirm", "Cancel");
-    }
+            format(dialog, sizeof dialog, "{FFFFFF}Enter the values below to set:\n\n \
+                                            X: {"#HEX_DEFAULT"}%0.3f{FFFFFF}\n \
+                                            Y: {"#HEX_DEFAULT"}%0.3f{FFFFFF}\n\n \
+                                            \
+                                            For {CCCCCC}X-axis{FFFFFF} editing use\n \
+                                            value {"#HEX_INFO"}0.0{FFFFFF}\n\n \
+                                            \
+                                            For {CCCCCC}Y-axis{FFFFFF} editing use\n \
+                                            {"#HEX_INFO"}0.0{FFFFFF} value", 
 
-    else if(updown != 0.0 || leftright != 0.0) {
-        new 
-            Float:position[4],
-            Float:speed = TaskBarEventMoviment_GetSpeed(playerid),
-            index = TaskBarTextdraw_GetSelected(playerid)
-        ;
+                                            position[0], 
+                                            position[1]
+                                        );
 
-        switch(TaskBarKey_GetType(playerid)) 
-        {
-            case E_TYPEKEY_SIZE: {
-                SessionTextdrawData_GetSize(index, position[0], position[1]);
-
-                if(leftright == KEY_LEFT) position[0] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-                if(leftright == KEY_RIGHT) position[0] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-                if(updown == KEY_UP) position[1] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-                if(updown == KEY_DOWN) position[1] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-
-                SessionTextdrawData_SetSize(index, position[0], position[1], false);
-            }
-
-            case E_TYPEKEY_POSITION: {
-                SessionTextdrawData_GetPosition(index, position[0], position[1]);
-
-                if(leftright == KEY_LEFT) position[0] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-                if(leftright == KEY_RIGHT) position[0] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-                if(updown == KEY_UP) position[1] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-                if(updown == KEY_DOWN) position[1] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
-
-                SessionTextdrawData_SetPosition(index, position[0], position[1], false);
-            }
-
-            case E_TYPEKEY_LETTER_SIZE: {
-                SessionTextdrawData_GetLettSize(index, position[0], position[1]);
-                
-                if(leftright == KEY_LEFT) position[0] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH / 100) : (speed / 10);
-                if(leftright == KEY_RIGHT) position[0] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH / 100) : (speed / 100);
-                if(updown == KEY_UP) position[1] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH / 100) : (speed / 100);
-                if(updown == KEY_DOWN) position[1] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH / 100) : (speed / 100);
-
-                SessionTextdrawData_SetLettSize(index, position[0], position[1], false);
-            }
-
-            case E_TYPEKEY_COLOR: {
-
-
-            }
+            Dialog_Show(playerid, D_MOVIMENT_EDIT, DIALOG_STYLE_INPUT, "Edit Data", dialog, "Confirm", "Cancel");
         }
 
-        TaskBarEventMoviment_InfoTimer(playerid, va_return("~y~X:~w~ %0.3f     ~y~Y:~w~ %0.3f     ~r~Speed:~w~ %0.1f", position[0], position[1], keys == KEY_SPRINT ? MAX_SPEED_HIGH : speed), 4);
-    }
-}
+        else if(typeKey == E_TYPEKEY_COLOR || typeKey == E_TYPEKEY_COLOR_BACKGROUND || typeKey == E_TYPEKEY_COLOR_BOX) {
 
-public OnTaskBarMovimentKillInfo(playerid) {
-    TaskBarEventMoviment_KillInfo(playerid);
+            new 
+                dialog[164 + 1],
+                colorRGBA[4],
+                color = TaskBarTextDrawUpdate_GetColor(typeKey, index),
+                currentColumn = TaskBarEventMoviment_GetColumn(playerid)
+            ;
+
+            RGB::HexToRGBA(color, colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
+
+            format(dialog, sizeof dialog, "{FFFFFF}Enter a value between {"#HEX_DEFAULT"}0{FFFFFF} and {"#HEX_DEFAULT"}255{FFFFFF} below for your coloring result.\n\n \
+                                            \
+                                            The current color of the column is: {"#HEX_INFO"}%i",
+                                        
+                                            colorRGBA[currentColumn]
+                                        );
+
+            Dialog_Show(playerid, D_MOVIMENT_COLOR, DIALOG_STYLE_INPUT, "Coloring", dialog, "Change", "Cancel");
+        }
+
+        else if(typeKey == E_TYPEKEY_MODEL_ROTATION) {
+
+            new 
+                dialog[109 * 3],
+                Float:rotation[4],
+                currentColumn = TaskBarEventMoviment_GetColumn(playerid)
+            ;
+
+            static const eixs[][5] = {"X", "Y", "Z", "Zoom"};
+
+            SessionTextDrawData_GetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
+
+            format(dialog, sizeof dialog, "{FFFFFF}You are editing the {"#HEX_INFO"}%s{FFFFFF} rotation of your model. \
+                                        \
+                                        Currently: {"#HEX_DEFAULT"}%0.3f{FFFFFF} \
+                                        \
+                                        Please enter the desired new value below, between {"#HEX_INFO"}-360.0{FFFFFF} and {"#HEX_INFO"}360.0{FFFFFF}.", 
+
+                                        eixs[currentColumn],
+                                        rotation[currentColumn]
+                                    );
+
+            Dialog_Show(playerid, D_MOVIMENT_MODEL_ROT, DIALOG_STYLE_INPUT, "Model Rotation", dialog, "Change", "Cancel");
+        }
+    }
+    else
+    {
+        new
+            index = TaskBarTextDraw_GetSelected(playerid),
+            E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid)
+        ;
+
+        if((typeKey == E_TYPEKEY_SIZE || typeKey == E_TYPEKEY_POSITION || typeKey == E_TYPEKEY_LETTER_SIZE) && (updown != 0.0 || leftright != 0.0)) {
+
+            new 
+                Float:position[2],
+                Float:defSpeed = TaskBarEventMoviment_GetSpeed(playerid),
+                E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey)
+            ;
+
+            defSpeed = keys == KEY_SPRINT ? MAX_SPEED_HIGH : defSpeed;
+            if(typeKey == E_TYPEKEY_LETTER_SIZE)
+                defSpeed = defSpeed / 100;
+
+            TaskBarTextDrawUpdate_GetPos(typeButton, index, position[0], position[1]);
+
+            if(leftright == KEY_LEFT) position[0] -= defSpeed;
+            if(leftright == KEY_RIGHT) position[0] += defSpeed;
+            if(updown == KEY_UP) position[1] -= defSpeed;
+            if(updown == KEY_DOWN) position[1] += defSpeed;
+
+            TaskBarTextDrawUpdate_SetPos(typeButton, index, position[0], position[1], false);
+            TaskBarMessage_Create(playerid, va_return("~y~X:~w~ %0.2f     ~y~Y:~w~ %0.2f     ~r~Speed:~w~ %0.1f", position[0], position[1], defSpeed), 4);
+        }
+
+        else if(typeKey == E_TYPEKEY_COLOR || typeKey == E_TYPEKEY_COLOR_BACKGROUND || typeKey == E_TYPEKEY_COLOR_BOX) {
+
+            new 
+                column = TaskBarEventMoviment_GetColumn(playerid),
+                maxColumn = TaskBarEventMoviment_GetColumnMax(playerid),
+                E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey),
+                color,
+                colorRGBA[4]
+            ;
+
+            color = TaskBarTextDrawUpdate_GetColor(typeButton, index);
+            RGB::HexToRGBA(color, colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
+
+            if(updown != 0.0 || leftright != 0.0 || leftright == KEY_LEFT || leftright == KEY_RIGHT) {
+                if(leftright == KEY_LEFT && !TaskBarEventMoviment_HasDelay(playerid)) column = (column - 1) < 0 ? (maxColumn - 1) : (column - 1);
+                else if(leftright == KEY_RIGHT && !TaskBarEventMoviment_HasDelay(playerid)) column = (column + 1) >= maxColumn ? 0 : (column + 1);
+                else if(updown == KEY_UP) colorRGBA[column] = (colorRGBA[column] + 1) > 255 ? 0 : (colorRGBA[column] + 1);
+                else if(updown == KEY_DOWN) colorRGBA[column] = (colorRGBA[column] - 1) < 0 ? 255 : (colorRGBA[column] - 1);
+                
+                color = RGB::RGBAToHex(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
+                TaskBarTextDrawUpdate_SetColor(typeButton, index, color, false);
+
+                if(TaskBarEventMoviment_GetColumn(playerid) != column) {
+                    TaskBarEventMoviment_SetDelay(playerid, 500);
+                    TaskBarEventMoviment_SetColumn(playerid, column);
+                }
+            }
+
+            TaskBarMessage_Create(
+                playerid, 
+                va_return(
+                    "~%s~R:%d  ~%s~G: %d  ~%s~B: %d  ~%s~A: %d", 
+                    column == 0 ? "r" : "w", colorRGBA[0], 
+                    column == 1 ? "r" : "w", colorRGBA[1], 
+                    column == 2 ? "r" : "w", colorRGBA[2], 
+                    column == 3 ? "r" : "w", colorRGBA[3]
+                ), 
+                4
+            );
+        }
+
+        else if((typeKey == E_TYPEKEY_GROUP_POSITION || typeKey == E_TYPEKEY_GROUP_SIZE || typeKey == E_TYPEKEY_GROUP_LETTER_SIZE) && (updown != 0.0 || leftright != 0.0)) {
+
+            new
+                Float:offset[2],
+                Float:offsetSet[2],
+                Float:defSpeed = TaskBarEventMoviment_GetSpeed(playerid)
+            ;
+
+            defSpeed = keys == KEY_SPRINT ? MAX_SPEED_HIGH : defSpeed;
+            if(typeKey == E_TYPEKEY_GROUP_LETTER_SIZE)
+                defSpeed = defSpeed / 100;
+
+            if(leftright == KEY_LEFT) offset[0] = -defSpeed;
+            if(leftright == KEY_RIGHT) offset[0] = defSpeed;
+            if(updown == KEY_UP) offset[1] = -defSpeed;
+            if(updown == KEY_DOWN) offset[1] = defSpeed;
+
+            SessionEventGroupItem_SetOffset(playerid, offset[0], offset[1], false);
+
+            TaskBarEventMoviment_GetOffset(playerid, offsetSet[0], offsetSet[1]);
+            offsetSet[0] += offset[0];
+            offsetSet[1] += offset[1];
+            TaskBarEventMoviment_SetOffset(playerid, offsetSet[0], offsetSet[1]);
+            TaskBarMessage_Create(playerid, va_return("~y~OffsetX:~w~ %0.2f     ~y~OffsetY:~w~ %0.2f     ~r~Speed:~w~ %0.1f", offsetSet[0], offsetSet[1], defSpeed), 4);
+        }
+
+        else if(typeKey == E_TYPEKEY_MODEL_ROTATION) {
+
+            new 
+                Float:rotation[4],
+                Float:speed = TaskBarEventMoviment_GetSpeed(playerid),
+                column = TaskBarEventMoviment_GetColumn(playerid),
+                maxColumn = TaskBarEventMoviment_GetColumnMax(playerid)
+            ;
+
+            SessionTextDrawData_GetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
+
+            if(updown != 0.0 || leftright != 0.0 || leftright == KEY_LEFT || leftright == KEY_RIGHT) {
+
+                if(updown != 0.0) {
+                    if(updown == KEY_UP) rotation[column] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
+                    if(updown == KEY_DOWN) rotation[column] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
+
+                    SessionTextDrawData_SetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3], false);
+                }
+
+                if(leftright == KEY_LEFT && !TaskBarEventMoviment_HasDelay(playerid)) column = (column - 1) < 0 ? (maxColumn - 1) : (column - 1);
+                else if(leftright == KEY_RIGHT && !TaskBarEventMoviment_HasDelay(playerid)) column = (column + 1) >= maxColumn ? 0 : (column + 1);
+
+                if(TaskBarEventMoviment_GetColumn(playerid) != column) {
+                    TaskBarEventMoviment_SetDelay(playerid, 500);
+                    TaskBarEventMoviment_SetColumn(playerid, column);
+                }
+            }
+
+            TaskBarMessage_Create(
+                playerid, 
+                va_return(
+                    "~%s~X:%0.2f  ~%s~Y: %0.2f  ~%s~Z: %0.2f  ~%s~Zoom: %0.2f  ~w~- Speed: ~r~%0.1f", 
+                    column == 0 ? "y" : "w", rotation[0], 
+                    column == 1 ? "y" : "w", rotation[1], 
+                    column == 2 ? "y" : "w", rotation[2], 
+                    column == 3 ? "y" : "w", rotation[3],
+                    keys == KEY_SPRINT ? MAX_SPEED_HIGH : speed
+                ), 
+                4
+            );
+        }
+    }
 }
 
 
@@ -186,8 +323,17 @@ public OnTaskBarMovimentKillInfo(playerid) {
 
 stock TaskBarEventMoviment_Init(playerid) {
 
+    new E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid);
+
     TaskBarEventMoviment_KillTimer(playerid);
-    TaskBarEventMoviment_Tips(playerid, TaskBarEventMoviment_GetTips(playerid));
+    TaskBarEventMoviment_SetColumn(playerid, 0);                                    // Default
+    TaskBarEventMoviment_SetOffset(playerid, 0.0, 0.0);                             // Default
+    TaskBarEventMoviment_Tips(playerid, TaskBarEventMoviment_GetTips(playerid));    // Set Tips
+
+    switch(typeKey) {
+        case E_TYPEKEY_COLOR, E_TYPEKEY_COLOR_BACKGROUND, E_TYPEKEY_COLOR_BOX, E_TYPEKEY_MODEL_ROTATION: TaskBarEventMoviment_SetColumnMax(playerid, 4);
+        default: TaskBarEventMoviment_SetColumnMax(playerid, 0);
+    }
 
     e_Data[playerid][E_DATA_TIMER_KEY] = SetTimerEx("OnTaskBarMovimentUpdate", 50, true, "i", playerid);
 }
@@ -195,58 +341,46 @@ stock TaskBarEventMoviment_Init(playerid) {
 stock TaskBarEventMoviment_Unload(playerid) {
 
     TaskBarEventMoviment_KillTimer(playerid);
+    TaskBarMessage_Destroy(playerid);
     TaskBarEventMoviment_Tips(playerid, false);
 }
 
 stock TaskBarEventMoviment_Close(playerid, bool:reCheck = true) {
-    new 
-        Float:position[2],
-        index = TaskBarTextdraw_GetSelected(playerid)
-    ;
-
+    
+    new index = TaskBarTextDraw_GetSelected(playerid);
     if(index != -1) {
-        switch(TaskBarKey_GetType(playerid)) {
 
-            case E_TYPEKEY_SIZE: {
-                SessionTextdrawData_GetSize(index, position[0], position[1]);
-                SessionTextdrawData_SetSize(index, position[0], position[1]);
+        new 
+            E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
+            E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey)
+        ;
+
+        switch(typeKey) 
+        {
+            case E_TYPEKEY_SIZE, E_TYPEKEY_POSITION, E_TYPEKEY_LETTER_SIZE: {
+                new Float:position[2];
+                TaskBarTextDrawUpdate_GetPos(typeButton, index, position[0], position[1]);
+                TaskBarTextDrawUpdate_SetPos(typeButton, index, position[0], position[1]);
             }
-            case E_TYPEKEY_POSITION: {
-                SessionTextdrawData_GetPosition(index, position[0], position[1]);
-                SessionTextdrawData_SetPosition(index, position[0], position[1]); 
+
+            case E_TYPEKEY_MODEL_ROTATION: {
+                new Float:rotation[4];
+                SessionTextDrawData_GetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
+                SessionTextDrawData_SetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
             }
-            case E_TYPEKEY_LETTER_SIZE: {
-                SessionTextdrawData_GetLettSize(index, position[0], position[1]);
-                SessionTextdrawData_SetLettSize(index, position[0], position[1]);
+
+            case E_TYPEKEY_GROUP_POSITION, E_TYPEKEY_GROUP_SIZE, E_TYPEKEY_GROUP_LETTER_SIZE: {
+                SessionEventGroupItem_SetOffset(playerid, 0.0, 0.0, true, true);
+            }
+
+            case E_TYPEKEY_COLOR, E_TYPEKEY_COLOR_BACKGROUND, E_TYPEKEY_COLOR_BOX: {
+                TaskBarTextDrawUpdate_SetColor(typeButton, index, TaskBarTextDrawUpdate_GetColor(typeButton, index));
             }
         }
     }
 
     if(reCheck)
         TaskBarKey_Set(playerid, E_TYPEKEY_DISABLED);
-}
-
-static stock TaskBarEventMoviment_InfoTimer(playerid, const string[], seconds) {
-
-    if(TaskBarEventMoviment_HasInfo(playerid))
-        TaskBarEventMoviment_KillInfo(playerid, false);
-    else
-        TaskBarView_ShowInfo(playerid);
-
-    TaskBarView_SetInfo(playerid, string);
-    e_Data[playerid][E_DATA_TIMER] = SetTimerEx("OnTaskBarMovimentKillInfo", 1000 * seconds, false, "i", playerid);
-}
-
-static stock TaskBarEventMoviment_KillInfo(playerid, bool:hideDraw = true) {
-    
-    if(TaskBarEventMoviment_HasInfo(playerid)) {
-        KillTimer(e_Data[playerid][E_DATA_TIMER]);
-    
-        if(hideDraw)
-            TaskBarView_HideInfo(playerid);
-    }
-
-    e_Data[playerid][E_DATA_TIMER] = 0;
 }
 
 static stock TaskBarEventMoviment_KillTimer(playerid) {
@@ -273,11 +407,25 @@ static stock TaskBarEventMoviment_SetTips(playerid, bool:status, bool:showNow = 
     e_Data[playerid][E_DATA_SHOW_TIPS] = status;
 }
 
+static stock TaskBarEventMoviment_SetOffset(playerid, Float:x, Float:y) {
+    e_Data[playerid][E_DATA_OFFSET][0] = x;
+    e_Data[playerid][E_DATA_OFFSET][1] = y;
+}
+
+static stock TaskBarEventMoviment_SetColumn(playerid, value)
+    e_Data[playerid][E_DATA_COLUMN] = value;
+
+static stock TaskBarEventMoviment_SetColumnMax(playerid, value)
+    e_Data[playerid][E_DATA_COLUMN_MAX] = value;
+
+static stock TaskBarEventMoviment_GetColumn(playerid)
+    return e_Data[playerid][E_DATA_COLUMN];
+
+static stock TaskBarEventMoviment_GetColumnMax(playerid)
+    return e_Data[playerid][E_DATA_COLUMN_MAX];
+
 static stock bool:TaskBarEventMoviment_GetTips(playerid)
     return e_Data[playerid][E_DATA_SHOW_TIPS];
-
-static stock bool:TaskBarEventMoviment_HasInfo(playerid)
-    return e_Data[playerid][E_DATA_TIMER] > 0;
 
 static stock TaskBarEventMoviment_SetSpeed(playerid, Float:speed)
     e_Data[playerid][E_DATA_SPEED] = speed;
@@ -285,9 +433,20 @@ static stock TaskBarEventMoviment_SetSpeed(playerid, Float:speed)
 static stock Float:TaskBarEventMoviment_GetSpeed(playerid)
     return e_Data[playerid][E_DATA_SPEED];
 
+static stock bool:TaskBarEventMoviment_HasDelay(playerid)
+    return e_Data[playerid][E_DATA_DELAY] >= GetTickCount();
+
+static stock TaskBarEventMoviment_SetDelay(playerid, seconds)
+    e_Data[playerid][E_DATA_DELAY] = (GetTickCount() + seconds);
+
+static stock TaskBarEventMoviment_GetOffset(playerid, &Float:x, &Float:y) {
+    x = e_Data[playerid][E_DATA_OFFSET][0];
+    y = e_Data[playerid][E_DATA_OFFSET][1];
+}
+
 static stock TaskBarEventMoviment_Reset(playerid) {
 
-    TaskBarEventMoviment_KillInfo(playerid);
+    TaskBarMessage_Destroy(playerid);
     TaskBarEventMoviment_KillTimer(playerid);
 
     static const e_Clear[E_DATA];
@@ -311,32 +470,27 @@ static stock TaskBarEventMoviment_Reset(playerid) {
 Dialog:D_MOVIMENT_EDIT(playerid, response, listitem, inputtext[]) {
 
     if(response && !isnull(inputtext)) {
+
         new Float:position[2];
+
         if(sscanf(inputtext, "ff", position[0], position[1])) 
             return Dialog_ReShow(playerid, "Only put floats (Example: 0.0 0.0)");
 
         new 
             Float:positionItem[2],
             E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
-            index = TaskBarTextdraw_GetSelected(playerid)
+            E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey),
+            index = TaskBarTextDraw_GetSelected(playerid)
         ;
 
-        switch(typeKey) {
-            case E_TYPEKEY_SIZE: SessionTextdrawData_GetSize(index, positionItem[0], positionItem[1]);
-            case E_TYPEKEY_POSITION: SessionTextdrawData_GetPosition(index, positionItem[0], positionItem[1]);
-            case E_TYPEKEY_LETTER_SIZE: SessionTextdrawData_GetLettSize(index, positionItem[0], positionItem[1]);
-        }
+        TaskBarTextDrawUpdate_GetPos(typeButton, index, positionItem[0], positionItem[1]);
 
         if(position[0] != 0.0 || position[1] != 0.0) {
             if(position[0] == 0.0) position[0] = positionItem[0];
             if(position[1] == 0.0) position[1] = positionItem[1];
         }
 
-        switch(typeKey) {
-            case E_TYPEKEY_SIZE: SessionTextdrawData_SetSize(index, position[0], position[1]);
-            case E_TYPEKEY_POSITION: SessionTextdrawData_SetPosition(index, position[0], position[1]);
-            case E_TYPEKEY_LETTER_SIZE: SessionTextdrawData_SetLettSize(index, position[0], position[1]);
-        }
+        TaskBarTextDrawUpdate_SetPos(typeButton, index, position[0], position[1]);
     }
     return true;
 }
@@ -346,11 +500,65 @@ Dialog:D_MOVIMENT_SPEED(playerid, response, listitem, inputtext[]) {
     if(response && !isnull(inputtext)) {
 
         new Float:speed;
+
         if(sscanf(inputtext, "f", speed)) 
             return Dialog_ReShow(playerid, "Only put floats");
 
         TaskBarEventMoviment_SetSpeed(playerid, speed);
-        TaskBarEventMoviment_InfoTimer(playerid, va_return("~r~New Speed:~w~ %0.1f", speed), 2);
+        TaskBarMessage_Create(playerid, va_return("~r~New Speed:~w~ %0.1f", speed), 2);
+    }
+    return true;
+}
+
+Dialog:D_MOVIMENT_COLOR(playerid, response, listitem, inputtext[]) {
+
+    if(response && !isnull(inputtext)) {
+
+        new newColor;
+        
+        if(sscanf(inputtext, "i", newColor))
+            return Dialog_ReShow(playerid, "Only put numbers");
+
+        if(newColor < 0 || newColor > 255)
+            return Dialog_ReShow(playerid, "You can only enter values from 0 to 255.");
+
+        new 
+            E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
+            E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey),
+            index = TaskBarTextDraw_GetSelected(playerid),
+            color = TaskBarTextDrawUpdate_GetColor(typeButton, index),
+            currentColumn = TaskBarEventMoviment_GetColumn(playerid),
+            colorRGBA[4]
+        ;
+
+        RGB::HexToRGBA(color, colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
+
+        colorRGBA[currentColumn] = newColor;
+        color = RGB::RGBAToHex(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
+
+        TaskBarTextDrawUpdate_SetColor(typeButton, index, color);
+    }
+    return true;
+}
+
+Dialog:D_MOVIMENT_MODEL_ROT(playerid, response, listitem, inputtext[]) {
+
+    if(response && !isnull(inputtext)) {
+
+        new Float:rotation;
+        if(sscanf(inputtext, "f", rotation))
+            return Dialog_ReShow(playerid, "Only put floats");
+
+        new 
+            index = TaskBarTextDraw_GetSelected(playerid),
+            currentColumn = TaskBarEventMoviment_GetColumn(playerid),
+            Float:currentRotation[4]
+        ;
+
+        SessionTextDrawData_GetModelRot(index, currentRotation[0], currentRotation[1], currentRotation[2], currentRotation[3]);
+        currentRotation[currentColumn] = rotation;
+
+        SessionTextDrawData_SetModelRot(index, currentRotation[0], currentRotation[1], currentRotation[2], currentRotation[3], false);
     }
     return true;
 }

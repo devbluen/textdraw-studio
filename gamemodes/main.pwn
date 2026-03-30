@@ -9,6 +9,7 @@
 // #pragma warning disable 239		// temporary, literal array/string passed to a non-const parameter
 
         // Main
+#include <crashdetect>
 #include <open.mp>
 #include <sscanf2>
 
@@ -26,17 +27,22 @@
 #include <easyDialog>
 #include <textdraw-simple-click>
 #include <zcmd>
+#include <rgb>
 
         // Source Code
             // Utils
 #include "src/utils/variables.inc"
 #include "src/utils/functions.inc"
 
+            // Libs
+#include "src/libs/textdraws/interaction.inc"
+
             // Connections
 #include "src/connections/connection.inc"
 
             // Exception
 #include "src/general/misc/dialog/dialog.inc"
+#include "src/utils/web_colors.inc"
 
             // General
 #include "src/general/auth/auth.inc"

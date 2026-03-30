@@ -13,7 +13,7 @@
 
 */
 
-stock SessionTextdraw_Create(index) {
+stock SessionTextDraw_Create(index) {
 
     // Creation
     new 
@@ -22,31 +22,31 @@ stock SessionTextdraw_Create(index) {
         Float:size[2]
     ;
 
-    SessionTextdrawData_GetString(index, string);
-    SessionTextdrawData_GetPosition(index, position[0], position[1]);
+    SessionTextDrawData_GetString(index, string);
+    SessionTextDrawData_GetPosition(index, position[0], position[1]);
     e_SessionDraw[index][E_SESSIONDRAW_DRAW] = TextDrawCreate(position[0], position[1], string);
 
     // Set Informations
-    SessionTextdrawData_GetSize(index, size[0], size[1]);
-    SessionTextdrawData_SetSize     (index,      size[0], size[1],                        false);
-    SessionTextdrawData_SetAlign    (index,      SessionTextdrawData_GetAlign(index),     false);
-    SessionTextdrawData_SetColor    (index,      SessionTextdrawData_GetColor(index),     false);
-    SessionTextdrawData_SetShadow   (index,      SessionTextdrawData_GetShadow(index),    false);
-    SessionTextdrawData_SetOutline  (index,      SessionTextdrawData_GetOutline(index),   false);
-    SessionTextdrawData_SetColorBG  (index,      SessionTextdrawData_GetColorBG(index),   false);
-    SessionTextdrawData_SetFont     (index,      SessionTextdrawData_GetFont(index),      false);
-    SessionTextdrawData_SetPropor   (index,      SessionTextdrawData_GetPropor(index),    false);
-    SessionTextdrawData_SetSelect   (index,      SessionTextdrawData_GetSelect(index),    false);
+    SessionTextDrawData_GetSize(index, size[0], size[1]);
+    SessionTextDrawData_SetSize(index, size[0], size[1], false);
+    SessionTextDrawData_SetAlign(index, SessionTextDrawData_GetAlign(index), false);
+    SessionTextDrawData_SetColor(index, SessionTextDrawData_GetColor(index), false);
+    SessionTextDrawData_SetShadow(index, SessionTextDrawData_GetShadow(index), false);
+    SessionTextDrawData_SetOutline(index, SessionTextDrawData_GetOutline(index), false);
+    SessionTextDrawData_SetColorBG(index, SessionTextDrawData_GetColorBG(index), false);
+    SessionTextDrawData_SetFont(index, SessionTextDrawData_GetFont(index), false);
+    SessionTextDrawData_SetPropor(index, SessionTextDrawData_GetPropor(index), false);
+    SessionTextDrawData_SetSelect(index, SessionTextDrawData_GetSelect(index), false);
     
-    switch(SessionTextdrawData_GetType(index)) {
+    switch(SessionTextDrawData_GetType(index)) {
         case E_TYPEITEM_TEXT: {
 
             new Float:letterSize[2];
 
-            SessionTextdrawData_GetLettSize(index, letterSize[0], letterSize[1]);
-            SessionTextdrawData_SetLettSize (index,     letterSize[0], letterSize[1],               false);
-            SessionTextdrawData_SetBox      (index,     SessionTextdrawData_GetBox(index),          false);
-            SessionTextdrawData_SetColorBox (index,     SessionTextdrawData_GetColorBox(index),     false);
+            SessionTextDrawData_GetLettSize(index, letterSize[0], letterSize[1]);
+            SessionTextDrawData_SetLettSize(index, letterSize[0], letterSize[1], false);
+            SessionTextDrawData_SetBox(index, SessionTextDrawData_GetBox(index), false);
+            SessionTextDrawData_SetColorBox(index, SessionTextDrawData_GetColorBox(index), false);
         }
 
         case E_TYPEITEM_MODEL: {
@@ -56,20 +56,20 @@ stock SessionTextdraw_Create(index) {
                 model_colors[2]
             ;
 
-            SessionTextdrawData_SetModel    (index,     SessionTextdrawData_GetModel(index),                                            false);
+            SessionTextDrawData_SetModel(index, SessionTextDrawData_GetModel(index), false);
 
-            SessionTextdrawData_GetModelRot(index, model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3]);
-            SessionTextdrawData_SetModelRot (index,     model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3],     false);
+            SessionTextDrawData_GetModelRot(index, model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3]);
+            SessionTextDrawData_SetModelRot(index, model_rotation[0], model_rotation[1], model_rotation[2], model_rotation[3], false);
 
-            SessionTextdrawData_GetModelCol(index, model_colors[0], model_colors[1]);
-            SessionTextdrawData_SetModelCol (index,     model_colors[0], model_colors[1],                                               false);
+            SessionTextDrawData_GetModelCol(index, model_colors[0], model_colors[1]);
+            SessionTextDrawData_SetModelCol(index, model_colors[0], model_colors[1], false);
         }
     }
     
-    SessionTextdrawData_Show(index);
+    SessionTextDrawData_Show(index);
 }
 
-stock SessionTextdraw_Destroy(index, bool:resetHeader = true) {
+stock SessionTextDraw_Destroy(index, bool:resetHeader = true) {
 
     TextDrawDestroy(e_SessionDraw[index][E_SESSIONDRAW_DRAW]);
     e_SessionDraw[index][E_SESSIONDRAW_DRAW] = INVALID_TEXT_DRAW;
@@ -80,33 +80,42 @@ stock SessionTextdraw_Destroy(index, bool:resetHeader = true) {
         e_SessionDraw[index] = e_Clear;
 
         foreach(new i: SessionDrawsPlayers[index])
-            TaskBarTextdraw_UnSelect(i);
+            TaskBarTextDraw_UnSelect(i);
 
         Iter_Clear(SessionDrawsPlayers[index]);
         Iter_Remove(SessionDraws, index);
     }
 }
 
-stock SessionTextdraw_DestroyAll() {
+stock SessionTextDraw_DestroyAll() { 
 
     foreach(new i: SessionDraws)
-        SessionTextdraw_Destroy(i);
+        SessionTextDraw_Destroy(i);
+    
+    foreach(new i: Users)
+        TaskBarEventUpdate_Buttons(i);
 }
 
-stock SessionTextdraw_UpdateButton(index) {
+stock SessionTextDraw_UpdateButton(index) {
 
     foreach(new i: SessionDrawsPlayers[index])
         TaskBarEventUpdate_Sprite(i, index);
 }
 
-stock SessionTextdraw_UpdateButtonAll() {
+stock SessionTextDraw_UpdateButtonAll() {
 
     foreach(new i: Users)
         TaskBarEventUpdate_Buttons(i);
 }
 
-stock SessionTextdraw_SetSelect(playerid, index)
+stock SessionTextDraw_ShowAlLForPlayer(playerid) {
+
+    foreach(new i: SessionDraws)
+        TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(i));
+}
+
+stock SessionTextDraw_SetSelect(playerid, index)
     Iter_Add(SessionDrawsPlayers[index], playerid);
 
-stock SessionTextdraw_RemoveSelect(playerid, index)
+stock SessionTextDraw_RemoveSelect(playerid, index)
     Iter_Remove(SessionDrawsPlayers[index], playerid);

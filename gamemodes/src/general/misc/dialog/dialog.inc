@@ -27,6 +27,8 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 stock DialogMod_Create(playerid, DIALOG_STYLE:style, const title[], const button1[], const button2[], const callback[], Func:callbackCreate<>) {
 
+    DialogMod_Reset(playerid);
+
     Indirect_Claim(callbackCreate);
     @.callbackCreate();
     Indirect_Release(callbackCreate);

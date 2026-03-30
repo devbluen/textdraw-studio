@@ -38,7 +38,8 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
 static stock TaskBarEvent_Page(playerid, page) {
 
-    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT count(*) AS count FROM textdraws");
+    new sessionId = Session_GetId();
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT count(*) AS count FROM textdraws WHERE project_id = %i", sessionId);
 
     if(cache)
     {
@@ -61,42 +62,47 @@ static stock TaskBarEvent_Page(playerid, page) {
 
             DialogMod_Add(playerid, "ID\tVariable\tName\tType");
 
-            cache = DB_ExecuteQuery(IDConnection, "SELECT \
-                                                    indexDraw, \
-                                                    `text`, \
-                                                    mode \
-                                                FROM textdraws \
-                                                LIMIT %i OFFSET %i",
+            new DBResult:cacheInside = DB_ExecuteQuery(IDConnection, "SELECT \
+                                                                        indexDraw, \
+                                                                        text, \
+                                                                        mode \
+                                                                    FROM textdraws \
+                                                                    WHERE project_id = %i \
+                                                                    ORDER BY indexDraw ASC \
+                                                                    LIMIT %i OFFSET %i",
 
-                                                MAX_TASKBAR_LIST_VIEW,
-                                                page * MAX_TASKBAR_LIST_VIEW
-                                            );
+                                                                    sessionId,
+                                                                    MAX_TASKBAR_LIST_VIEW,
+                                                                    page * MAX_TASKBAR_LIST_VIEW
+                                                                );
 
-            if(cache)
+            if(cacheInside && DB_GetRowCount(cacheInside))
             {
-                if(page && page <= (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
+                if((page && pages) &&  (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
                 if(page >= 1) DialogMod_Add(playerid, "<<", -1337);
 
-                DialogMod_Add(playerid, " ", -1333);
+                if(page >= 1)
+                    DialogMod_Add(playerid, "Goto Page", -1368);
 
                 new
                     index,
-                    text[1024],
+                    text[1024 + 1],
                     E_TYPEMODE:mode,
-                    currentIndex = TaskBarTextdraw_GetSelected(playerid)
+                    currentIndex = TaskBarTextDraw_GetSelected(playerid)
                 ;
 
                 do
                 {
-                    index = DB_GetFieldIntByName(IDConnection, "index");
-                    mode = E_TYPEMODE:DB_GetFieldIntByName(IDConnection, "mode");
-                    DB_GetFieldStringByName(IDConnection, "text", text);
+                    index = DB_GetFieldIntByName(cache, "indexDraw");
+                    mode = E_TYPEMODE:DB_GetFieldIntByName(cache, "mode");
+                    DB_GetFieldStringByName(cache, "text", text);
+                    Util_CutString(text, 28);
 
-                    DialogMod_Add(playerid, "%d\t%s\t{%s}%s\t%s", index, index, "...", currentIndex == index ? "FF0000" : "CCCCCC", text, "...");
+                    DialogMod_Add(playerid, "%d\t...\t{%s}%s\t%s", index, index, currentIndex == index ? HEX_DEFAULT : "CCCCCC", text, TaskBarTypeMode_GetName(mode));
                 }
-                while(DB_SelectNextRow(cache));
+                while(DB_SelectNextRow(cacheInside));
 
-                DB_FreeResultSet(cache);
+                DB_FreeResultSet(cacheInside);
             }
         }
 
@@ -105,7 +111,7 @@ static stock TaskBarEvent_Page(playerid, page) {
 }
 
 static stock TaskBarEvent_SelectIndex(playerid, index) {
-    TaskBarTextdraw_Select(playerid, index);
+    TaskBarTextDraw_Select(playerid, index);
 }
 
 static stock TaskBarEvent_GetPage(playerid)

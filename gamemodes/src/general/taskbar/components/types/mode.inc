@@ -6,13 +6,14 @@ enum E_TYPEMODE {
 
 static enum E_DATAINFO {
     E_TYPEMODE:E_DATAINFO_TYPE,
-    E_DATAINFO_SPRITE[20 + 1]
+    E_DATAINFO_SPRITE[20 + 1],
+    E_DATAINFO_NAME[20 + 1]
 };
 
 static const 
     e_DataInfo[][E_DATAINFO] = {
-        {E_TYPEMODE_PLAYER, "player"},
-        {E_TYPEMODE_GLOBAL, "global"}
+        {E_TYPEMODE_PLAYER, "player", "Player"},
+        {E_TYPEMODE_GLOBAL, "global", "Global"}
     }
 ;
 
@@ -60,5 +61,15 @@ stock TaskBarTypeMode_GetSprite(E_TYPEMODE:type) {
     ;
 
     strcat(string, e_DataInfo[index][E_DATAINFO_SPRITE]);
+    return string;
+}
+
+stock TaskBarTypeMode_GetName(E_TYPEMODE:type) {
+    new 
+        string[20 + 1],
+        index = GetIndexInternal_Type(type)
+    ;
+
+    strcat(string, e_DataInfo[index][E_DATAINFO_NAME]);
     return string;
 }

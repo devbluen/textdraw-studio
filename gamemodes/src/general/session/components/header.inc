@@ -3,6 +3,7 @@
 #define     MAX_TEXTDRAWS_PLAYER_STUDIO         (256)
 #define     MAX_TEXTDRAWS_GLOBAL_STUDIO         (2048)
 #define     MAX_TEXTDRAWS_STUDIO                (MAX_TEXTDRAWS_GLOBAL_STUDIO)
+#define     MAX_STUDIO_GROUPS                   (32)
 
 enum E_SESSION {
     E_SESSION_ID
@@ -33,9 +34,17 @@ enum E_SESSIONDRAW {
     E_SESSIONDRAW_MODEL_COLORS[2]
 };
 
+enum E_SESSIONGROUP {
+    E_SESSIONGROUP_UNIQUE_ID,
+    E_SESSIONGROUP_NAME[30 + 1]
+};
+
 new
     Iterator:SessionDraws<MAX_TEXTDRAWS_STUDIO>,
     Iterator:SessionDrawsPlayers[MAX_TEXTDRAWS_STUDIO]<MAX_PLAYERS>,
+    Iterator:SessionGroups<MAX_STUDIO_GROUPS>,
+    Iterator:SessionGroupsDraws[MAX_STUDIO_GROUPS]<MAX_TEXTDRAWS_STUDIO>,
     e_Session[E_SESSION],
-    e_SessionDraw[MAX_TEXTDRAWS_STUDIO][E_SESSIONDRAW]
+    e_SessionDraw[MAX_TEXTDRAWS_STUDIO][E_SESSIONDRAW],
+    e_SessionGroup[MAX_STUDIO_GROUPS][E_SESSIONGROUP]
 ;

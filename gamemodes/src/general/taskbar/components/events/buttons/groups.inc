@@ -4,10 +4,9 @@
 
 hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
-    if(type != E_TYPETASKBUTTON_PROPORTION)
+    if(type != E_TYPETASKBUTTON_GROUP)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
-    new index = TaskBarTextDraw_GetSelected(playerid);
-    SessionTextDrawData_SetPropor(index, !SessionTextDrawData_GetPropor(index));
+    SessionEventGroupList_Show(playerid);
     return Y_HOOKS_BREAK_RETURN_1;
 }

@@ -2,6 +2,15 @@
             // Components
 #include "src/general/session/components/header.inc"
 
+            // Includes
+#include <YSI_Coding\y_hooks>
+
+hook OnUserLogin(playerid) {
+
+    SessionTextDraw_ShowAlLForPlayer(playerid);
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 
 
 /*
@@ -19,14 +28,16 @@
 stock Session_Create(uniqueId) {
     e_Session[E_SESSION_ID] = uniqueId;
 
-    SessionTextdrawData_LoadAll();
-    SessionTextdraw_UpdateButtonAll();
+    SessionTextDrawData_LoadAll();
+    SessionTextDraw_UpdateButtonAll();
+    SessionGroup_LoadAll();
 }
 
 stock Session_Destroy() {
     e_Session[E_SESSION_ID] = 0;
-
-    SessionTextdraw_DestroyAll();
+    
+    SessionTextDraw_DestroyAll();
+    SessionGroup_DestroyAll();
 }
 
 stock Session_GetId()
@@ -41,3 +52,9 @@ stock bool:Session_Has()
                 // Functions
 #include "src/general/session/components/functions/textdraw.inc"
 #include "src/general/session/components/functions/textdrawData.inc"
+#include "src/general/session/components/functions/groups.inc"
+#include "src/general/session/components/functions/groupsDataDraws.inc"
+                // Events
+#include "src/general/session/components/events/groups/list.inc"
+#include "src/general/session/components/events/groups/items.inc"
+#include "src/general/session/components/events/groups/draws.inc"

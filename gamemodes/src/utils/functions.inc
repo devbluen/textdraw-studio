@@ -20,3 +20,35 @@ stock Util_ClearChat(playerid, lines = 50) {
 
 stock Util_GetPages(count, maxPerPage)
     return ((count / maxPerPage) + (count % maxPerPage > 0 ? (1) : (0)));
+
+stock Util_ParseColor(const input[]) { 
+
+    new 
+        r, 
+        g, 
+        b, 
+        a = 255, 
+        hex
+    ;
+    
+    if(!sscanf(input, "'rgba'p<, ()>dddd", r, g, b, a)) return RGB::RGBAToHex(r, g, b, a);                         // Format: rgba(r,g,b,a)
+    else if(!sscanf(input, "'rgb'p<, ()>ddd", r, g, b)) return RGB::RGBAToHex(r, g, b, a);                         // Format: rgb(r,g,b)
+    else if(!sscanf(input, "'#'x", hex) || !sscanf(input, "'0x'x", hex) || !sscanf(input, "'{'x'}'", hex)) {        // Format: 0xFFFFFFFF or #FFFFFF or {FFFFFF}
+        if (hex >= 0 && hex <= 0xFFFFFF)
+            return (hex << 8 | 0xFF);
+
+        return hex;
+    }
+    else if(!sscanf(input, "p<,>dddD(255)", r, g, b, a)) return RGB::RGBAToHex(r, g, b, a);                         // Format: [r,g,b,a] or [r g b]
+    else if(!sscanf(input, "dddD(255)", r, g, b, a)) return RGB::RGBAToHex(r, g, b, a);                             // Format: [r g b a] or [r g b]
+    else if(!sscanf(input, "d", hex)) return hex;
+    return 0xFFFFFFFF;
+}
+
+stock Util_CutString(dest[], maxlength, maxSize = sizeof dest) {
+
+    if(strlen(dest) > maxlength) {
+        dest[maxlength - 3] = '\0';
+        strcat(dest, "...", maxSize);
+    }
+}

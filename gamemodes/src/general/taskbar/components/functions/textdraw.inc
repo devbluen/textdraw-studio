@@ -13,13 +13,13 @@ static
 
 hook OnUserLogin(playerid) {
     
-    TaskBarTextdraw_SetSelected(playerid, -1);
+    TaskBarTextDraw_SetSelected(playerid, -1);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnUserLogout(playerid) {
 
-    TaskBarTextdraw_Reset(playerid);
+    TaskBarTextDraw_Reset(playerid);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -37,42 +37,42 @@ hook OnUserLogout(playerid) {
 
 */
 
-stock TaskBarTextdraw_Select(playerid, index) {
+stock TaskBarTextDraw_Select(playerid, index) {
 
-    TaskBarTextdraw_SetSelected(playerid, index);
+    TaskBarTextDraw_SetSelected(playerid, index);
     CallLocalFunction("OnPlayerTaskBarDrawSelected", "ii", playerid, index);
 }
 
-stock TaskBarTextdraw_UnSelect(playerid) {
+stock TaskBarTextDraw_UnSelect(playerid) {
 
     Dialog_Hide(playerid);
-    TaskBarTextdraw_SetSelected(playerid, -1);
+    TaskBarTextDraw_SetSelected(playerid, -1);
     CallLocalFunction("OnPlayerTaskBarDrawUnSelected", "i", playerid);
 }
 
-stock TaskBarTextdraw_SetSelected(playerid, index) {
+stock TaskBarTextDraw_SetSelected(playerid, index) {
 
     if(e_Data[playerid][E_DATA_SELECTED_ID] == index)
         return;
 
-    if(TaskBarTextdraw_Selected(playerid)) {
-        new oldIndex = TaskBarTextdraw_GetSelected(playerid);
-        SessionTextdraw_RemoveSelect(playerid, oldIndex);
+    if(TaskBarTextDraw_Selected(playerid)) {
+        new oldIndex = TaskBarTextDraw_GetSelected(playerid);
+        SessionTextDraw_RemoveSelect(playerid, oldIndex);
     }
 
-    if(index != -1) SessionTextdraw_SetSelect(playerid, index);
+    if(index != -1) SessionTextDraw_SetSelect(playerid, index);
 
     e_Data[playerid][E_DATA_SELECT] = index != -1;
     e_Data[playerid][E_DATA_SELECTED_ID] = index;
 }
 
-stock bool:TaskBarTextdraw_Selected(playerid)
+stock bool:TaskBarTextDraw_Selected(playerid)
     return e_Data[playerid][E_DATA_SELECT];
 
-stock TaskBarTextdraw_GetSelected(playerid)
-    return TaskBarTextdraw_Selected(playerid) ? e_Data[playerid][E_DATA_SELECTED_ID] : -1;
+stock TaskBarTextDraw_GetSelected(playerid)
+    return TaskBarTextDraw_Selected(playerid) ? e_Data[playerid][E_DATA_SELECTED_ID] : -1;
 
-static stock TaskBarTextdraw_Reset(playerid) {
+static stock TaskBarTextDraw_Reset(playerid) {
 
     static const e_Clear[E_DATA];
     e_Data[playerid] = e_Clear;

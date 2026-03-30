@@ -15,8 +15,8 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
         };
 
     new 
-        index = TaskBarTextdraw_GetSelected(playerid),
-        E_TYPEALIGNMENT:currentType = SessionTextdrawData_GetAlign(index)
+        index = TaskBarTextDraw_GetSelected(playerid),
+        E_TYPEALIGNMENT:currentType = SessionTextDrawData_GetAlign(index)
     ;
 
     for(new i = 0; i < sizeof typeAvailable; i++) {
@@ -28,7 +28,7 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
             nextIndex = previsionIndex >= sizeof typeAvailable ? 0 : previsionIndex
         ;
 
-        SessionTextdrawData_SetAlign(index, typeAvailable[nextIndex]);
+        SessionTextDrawData_SetAlign(index, typeAvailable[nextIndex]);
         break;
     }
     return Y_HOOKS_BREAK_RETURN_1;

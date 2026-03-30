@@ -16,8 +16,8 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
         };
 
     new 
-        index = TaskBarTextdraw_GetSelected(playerid),
-        E_TYPEFONT:currentType = SessionTextdrawData_GetFont(index)
+        index = TaskBarTextDraw_GetSelected(playerid),
+        E_TYPEFONT:currentType = SessionTextDrawData_GetFont(index)
     ;
 
     for(new i = 0; i < sizeof typeAvailable; i++) {
@@ -29,7 +29,7 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
             nextIndex = previsionIndex >= sizeof typeAvailable ? 0 : previsionIndex
         ;
 
-        SessionTextdrawData_SetFont(index, typeAvailable[nextIndex]);
+        SessionTextDrawData_SetFont(index, typeAvailable[nextIndex]);
         break;
     }
     return Y_HOOKS_BREAK_RETURN_1;

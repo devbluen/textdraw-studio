@@ -2,13 +2,13 @@
             // Includes
 #include <YSI_Coding\y_hooks>
 
-hook OnPlayerTaskBarDrawUnSelected(playerid, index) {
+// hook OnPlayerTaskBarDrawUnSelected(playerid, index) {
 
-    if(TaskBarKey_GetType(playerid) != E_TYPEKEY_DISABLED)
-        TaskBarEventMoviment_Close(playerid);
+//     if(TaskBarKey_GetType(playerid) != E_TYPEKEY_DISABLED)
+//         TaskBarEventMoviment_Close(playerid);
 
-    return Y_HOOKS_CONTINUE_RETURN_1;
-}
+//     return Y_HOOKS_CONTINUE_RETURN_1;
+// }
 
 hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
