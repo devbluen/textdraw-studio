@@ -4,13 +4,13 @@
         {
             "label": "Build Normal",
             "type": "shell",
-            "command": "${workspaceRoot}/qawno/pawncc",
+            "command": "${workspaceRoot}/pawno/pawncc",
             "runOptions": {
                 "instanceLimit": 1,
             },
             "args": [
                 "${file}",
-                "'-i${workspaceFolder}/qawno/include'",
+                "'-i${workspaceFolder}/pawno/include'",
                 "'-D${fileDirname}'",
                 "'-;+'",
                 "'-(+'",
@@ -32,13 +32,13 @@
             "type": "shell",
             "command": "powershell",
             "runOptions": {
-                "instanceLimit": 1,
+                "instanceLimit": 1
             },
             "args": [
                 "-ExecutionPolicy", "Bypass",
                 "-File", "${workspaceFolder}/.vscode/powershell/compile.ps1",
                 "-file", "${file}",
-                "-include", "${workspaceFolder}/qawno/include",
+                "-include", "${workspaceFolder}/pawno/include",
                 "-dir", "${fileDirname}"
             ],
             "group": {
@@ -48,25 +48,7 @@
             "presentation": {
                 "reveal": "always",
                 "panel": "shared",
-                "focus": true
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Size Photoshop",
-            "type": "shell",
-            "command": "powershell",
-            "args": [
-                "-ExecutionPolicy", "Bypass",
-                "-File", "${workspaceFolder}/.vscode/powershell/size_photoshop.ps1"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared",
+                "clear": true,
                 "focus": true
             },
             "problemMatcher": []
