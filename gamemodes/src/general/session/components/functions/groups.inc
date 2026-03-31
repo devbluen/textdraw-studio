@@ -173,7 +173,15 @@ stock SessionGroup_RemoveDraw(indexGroup, indexDraw, bool:execute_query = true) 
 stock SessionGroup_RemoveAll(indexGroup, bool:execute_query = true) {
 
     foreach(new i: SessionGroupsDraws[indexGroup])
-        SessionGroup_RemoveDraw(i, execute_query);
+        SessionGroup_RemoveDraw(indexGroup, i, execute_query);
+}
+
+stock SessionGroup_DestroyDraws(indexGroup) {
+
+    foreach(new i: SessionGroupsDraws[indexGroup]) {
+        SessionTextDrawData_Destroy(i);
+        SessionGroup_RemoveDraw(indexGroup, i, false);
+    }
 }
 
 stock SessionGroup_RemoveAllByDrawIndex(indexDraw, bool:execute_query = true) {

@@ -1,0 +1,86 @@
+/*
+- Textdraw Studio - v1.0.0
+- Exported on 31/03/2026 04:38:31
+*/
+ 
+ 
+new PlayerText:TSPlayer[MAX_PLAYERS][4];
+new Text:TSGlobal[2];
+ 
+new TSPlayer[playerid][0] = CreatePlayerTextDraw(playerid, 231.000000, 150.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][0], 90.000000, 90.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][0], 1);
+PlayerTextDrawColor(playerid, TSPlayer[playerid][0], -1);
+PlayerTextDrawBackgroundColor(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][0], 4);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][0], true);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][0], false);
+ 
+new TSPlayer[playerid][1] = CreatePlayerTextDraw(playerid, 320.000000, 150.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][1], 90.000000, 90.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][1], 1);
+PlayerTextDrawColor(playerid, TSPlayer[playerid][1], -1);
+PlayerTextDrawBackgroundColor(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][1], 4);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][1], true);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][1], false);
+ 
+new TSPlayer[playerid][2] = CreatePlayerTextDraw(playerid, 270.000000, 280.000000, "Fala tu blueN");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][2], 640.000000, 0.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][2], 1);
+PlayerTextDrawColor(playerid, TSPlayer[playerid][2], -1);
+PlayerTextDrawBackgroundColor(playerid, TSPlayer[playerid][2], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][2], 1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][2], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][2], 1);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][2], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][2], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][2], false);
+PlayerTextDrawBoxColor(playerid, TSPlayer[playerid][2], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][2], false);
+ 
+new TSPlayer[playerid][3] = CreatePlayerTextDraw(playerid, 276.000000, 300.000000, "Fala tu blueN");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][3], 377.000000, 0.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][3], 1);
+PlayerTextDrawColor(playerid, TSPlayer[playerid][3], -5553921);
+PlayerTextDrawBackgroundColor(playerid, TSPlayer[playerid][3], -1);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][3], 1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][3], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][3], 1);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][3], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][3], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][3], true);
+PlayerTextDrawBoxColor(playerid, TSPlayer[playerid][3], 12375295);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][3], false);
+ 
+new TSGlobal[0] = TextDrawCreate(90.000000, 210.000000, "_");
+TextDrawTextSize(TSGlobal[0], 90.000000, 90.000000);
+TextDrawAlignment(TSGlobal[0], 1);
+TextDrawColor(TSGlobal[0], -1);
+TextDrawBackgroundColor(TSGlobal[0], 85);
+TextDrawFont(TSGlobal[0], 5);
+TextDrawSetShadow(TSGlobal[0], 0);
+TextDrawSetOutline(TSGlobal[0], 0);
+TextDrawSetProportional(TSGlobal[0], true);
+TextDrawSetPreviewModel(TSGlobal[0], 0);
+TextDrawSetPreviewVehCol(TSGlobal[0], 0, 0);
+TextDrawSetPreviewRot(TSGlobal[0], -7.000000, 0.000000, -45.000000, 1.000000);
+TextDrawSetSelectable(TSGlobal[0], false);
+ 
+new TSGlobal[1] = TextDrawCreate(451.000000, 250.000000, "_");
+TextDrawTextSize(TSGlobal[1], 90.000000, 90.000000);
+TextDrawAlignment(TSGlobal[1], 1);
+TextDrawColor(TSGlobal[1], -1);
+TextDrawBackgroundColor(TSGlobal[1], 85);
+TextDrawFont(TSGlobal[1], 5);
+TextDrawSetShadow(TSGlobal[1], 0);
+TextDrawSetOutline(TSGlobal[1], 0);
+TextDrawSetProportional(TSGlobal[1], true);
+TextDrawSetPreviewModel(TSGlobal[1], 560);
+TextDrawSetPreviewVehCol(TSGlobal[1], 0, 0);
+TextDrawSetPreviewRot(TSGlobal[1], -8.000000, 0.000000, 27.000000, 1.000000);
+TextDrawSetSelectable(TSGlobal[1], false);

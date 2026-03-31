@@ -74,8 +74,8 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
         {
             if(DB_GetRowCount(cache)) 
             {
-                DialogMod_Add(playerid, "Add all", -2);
-                DialogMod_Add(playerid, "Remove all", -3);
+                DialogMod_Add(playerid, "Add this page", -2);
+                DialogMod_Add(playerid, "Remove this page", -3);
 
                 new 
                     string[1024 + 1],

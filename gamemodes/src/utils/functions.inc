@@ -52,3 +52,8 @@ stock Util_CutString(dest[], maxlength, maxSize = sizeof dest) {
         strcat(dest, "...", maxSize);
     }
 }
+
+stock Util_GetForwardAngle(&Float:x, &Float:y, Float:angle, Float:distance) {
+    x += (distance * floatsin(-angle, degrees));
+    y += (distance * floatcos(-angle, degrees));
+}

@@ -16,8 +16,12 @@
 stock TaskBarButton_Create(playerid, E_TYPETASKBUTTON:type, PlayerText:draw) {
 
     new index = _:type;
+
     e_TaskBarButton[playerid][index][E_TASKBARBUTTON_DRAWID] = draw;
     
+    // Get Default Informations
+    PlayerTextDrawGetPos(playerid, draw, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_POSITION][0], e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_POSITION][1]);
+
     // Set Default Informations
     TaskBarButton_Show(playerid, type);
     TaskBarButton_Enable(playerid, type);
@@ -25,6 +29,9 @@ stock TaskBarButton_Create(playerid, E_TYPETASKBUTTON:type, PlayerText:draw) {
     PlayerTextDrawCreateClick(playerid, "TaskBar_Buttons", draw, index);
     Iter_Add(TaskBarButtons[playerid], index);
 }
+
+stock bool:TaskBarButton_IsValid(playerid, E_TYPETASKBUTTON:type)
+    return Iter_Contains(TaskBarButtons[playerid], _:type);
 
 stock bool:TaskBarButton_IsDisplayed(playerid, E_TYPETASKBUTTON:type)
     return e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_VISIBILITY];
@@ -62,6 +69,7 @@ stock bool:TaskBarButton_Enabled(playerid, E_TYPETASKBUTTON:type)
     return e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_STATUS];
 
 stock TaskBarButton_HideAll(playerid) {
+    
     foreach(new i: TaskBarButtons[playerid])
         TaskBarButton_Hide(playerid, E_TYPETASKBUTTON:i);
 
@@ -87,4 +95,17 @@ stock TaskBarButton_EnableAll(playerid) {
 
 stock TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON:type, const sprite[]) {
     PlayerTextDrawSetString(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], "textdrawStudio:%s", sprite);
+}
+
+stock TaskBarButton_GetPos(playerid, E_TYPETASKBUTTON:type, &Float:x, &Float:y) {
+    x = e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_POSITION][0];
+    y = e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_POSITION][1];
+}
+
+stock TaskBarButton_SetPos(playerid, E_TYPETASKBUTTON:type, Float:x, Float:y) {
+
+    PlayerTextDrawSetPos(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID], x, y);
+
+    if(TaskBarButton_IsDisplayed(playerid, type))
+        PlayerTextDrawShow(playerid, e_TaskBarButton[playerid][_:type][E_TASKBARBUTTON_DRAWID]);
 }

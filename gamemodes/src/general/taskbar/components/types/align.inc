@@ -8,14 +8,15 @@ enum E_TYPEALIGNMENT {
 
 static enum E_DATAINFO {
     E_TYPEALIGNMENT:E_DATAINFO_TYPE,
-    E_DATAINFO_SPRITE[20 + 1]
+    E_DATAINFO_SPRITE[20 + 1],
+    E_DATAINFO_NAME[30 + 1]
 };
 
 static const 
     e_DataInfo[][E_DATAINFO] = {
-        {E_TYPEALIGNMENT_LEFT, "alignLeft"},
-        {E_TYPEALIGNMENT_CENTER, "alignCenter"},
-        {E_TYPEALIGNMENT_RIGHT, "alignRight"}
+        {E_TYPEALIGNMENT_LEFT, "alignLeft", "TEXT_DRAW_ALIGN_LEFT"},
+        {E_TYPEALIGNMENT_CENTER, "alignCenter", "TEXT_DRAW_ALIGN_CENTER"},
+        {E_TYPEALIGNMENT_RIGHT, "alignRight", "TEXT_DRAW_ALIGN_RIGHT"}
     }
 ;
 
@@ -63,5 +64,15 @@ stock TaskBarTypeAlign_GetSprite(E_TYPEALIGNMENT:type) {
     ;
 
     strcat(string, e_DataInfo[index][E_DATAINFO_SPRITE]);
+    return string;
+}
+
+stock TaskBarTypeAlign_GetName(type) {
+    new 
+        string[20 + 1],
+        index = GetIndexInternal_Type(E_TYPEALIGNMENT:type)
+    ;
+
+    strcat(string, e_DataInfo[index][E_DATAINFO_NAME]);
     return string;
 }

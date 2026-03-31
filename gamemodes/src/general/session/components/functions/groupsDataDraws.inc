@@ -19,6 +19,12 @@ stock SessionGroupDataDraw_SetText(index, const string[], bool:execute_query = t
         SessionTextDrawData_SetString(i, string, execute_query);
 }
 
+stock SessionGroupDataDraw_SetVariable(index, const string[], bool:execute_query = true) {
+
+    foreach(new i: SessionGroupsDraws[index])
+        SessionTextDrawData_SetVariable(i, string, execute_query);   
+}
+
 stock SessionGroupDataDraw_SetMode(index, E_TYPEMODE:type, bool:execute_query = true) {
 
     foreach(new i: SessionGroupsDraws[index])
@@ -92,4 +98,34 @@ stock SessionGroupDataDraw_SetLettSize(index, Float:offsetX, Float:offsetY, bool
         }
         SessionTextDrawData_SetLettSize(i, position[0], position[1], execute_query);
     }
+}
+
+stock SessionGroupDataDraw_SetFont(index, E_TYPEFONT:font, bool:execute_query = true) {
+
+    foreach(new i: SessionGroupsDraws[index])
+        SessionTextDrawData_SetFont(i, font, execute_query);
+}
+
+stock SessionGroupDataDraw_SetAlign(index, E_TYPEALIGNMENT:align, bool:execute_query = true) {
+
+    foreach(new i: SessionGroupsDraws[index])
+        SessionTextDrawData_SetAlign(i, align, execute_query);
+}
+
+stock SessionGroupDataDraw_SetPropor(index, bool:status, bool:execute_query = true) {
+
+    foreach(new i: SessionGroupsDraws[index])
+        SessionTextDrawData_SetPropor(i, status, execute_query);
+}
+
+stock SessionGroupDataDraw_SetOuline(index, value, bool:execute_query = true) {
+
+    foreach(new i: SessionGroupsDraws[index])
+        SessionTextDrawData_SetOutline(i, value, execute_query);
+}
+
+stock SessionGroupDataDraw_SetShadow(index, value, bool:execute_query = true) {
+
+    foreach(new i: SessionGroupsDraws[index])
+        SessionTextDrawData_SetShadow(i, value, execute_query);
 }

@@ -37,12 +37,13 @@ stock TaskBarEventUpdate_Buttons(playerid) {
     
     TaskBarButton_DisableAll(playerid);                         // disable all buttons
     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_PROJECT);   // aways enabled
+    TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_CONFIG);    // aways enabled
 
     switch(Session_Has())
     {
         case true:
         {
-            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_CONFIG);
+            
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_GROUP);
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ITENS);
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_CREATE);

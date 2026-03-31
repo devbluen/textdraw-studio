@@ -350,10 +350,23 @@ stock TaskBarView_ShowTips(playerid)
 stock TaskBarView_HideTips(playerid)
     PlayerTextDrawHide(playerid, taskBarView[playerid][26]);
 
+stock TaskBarView_SetPosition(playerid, offset) {
+
+    new Float:position[2];
+    
+    if(IsPlayerTextDrawVisible(playerid, taskBarView[playerid][0])) {
+        PlayerTextDrawSetPos(playerid, taskBarView[playerid][0], 8.000, 414.000 - offset);
+        PlayerTextDrawShow(playerid, taskBarView[playerid][0]);
+    }
+
+    foreach(new i: TaskBarButtons[playerid]) {
+        TaskBarButton_GetPos(playerid, E_TYPETASKBUTTON:i, position[0], position[1]);
+        TaskBarButton_SetPos(playerid, E_TYPETASKBUTTON:i, position[0], position[1] - offset);
+    }
+}
+
 stock TaskBarView_Destroy(playerid) {
 
-    for(new i = 0; i < sizeof taskBarView[]; i++) {
-        PlayerTextDrawDestroy(playerid, taskBarView[playerid][i]);
-        taskBarView[playerid][i] = INVALID_PLAYER_TEXT_DRAW;
-    }
+    for(new i = 0; i < sizeof taskBarView[]; i++) 
+        PlayerTextDrawHide(playerid, taskBarView[playerid][i]);
 }

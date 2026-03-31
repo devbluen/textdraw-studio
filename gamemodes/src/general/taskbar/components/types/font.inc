@@ -11,17 +11,18 @@ enum E_TYPEFONT {
 
 static enum E_DATAINFO {
     E_TYPEFONT:E_DATAINFO_TYPE,
-    E_DATAINFO_SPRITE[20 + 1]
+    E_DATAINFO_SPRITE[20 + 1],
+    E_DATAINFO_NAME[30 + 1]
 };
 
 static const 
     e_DataInfo[][E_DATAINFO] = {
-        {E_TYPEFONT_0, "font1"},
-        {E_TYPEFONT_1, "font2"},
-        {E_TYPEFONT_2, "font3"},
-        {E_TYPEFONT_3, "font4"},
-        {E_TYPEFONT_SPRITE, "fontSprite"},
-        {E_TYPEFONT_MODEL, "fontModel"}
+        {E_TYPEFONT_0, "font1", "TEXT_DRAW_FONT_0"},
+        {E_TYPEFONT_1, "font2", "TEXT_DRAW_FONT_1"},
+        {E_TYPEFONT_2, "font3", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_3, "font4", "TEXT_DRAW_FONT_3"},
+        {E_TYPEFONT_SPRITE, "fontSprite", "TEXT_DRAW_FONT_SPRITE_DRAW"},
+        {E_TYPEFONT_MODEL, "fontModel", "TEXT_DRAW_FONT_MODEL_PREVIEW"}
     }
 ;
 
@@ -69,5 +70,15 @@ stock TaskBarTypeFont_GetSprite(E_TYPEFONT:type) {
     ;
 
     strcat(string, e_DataInfo[index][E_DATAINFO_SPRITE]);
+    return string;
+}
+
+stock TaskBarTypeFont_GetName(type) {
+    new 
+        string[20 + 1],
+        index = GetIndexInternal_Type(E_TYPEFONT:type)
+    ;
+
+    strcat(string, e_DataInfo[index][E_DATAINFO_NAME]);
     return string;
 }

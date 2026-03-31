@@ -98,7 +98,7 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Page (%d/%d)", page + 1, pages), "Select", "Close", "D_TASKBAR_PROJECTS", using inline TaskBarEventProjectListing);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Page (%d/%d)", page + 1, pages), "Select", "Close", "D_TASKBAR_PROJECTLIST", using inline TaskBarEventProjectListing);
 }
 
 static stock TaskBarEventProjectList_Options(playerid, uniqueId) {
@@ -218,7 +218,7 @@ Dialog:D_TASKBAR_DESTROY(playerid, response) {
 
 */
 
-DialogMod:D_TASKBAR_PROJECTS(playerid, response, inputtext[], params) {
+DialogMod:D_TASKBAR_PROJECTLIST(playerid, response, inputtext[], params) {
 
     if(response) {
 

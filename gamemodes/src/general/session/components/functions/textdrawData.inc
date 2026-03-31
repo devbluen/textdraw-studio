@@ -58,7 +58,8 @@ stock SessionTextDrawData_Load(index, id) {
                                                             model, \
                                                             model_rotation, \
                                                             model_colors, \
-                                                            itemType \
+                                                            itemType, \
+                                                            variable \
                                                         FROM textdraws  \
                                                         WHERE id = %i",
 
@@ -89,6 +90,7 @@ stock SessionTextDrawData_Load(index, id) {
 
             // Strings
             DB_GetFieldStringByName(cache, "text", e_SessionDraw[index][E_SESSIONDRAW_TEXT]);
+            DB_GetFieldStringByName(cache, "variable", e_SessionDraw[index][E_SESSIONDRAW_VARIABLE]);
 
             // Floats
             DB_GetFieldStringByName(cache, "position", buffGeneral);
@@ -367,12 +369,25 @@ stock Text:SessionTextDrawData_GetDraw(index)
 stock bool:SessionTextDrawData_GetSelect(index)
     return e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE];
 
+stock SessionTextDrawData_GetVariable(index, dest[], maxlength = sizeof dest) {
+    
+    if(isnull(e_SessionDraw[index][E_SESSIONDRAW_VARIABLE])) {
+        switch(SessionTextDrawData_GetMode(index)) {
+            case E_TYPEMODE_PLAYER: Session_GetPlayerVariable(dest, maxlength);
+            case E_TYPEMODE_GLOBAL: Session_GetGlobalVariable(dest, maxlength);
+        }
+        return;
+    }
+    
+    strcat(dest, e_SessionDraw[index][E_SESSIONDRAW_VARIABLE], maxlength);
+}
+
 //
 
 stock SessionTextDrawData_SetUniqueId(index, uniqueId)
     e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID] = uniqueId;
 
-stock SessionTextDrawData_SetModelCol(index, &Float:color1, &Float:color2, bool:execute_query = true) {
+stock SessionTextDrawData_SetModelCol(index, Float:color1, Float:color2, bool:execute_query = true) {
 
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][0] = color1;
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][1] = color2;
@@ -648,6 +663,20 @@ stock SessionTextDrawData_SetSelect(index, bool:status, bool:execute_query = tru
     SessionTextDrawData_Update(index);
 
     SessionTextDraw_UpdateButton(index);
+}
+
+stock SessionTextDrawData_SetVariable(index, const string[], bool:execute_query = true) {
+
+    if(isnull(string))
+        stringclear(e_SessionDraw[index][E_SESSIONDRAW_VARIABLE]);
+    else
+        strcopy(e_SessionDraw[index][E_SESSIONDRAW_VARIABLE], string);
+
+    if(execute_query) {
+        DB_FreeResultSet(
+            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET variable = %s WHERE id = %i", isnull(string) ? "NULL" : va_return("'%s'", string), SessionTextDrawData_GetUniqueId(index))
+        );
+    }
 }
 
 stock SessionTextDrawData_Show(index) {

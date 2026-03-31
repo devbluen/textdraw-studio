@@ -1,0 +1,29 @@
+/*
+- Textdraw Studio - v1.0.0
+- Exported on 31/03/2026 04:20:15
+*/
+ 
+ 
+new PlayerText:TSPlayer[MAX_PLAYERS][2];
+ 
+new TSPlayer[playerid][0] = CreatePlayerTextDraw(playerid, 231.000000, 150.000000, "LD_SPAC:white)");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][0], 90.000000, 90.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][0], 1);
+PlayerTextDrawColor(playerid, TSPlayer[playerid][0], -1);
+PlayerTextDrawBackgroundColor(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][0], 4);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][0], true);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][0], false);
+ 
+new TSPlayer[playerid][1] = CreatePlayerTextDraw(playerid, 320.000000, 150.000000, "LD_SPAC:white)");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][1], 90.000000, 90.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][1], 1);
+PlayerTextDrawColor(playerid, TSPlayer[playerid][1], -1);
+PlayerTextDrawBackgroundColor(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][1], 4);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][1], true);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][1], false);

@@ -9,10 +9,8 @@ forward OnUserLogout(playerid);
 hook OnPlayerSpawn(playerid) {
 
     SetPlayerSkin(playerid, 60);
-    SetPlayerPos(playerid, 1923.5066, -2547.8245, 14.0469);
-    SetPlayerFacingAngle(playerid, 89.9278);
-    SetPlayerVirtualWorld(playerid, random(999999));
-    SetCameraBehindPlayer(playerid);
+    
+    Camera_Set(playerid, E_TYPECAMERA_PLAYER);
     TogglePlayerControllable(playerid, true);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
@@ -21,6 +19,8 @@ hook OnPlayerConnect(playerid) {
 
     Iter_Add(Users, playerid);
     Util_ClearChat(playerid);
+
+    SetPlayerVirtualWorld(playerid, random(999999));
     SpawnPlayer(playerid);
 
     CallLocalFunction("OnUserLogin", "i", playerid);

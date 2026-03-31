@@ -172,7 +172,7 @@ public OnTaskBarMovimentUpdate(playerid) {
             E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid)
         ;
 
-        if((typeKey == E_TYPEKEY_SIZE || typeKey == E_TYPEKEY_POSITION || typeKey == E_TYPEKEY_LETTER_SIZE) && (updown != 0.0 || leftright != 0.0)) {
+        if((typeKey == E_TYPEKEY_SIZE || typeKey == E_TYPEKEY_POSITION || typeKey == E_TYPEKEY_LETTER_SIZE) && (updown != 0 || leftright != 0)) {
 
             new 
                 Float:position[2],
@@ -236,7 +236,7 @@ public OnTaskBarMovimentUpdate(playerid) {
             );
         }
 
-        else if((typeKey == E_TYPEKEY_GROUP_POSITION || typeKey == E_TYPEKEY_GROUP_SIZE || typeKey == E_TYPEKEY_GROUP_LETTER_SIZE) && (updown != 0.0 || leftright != 0.0)) {
+        else if((typeKey == E_TYPEKEY_GROUP_POSITION || typeKey == E_TYPEKEY_GROUP_SIZE || typeKey == E_TYPEKEY_GROUP_LETTER_SIZE) && (updown != 0 || leftright != 0)) {
 
             new
                 Float:offset[2],
@@ -273,9 +273,9 @@ public OnTaskBarMovimentUpdate(playerid) {
 
             SessionTextDrawData_GetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
 
-            if(updown != 0.0 || leftright != 0.0 || leftright == KEY_LEFT || leftright == KEY_RIGHT) {
+            if(updown != 0 || leftright != 0 || leftright == KEY_LEFT || leftright == KEY_RIGHT) {
 
-                if(updown != 0.0) {
+                if(updown != 0) {
                     if(updown == KEY_UP) rotation[column] -= (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
                     if(updown == KEY_DOWN) rotation[column] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
 
@@ -304,6 +304,17 @@ public OnTaskBarMovimentUpdate(playerid) {
                 4
             );
         }
+
+        else if(typeKey == E_TYPEKEY_TASKBAR && updown != 0) {
+
+            new offset = TaskBarEventSettings_GetY(playerid);
+            
+            if(updown == KEY_UP) offset += (keys == KEY_SPRINT) ? (10) : (1);
+            else if(updown == KEY_DOWN) offset -= (keys == KEY_SPRINT) ? (10) : (1);
+
+            TaskBarEventSettings_SetY(playerid, offset);
+            TaskBarMessage_Create(playerid, va_return("Offset: ~g~%d", TaskBarEventSettings_GetY(playerid)), 4);
+        }
     }
 }
 
@@ -326,20 +337,26 @@ stock TaskBarEventMoviment_Init(playerid) {
     new E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid);
 
     TaskBarEventMoviment_KillTimer(playerid);
-    TaskBarEventMoviment_SetColumn(playerid, 0);                                    // Default
-    TaskBarEventMoviment_SetOffset(playerid, 0.0, 0.0);                             // Default
-    TaskBarEventMoviment_Tips(playerid, TaskBarEventMoviment_GetTips(playerid));    // Set Tips
+    TaskBarEventMoviment_SetColumn(playerid, 0);                                        // Default
+    TaskBarEventMoviment_SetColumnMax(playerid, 0);                                     // Default
+    TaskBarEventMoviment_SetOffset(playerid, 0.0, 0.0);                                 // Default
 
-    switch(typeKey) {
-        case E_TYPEKEY_COLOR, E_TYPEKEY_COLOR_BACKGROUND, E_TYPEKEY_COLOR_BOX, E_TYPEKEY_MODEL_ROTATION: TaskBarEventMoviment_SetColumnMax(playerid, 4);
-        default: TaskBarEventMoviment_SetColumnMax(playerid, 0);
+    if(typeKey != E_TYPEKEY_TASKBAR) {
+        TaskBarButton_HideAll(playerid);
+        TaskBarEventMoviment_Tips(playerid, TaskBarEventMoviment_GetTips(playerid));    // Set Tips
     }
+
+    if(typeKey == E_TYPEKEY_COLOR 
+        || typeKey == E_TYPEKEY_COLOR_BACKGROUND 
+        || typeKey == E_TYPEKEY_COLOR_BOX 
+        || typeKey == E_TYPEKEY_MODEL_ROTATION) TaskBarEventMoviment_SetColumnMax(playerid, 4);
 
     e_Data[playerid][E_DATA_TIMER_KEY] = SetTimerEx("OnTaskBarMovimentUpdate", 50, true, "i", playerid);
 }
 
 stock TaskBarEventMoviment_Unload(playerid) {
 
+    TaskBarButton_ShowAll(playerid);
     TaskBarEventMoviment_KillTimer(playerid);
     TaskBarMessage_Destroy(playerid);
     TaskBarEventMoviment_Tips(playerid, false);

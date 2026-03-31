@@ -2,6 +2,14 @@
             // Includes
 #include <YSI_Coding\y_hooks>
 
+static enum {
+    E_BUTTON_EXPORT,
+    E_BUTTON_IMPORT,
+    E_BUTTON_EXIT,
+    E_BUTTON_NEW,
+    E_BUTTON_OPEN
+};
+
 hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
     if(type != E_TYPETASKBUTTON_PROJECT)
@@ -27,12 +35,24 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
 stock TaskBarEventProjectLoad_Show(playerid) {
 
-    new dialog[15 * 3];
-    strcat(dialog, "New Workspace\n");
-    strcat(dialog, "Open Project\n");
-    strcat(dialog, "Exit Studio");
+    inline TaskBarEventProjectShowed() {
 
-    Dialog_Show(playerid, D_TASKBAR_PROJECTS, DIALOG_STYLE_TABLIST, "Project", dialog, "Select", "Close");
+        switch(Session_Has())
+        {
+            case true: {
+                DialogMod_Add(playerid, "Export Project", E_BUTTON_EXPORT);
+                DialogMod_Add(playerid, "Import Presets", E_BUTTON_IMPORT);
+                DialogMod_Add(playerid, "Exit Studio", E_BUTTON_EXIT);
+            }
+
+            case false: {
+                DialogMod_Add(playerid, "New Workspace", E_BUTTON_NEW);
+                DialogMod_Add(playerid, "Open Project", E_BUTTON_OPEN);
+            }
+        }
+    }
+
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Project", "Select", "Close", "D_TASKBAR_PROJECTS", using inline TaskBarEventProjectShowed);
 }
 
 stock TaskBarEventProjectLoad_OpenProjectName(playerid, const name[]) {
@@ -105,32 +125,50 @@ stock TaskBarEventProjectLoad_OpenProject(uniqueId)
                     888      888  888    .88ooo8888.    888         888      888 888     ooooo      `"Y88b 
                     888     d88'  888   .8'     `888.   888       o `88b    d88' `88.    .88'  oo     .d8P 
                     o888bood8P'   o888o o88o     o8888o o888ooooood8  `Y8bood8P'   `Y8bood8P'   8""88888P'  
+                                                                                                            
+                                                    .o8                                                   
+                                                    "888                                                   
+                    ooo. .oo.  .oo.    .ooooo.   .oooo888                                                   
+                    `888P"Y88bP"Y88b  d88' `88b d88' `888                                                   
+                    888   888   888  888   888 888   888                                                   
+                    888   888   888  888   888 888   888                                                   
+                    o888o o888o o888o `Y8bod8P' `Y8bod88P"                                                  
 
 */
 
-Dialog:D_TASKBAR_PROJECTS(playerid, response, listitem) {
+DialogMod:D_TASKBAR_PROJECTS(playerid, response, inputtext[], listitem) {
 
     if(response) {
         switch(listitem) {
 
-            case 0: {
-                if(Session_Has()) return SendMessage(playerid, -1, ""#MESSAGE_RED"There is an open project currently.");
+            case -1: TaskBarEventProjectLoad_Show(playerid);
+
+            case E_BUTTON_NEW: {
+                if(Session_Has()) 
+                    return SendMessage(playerid, -1, ""#MESSAGE_RED"There is an open project currently.");
+
                 TaskBarEventProjectCreate_Show(playerid);
             }
 
-            case 1: {
-                if(Session_Has()) return SendMessage(playerid, -1, ""#MESSAGE_RED"There is an open project currently.");
+            case E_BUTTON_OPEN: {
+                if(Session_Has()) 
+                    return SendMessage(playerid, -1, ""#MESSAGE_RED"There is an open project currently.");
+
                 TaskBarEventProjectList_Show(playerid);
             }
 
-            case 2: {
-                if(!Session_Has()) return SendMessage(playerid, -1, ""#MESSAGE_RED"There are no open projects.");
+            case E_BUTTON_EXIT: {
+                if(!Session_Has()) 
+                    return SendMessage(playerid, -1, ""#MESSAGE_RED"There are no open projects.");
                 
                 Session_Destroy();
                 TaskBarEventProjectLoad_Show(playerid);
 
                 SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"Project was successfully completed.");
             }
+
+            case E_BUTTON_EXPORT: TaskBarEventProjectExport_Show(playerid);
+            // case E_BUTTON_IMPORT:
         }
     }
     return true;

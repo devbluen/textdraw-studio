@@ -63,6 +63,7 @@ PlayerTextDrawClick:TaskBar_Buttons(playerid, E_TYPETASKBUTTON:type) {
 
 stock TaskBar_Create(playerid) {
     TaskBarView_Create(playerid);
+    TaskBarEventSettings_SetMax(playerid, 413);
     TaskBar_Cursor(playerid, true);
 }
 
@@ -112,6 +113,7 @@ static stock TaskBar_Reset(playerid) {
 #include "src/general/taskbar/components/events/buttons/shadow.inc"
 #include "src/general/taskbar/components/events/buttons/model.inc"
 #include "src/general/taskbar/components/events/buttons/groups.inc"
+#include "src/general/taskbar/components/events/buttons/settings.inc"
                     //
 #include "src/general/taskbar/components/events/moviment.inc"
 #include "src/general/taskbar/components/events/update.inc"
