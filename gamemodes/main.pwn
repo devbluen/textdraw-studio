@@ -1,3 +1,12 @@
+/*
+
+    - Add Sprite Browser
+    - Add Export no Grupo
+    - Add Export no Grupo para Prefabs
+    - Add Import de Prefabs
+    - Add Rollback
+    
+*/
 
         // Pragmas
 #pragma option          -d3 	    // Used for more accurate debugging
