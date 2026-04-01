@@ -137,7 +137,11 @@ if ($LASTEXITCODE -eq 0) {
         if ($filtered) {
             Write-Host ""
             Write-Host " WARNINGS " -ForegroundColor Black -BackgroundColor Yellow
-            Write-Host $filtered -ForegroundColor Yellow
+            
+            $filtered | ForEach-Object {
+                Write-Host $_.ToString().Trim() -ForegroundColor Yellow
+            }
+            
             Write-Host ""
         }
     }
@@ -177,7 +181,18 @@ else
     Write-Host ""
 
     if ($buildOutput) {
-        $buildOutput # Display Pawn Compiler errors
+        $importantLines = $buildOutput | Where-Object { $_ -match "error|warning" }
+        if ($importantLines) {
+            foreach ($line in $importantLines) {
+                if ($line -match "error") {
+                    Write-Host $line.ToString().Trim() -ForegroundColor Red
+                } else {
+                    Write-Host $line.ToString().Trim() -ForegroundColor Yellow
+                }
+            }
+        } else {
+            $buildOutput
+        }
     } else {
         Write-Host " [!] CRITICAL: Compiler crash." -ForegroundColor Yellow
         Write-Host " Check: $targetFile" -ForegroundColor DarkGray

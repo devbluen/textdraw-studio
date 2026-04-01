@@ -19,6 +19,7 @@ hook OnUserLogin(playerid) {
 #include "src/general/session/components/functions/textdrawExport.inc"
 #include "src/general/session/components/functions/groups.inc"
 #include "src/general/session/components/functions/groupsDataDraws.inc"
+#include "src/general/session/components/functions/player.inc"
                 // Events
 #include "src/general/session/components/events/groups/list.inc"
 #include "src/general/session/components/events/groups/items.inc"

@@ -54,7 +54,7 @@ stock TaskBarEventProjectExport_Show(playerid) {
     }
 
     strcat(dialog, "\nPlease enter the desired export name below.");
-    Dialog_Show(playerid, D_TASKBAR_EXPORT, DIALOG_STYLE_INPUT, "Export", dialog, "Export", "Back");
+    Dialog_Show(playerid, D_TASKBAR_EXPORT, DIALOG_STYLE_INPUT, "Export", dialog, "Export", "Previous");
 }
 
 

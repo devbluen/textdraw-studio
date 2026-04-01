@@ -3,6 +3,15 @@
             // Definers
 static const MAX_TASKBAR_PROJECT_VIEW = 20;
 
+static enum {
+    E_INTERACTION_NEXT = -999,
+    E_INTERACTION_PREVIOUS,
+    E_INTERACTION_GOTO_PAGE,
+    E_INTERACTION_LOAD_ITEMS,
+    E_INTERACTION_DESTROY,
+    E_INTERACTION_RENAME
+};
+
 static enum E_DATA {
     E_DATA_UNIQUE_ID,
     E_DATA_PAGE,
@@ -52,15 +61,15 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
     inline TaskBarEventProjectListing() {
 
         new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
-                                                            id, \
-                                                            name, \
-                                                            `date` \
-                                                        FROM projects \
-                                                        LIMIT %i OFFSET %i",
-                                                    
-                                                        MAX_TASKBAR_PROJECT_VIEW,
-                                                        page * MAX_TASKBAR_PROJECT_VIEW
-                                                    );
+                                                                id, \
+                                                                name, \
+                                                                `date` \
+                                                            FROM projects \
+                                                            LIMIT %i OFFSET %i",
+                                                        
+                                                            MAX_TASKBAR_PROJECT_VIEW,
+                                                            page * MAX_TASKBAR_PROJECT_VIEW
+                                                        );
 
         DialogMod_Add(playerid, "ID\tName\tCreated At", -1);
 
@@ -68,11 +77,9 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
         {
             if(DB_GetRowCount(cache))
             {
-                if((page && pages) &&  (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
-                if(page >= 1) DialogMod_Add(playerid, "<<", -1337);
-
-                if(page >= 1)
-                    DialogMod_Add(playerid, "Goto Page", -1368);
+                if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
+                if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
+                if(pages > 1) DialogMod_Add(playerid, "Goto Page", E_INTERACTION_GOTO_PAGE);
 
                 new 
                     id,
@@ -106,12 +113,12 @@ static stock TaskBarEventProjectList_Options(playerid, uniqueId) {
     TaskBarEventProjectList_SetUniqueId(playerid, uniqueId);
 
     inline TaskBarEventProjectOptions() {
-        DialogMod_Add(playerid, "Load Items", 0);
-        DialogMod_Add(playerid, "Delete Project", 1);
-        DialogMod_Add(playerid, "Rename this Project", 2);
+        DialogMod_Add(playerid, "Load Items", E_INTERACTION_LOAD_ITEMS);
+        DialogMod_Add(playerid, "Delete Project", E_INTERACTION_DESTROY);
+        DialogMod_Add(playerid, "Rename this Project", E_INTERACTION_RENAME);
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Project", "Select", "Back", "D_TASKBAR_OPTION", using inline TaskBarEventProjectOptions);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Project", "Select", "Previous", "D_TASKBAR_OPTION", using inline TaskBarEventProjectOptions);
 }
 
 static stock TaskBarEventProjectList_SamePage(playerid)
@@ -223,10 +230,9 @@ DialogMod:D_TASKBAR_PROJECTLIST(playerid, response, inputtext[], params) {
     if(response) {
 
         switch(params) {
-            case -1333: TaskBarEventProjectList_SamePage(playerid);
-            case -1337: TaskBarEventProjectList_Page(playerid, TaskBarEventProjectList_GetPage(playerid) - 1);
-            case -1338: TaskBarEventProjectList_Page(playerid, TaskBarEventProjectList_GetPage(playerid) + 1);
-            case -1368: Dialog_Show(playerid, D_TASKBAR_PROJECTPAGE, DIALOG_STYLE_INPUT, "Page", "Which page do you want to go to?", "Goto", "Cancel");
+            case E_INTERACTION_PREVIOUS: TaskBarEventProjectList_Page(playerid, TaskBarEventProjectList_GetPage(playerid) - 1);
+            case E_INTERACTION_NEXT: TaskBarEventProjectList_Page(playerid, TaskBarEventProjectList_GetPage(playerid) + 1);
+            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_PROJECTPAGE, DIALOG_STYLE_INPUT, "Page", "Which page do you want to go to?", "Goto", "Cancel");
             default: TaskBarEventProjectList_Options(playerid, params);
         }
     }
@@ -243,24 +249,15 @@ DialogMod:D_TASKBAR_OPTION(playerid, response, inputtext[], params) {
 
         switch(params) 
         {
-            case 0: 
-            {
+            case E_INTERACTION_LOAD_ITEMS: {
                 TaskBarEventProjectLoad_OpenProject(uniqueId);
                 SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"Project ID (%d) was successfully loaded.", uniqueId);
-                return true;
             }
 
-            case 1:
-            {
-                Dialog_Show(playerid, D_TASKBAR_DESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Are you sure you want to delete this project? There's no going back.", "Yes", "Cancel");
-                return true;
-            }
-            case 2: 
-            {
-                Dialog_Show(playerid, D_TASKBAR_RENAME, DIALOG_STYLE_INPUT, "Rename", "What name would you like to give this project?", "Confirm", "Back");
-                return true;
-            }
+            case E_INTERACTION_DESTROY: Dialog_Show(playerid, D_TASKBAR_DESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Are you sure you want to delete this project? There's no going back.", "Yes", "Cancel");
+            case E_INTERACTION_RENAME:  Dialog_Show(playerid, D_TASKBAR_RENAME, DIALOG_STYLE_INPUT, "Rename", "What name would you like to give this project?", "Confirm", "Previous");
         }
+        return true;
     }
 
     TaskBarEventProjectList_SamePage(playerid);

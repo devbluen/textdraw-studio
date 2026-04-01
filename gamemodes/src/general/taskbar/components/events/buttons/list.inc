@@ -5,8 +5,28 @@ static const MAX_TASKBAR_LIST_VIEW = 10;
             // Includes
 #include <YSI_Coding\y_hooks>
 
+static enum {
+    E_INTERACTION_NEXT = -999,
+    E_INTERACTION_PREVIOUS,
+    E_INTERACTION_GOTO_PAGE,
+    E_INTERACTION_SELECT_ALL,
+    E_INTERACTION_SELECT_ALL_PAGE,
+    E_INTERACTION_DESELECT_ALL_PAGE,
+    E_INTERACTION_DESELECT_ALL,
+    E_INTERACTION_SELECT,
+    E_INTERACTION_DELETE,
+    E_INTERACTION_SELECT_TO_ALL,
+    E_INTERACTION_UNSELECT_TO_ALL,
+    E_INTERACTION_GROUP_FROM_SELECTED,
+    E_INTERACTION_MULTIPLE_SELECTION,
+    E_INTERACTION_CLONE,
+    E_INTERACTION_CLONE_CHOOSE,
+    E_INTERACTION_DESTROY_ALL
+};
+
 static enum E_DATA {
     E_DATA_PAGE_UNIQUE_ID,
+    E_DATA_PAGES,
     E_DATA_PAGE,
     E_DATA_INDEX_DRAW
 };
@@ -81,16 +101,18 @@ static stock TaskBarEvent_Page(playerid, page) {
             {
                 if(DB_GetRowCount(cacheInside))
                 {
-                    if((page && pages) &&  (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
-                    if(page >= 1) DialogMod_Add(playerid, "<<", -1337);
+                    if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
+                    if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
+                    if(pages > 1) DialogMod_Add(playerid, "Goto Page", E_INTERACTION_GOTO_PAGE);
 
-                    if(page >= 1)
-                        DialogMod_Add(playerid, "Goto Page", -1368);
+                    DialogMod_Add(playerid, "Multiple Selection", E_INTERACTION_MULTIPLE_SELECTION);
+                    DialogMod_Add(playerid, " ");
 
                     new
                         index,
                         text[1024 + 1],
                         E_TYPEMODE:mode,
+                        color[20 + 1],
                         currentIndex = TaskBarTextDraw_GetSelected(playerid)
                     ;
 
@@ -108,8 +130,14 @@ static stock TaskBarEvent_Page(playerid, page) {
 
                         SessionTextDrawData_GetVariable(index, dest);
 
+                        if(currentIndex == index) color = "{"#HEX_DEFAULT"}";
+                        else color = "{CCCCCC}";
+
+                        if(SessionPlayer_Has(playerid, index)) strcat(color, "[GROUP] ");
+                        else if(currentIndex == index) strcat(color, "[EDITING] ");
+
                         // Dialog
-                        DialogMod_Add(playerid, "%d\t{CCCCCC}%s\t{%s}%s\t%s", index, index, dest, currentIndex == index ? HEX_DEFAULT : "CCCCCC", text, TaskBarTypeMode_GetName(mode));
+                        DialogMod_Add(playerid, "%d\t{CCCCCC}%s\t%s%s\t%s", index, index, dest, color, text, TaskBarTypeMode_GetName(mode));
                     }
                     while(DB_SelectNextRow(cacheInside));
                 }
@@ -137,6 +165,9 @@ static stock TaskBarEvent_SetPages(playerid, pages)
 static stock TaskBarEvent_SamePage(playerid)
     TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid));
 
+static stock TaskBarEvent_SamePageOptions(playerid)
+    TaskBarEvent_ShowOptions(playerid, TaskBarEvent_GetIndex(playerid));
+
 static stock TaskBarEvent_GetIndex(playerid)
     return e_Data[playerid][E_DATA_INDEX_DRAW];
 
@@ -145,19 +176,114 @@ static stock TaskBarEvent_SetIndex(playerid, index)
 
 static stock TaskBarEvent_ShowOptions(playerid, index) {
 
-    new 
-        dialog[(18 + 30) * 5],
-        dest[30 + 1]
-    ;
-
     TaskBarEvent_SetIndex(playerid, index);
-    SessionTextDrawData_GetVariable(index, dest);
+    
+    inline TaskBarEventListOptionShow() {
 
-    strcat(dialog, "Option\tOptional\n");
-    strcat(dialog, "Select Textdraw\n");
-    strcat(dialog, "Delete Textdraw\n");
-    // strcatEx(dialog, "Change Variable\t{"#HEX_DEFAULT"}%s", dest);
-    Dialog_Show(playerid, D_TASKBAR_LIST, DIALOG_STYLE_TABLIST_HEADERS, "Textdraw", dialog, "Select", "Back");
+        if(!SessionPlayer_Has(playerid, index))
+            DialogMod_Add(playerid, "{CCCCCC}Add to multi-select", E_INTERACTION_SELECT_TO_ALL);
+        else
+            DialogMod_Add(playerid, "{"HEX_INFO"}Remove to multi-select", E_INTERACTION_UNSELECT_TO_ALL);
+
+        DialogMod_Add(playerid, "Select Textdraw", E_INTERACTION_SELECT);
+        DialogMod_Add(playerid, "Delete Textdraw", E_INTERACTION_DELETE);
+    }
+
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Textdraw", "Select", "Previous", "D_TASKBAR_LISTOPTIONS", using inline TaskBarEventListOptionShow);
+}
+
+static stock TaskBarEvent_SelectAllFromPage(playerid, page, bool:status) {
+
+    new sessionId = Session_GetId();
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
+                                                            indexDraw \
+                                                        FROM textdraws \
+                                                        WHERE project_id = %i \
+                                                        ORDER BY indexDraw ASC \
+                                                        LIMIT %i OFFSET %i",
+
+                                                        sessionId,
+                                                        MAX_TASKBAR_LIST_VIEW,
+                                                        page * MAX_TASKBAR_LIST_VIEW
+                                                    );
+
+    if(cache)
+    {
+        if(DB_GetRowCount(cache)) {
+
+            new indexDraw;
+
+            do
+            {
+                indexDraw = DB_GetFieldIntByName(cache, "indexDraw");
+
+                if(status)
+                    SessionPlayer_AddDraw(playerid, indexDraw);
+                else
+                    SessionPlayer_RemoveDraw(playerid, indexDraw);
+
+            }
+            while(DB_SelectNextRow(cache));
+        }
+
+        DB_FreeResultSet(cache);
+    }
+}
+
+static stock TaskBarEvent_MultipleOptions(playerid) {
+
+    inline OnTaskBarEventListMultiple() {
+
+        DialogMod_Add(playerid, "{"HEX_DEFAULT"}Selections:");
+        DialogMod_Add(playerid, "- Select Page", E_INTERACTION_SELECT_ALL_PAGE);
+        DialogMod_Add(playerid, "- Deselect Page", E_INTERACTION_DESELECT_ALL_PAGE);
+        DialogMod_Add(playerid, "- Select All", E_INTERACTION_SELECT_ALL);
+        
+        if(SessionPlayer_HasAny(playerid)) {
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Resizing:");
+            DialogMod_Add(playerid, "- Modify Position", );
+            DialogMod_Add(playerid, "- Modify Size", );
+            DialogMod_Add(playerid, "- Modify Letter-Size", );
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Colors:");
+            DialogMod_Add(playerid, "- Change Color", );
+            DialogMod_Add(playerid, "- Change Background Color", );
+            DialogMod_Add(playerid, "- Change Box Color", );
+            DialogMod_Add(playerid, "- Enable Box", );
+            DialogMod_Add(playerid, "- Disable Box", );
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Clonings:");
+            DialogMod_Add(playerid, "- Clone All", E_INTERACTION_CLONE);
+            DialogMod_Add(playerid, "- Clone All and Choose", E_INTERACTION_CLONE_CHOOSE);
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Fonts:");
+            DialogMod_Add(playerid, "- Font 0", );
+            DialogMod_Add(playerid, "- Font 1", );
+            DialogMod_Add(playerid, "- Font 2", );
+            DialogMod_Add(playerid, "- Font 3", );
+            DialogMod_Add(playerid, "- Left Alignment", );
+            DialogMod_Add(playerid, "- Center Alignment", );
+            DialogMod_Add(playerid, "- Right Alignment", );
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Text:");
+            DialogMod_Add(playerid, "- Change Text", );
+            DialogMod_Add(playerid, "- Edit Outline", );
+            DialogMod_Add(playerid, "- Edit Shadow", );
+            DialogMod_Add(playerid, "- Enable Proportional", );
+            DialogMod_Add(playerid, "- Disable Proportional", );
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Management:");
+            DialogMod_Add(playerid, "- Destroy All", E_INTERACTION_DESTROY_ALL);
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Groups:");
+            DialogMod_Add(playerid, "- Create Group from Selection", E_INTERACTION_GROUP_FROM_SELECTED);
+            DialogMod_Add(playerid, " ");
+            DialogMod_Add(playerid, "{"#HEX_INFO"}- Reset Selection", E_INTERACTION_DESELECT_ALL);
+        }
+    }
+
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Multiple Selection", "Select", "Previous", "D_TASKBAR_MULTIPLE", using inline OnTaskBarEventListMultiple);
 }
 
 
@@ -174,28 +300,6 @@ static stock TaskBarEvent_ShowOptions(playerid, index) {
 
 */
 
-Dialog:D_TASKBAR_LIST(playerid, response, listitem) {
-
-    if(response) {
-        new index = TaskBarEvent_GetIndex(playerid);
-
-        switch(listitem) {
-            case 0: TaskBarTextDraw_Select(playerid, index);
-            case 1: {
-                SessionTextDrawData_Destroy(index);
-                TaskBarEvent_SamePage(playerid);
-            }
-            case 2: Dialog_Show(playerid, D_TASKBAR_VARIABLE, DIALOG_STYLE_INPUT, "Variable", "Define the name you want for the variable below.\n\n \
-                                                                                            \
-                                                                                            If you don't enter anything, its default will be set.", "Change", "Back");
-        }
-        return true;
-    }
-
-    TaskBarEvent_SamePage(playerid);
-    return true;
-}
-
 Dialog:D_TASKBAR_VARIABLE(playerid, response, listitem, inputtext[]) {
 
     new index = TaskBarEvent_GetIndex(playerid);
@@ -204,6 +308,26 @@ Dialog:D_TASKBAR_VARIABLE(playerid, response, listitem, inputtext[]) {
         SessionTextDrawData_SetVariable(index, inputtext);
 
     TaskBarEvent_ShowOptions(playerid, index);
+    return true;
+}
+
+Dialog:D_TASKBAR_GOTOPAGE(playerid, response, listitem, inputtext[]) {
+
+    if(response) {
+
+        new page;
+        if(sscanf(inputtext, "d", page))
+            return Dialog_ReShow(playerid, "Only put numbers");
+
+        new pages = TaskBarEvent_GetPages(playerid);
+        if(page < 0 || page >= pages)
+            return Dialog_ReShow(playerid, "Invalid page");
+
+        TaskBarEvent_Page(playerid, page);
+        return true;
+    }
+
+    TaskBarEvent_SamePage(playerid);
     return true;
 }
 
@@ -234,11 +358,59 @@ DialogMod:D_TASKBAR_LIST(playerid, response, inputtext[], index) {
     if(response) {
 
         switch(index) {
-            case -1333: TaskBarEvent_SamePage(playerid);
-            case -1337: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) - 1);
-            case -1338: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) + 1);
+            case -1: TaskBarEvent_SamePage(playerid);
+            case E_INTERACTION_PREVIOUS: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) - 1);
+            case E_INTERACTION_NEXT: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) + 1);
+            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_GOTOPAGE, DIALOG_STYLE_INPUT, "Goto Page", "Which page do you want to go to?", "Confirm", "Previous");
+            case E_INTERACTION_MULTIPLE_SELECTION: TaskBarEvent_MultipleOptions(playerid);
             default: TaskBarEvent_ShowOptions(playerid, index);
         }
     }
+    return true;
+}
+
+DialogMod:D_TASKBAR_LISTOPTIONS(playerid, response, inputtext[], listitem) {
+
+    if(response) {
+        new index = TaskBarEvent_GetIndex(playerid);
+
+        switch(listitem) {
+            case E_INTERACTION_SELECT: TaskBarTextDraw_Select(playerid, index);
+            case E_INTERACTION_DELETE: {
+                SessionTextDrawData_Destroy(index);
+                TaskBarEvent_SamePage(playerid);
+            }
+            case E_INTERACTION_SELECT_TO_ALL: {
+                SessionPlayer_AddDraw(playerid, index);
+                TaskBarEvent_SamePageOptions(playerid);
+            }
+            case E_INTERACTION_UNSELECT_TO_ALL: {
+                SessionPlayer_RemoveDraw(playerid, index);
+                TaskBarEvent_SamePageOptions(playerid);
+            }
+        }
+        return true;
+    }
+
+    TaskBarEvent_SamePage(playerid);
+    return true;
+}
+
+DialogMod:D_TASKBAR_MULTIPLE(playerid, response, inputtext[], listitem) {
+
+    if(response) {
+        switch(listitem) {
+            case E_INTERACTION_SELECT_ALL: SessionPlayer_SelectAll(playerid);
+            case E_INTERACTION_SELECT_ALL_PAGE: TaskBarEvent_SelectAllFromPage(playerid, TaskBarEvent_GetPage(playerid), true);
+            case E_INTERACTION_DESELECT_ALL_PAGE: TaskBarEvent_SelectAllFromPage(playerid, TaskBarEvent_GetPage(playerid), false);
+            case E_INTERACTION_DESELECT_ALL: SessionPlayer_ResetLocalGroup(playerid);
+            case E_INTERACTION_GROUP_FROM_SELECTED: {SessionPlayer_AddWithSelected(playerid); return true;}
+            case E_INTERACTION_CLONE: {SessionPlayer_CloneAll(playerid); return true;}
+            case E_INTERACTION_CLONE_CHOOSE: {SessionPlayer_CloneAll(playerid, true); return true;}
+            case E_INTERACTION_DESTROY_ALL: SessionPlayer_DestroyAll(playerid);
+        }
+    }
+
+    TaskBarEvent_SamePage(playerid);
     return true;
 }

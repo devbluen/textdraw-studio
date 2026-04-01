@@ -101,8 +101,8 @@ Dialog:D_SETTINGS(playerid, response, listitem) {
         switch(listitem) {
             case 0: Camera_Show(playerid);
             case 1: TaskBarKey_Set(playerid, E_TYPEKEY_TASKBAR);
-            case 2: Dialog_Show(playerid, D_SETTINGS_VPLAYER, DIALOG_STYLE_INPUT, "Player Variable", "Please enter the name of the variable you want below.", "Change", "Back");
-            case 3: Dialog_Show(playerid, D_SETTINGS_VGLOBAL, DIALOG_STYLE_INPUT, "Global Variable", "Please enter the name of the variable you want below.", "Change", "Back");
+            case 2: Dialog_Show(playerid, D_SETTINGS_VPLAYER, DIALOG_STYLE_INPUT, "Player Variable", "Please enter the name of the variable you want below.", "Change", "Previous");
+            case 3: Dialog_Show(playerid, D_SETTINGS_VGLOBAL, DIALOG_STYLE_INPUT, "Global Variable", "Please enter the name of the variable you want below.", "Change", "Previous");
         }
     }
     return true;

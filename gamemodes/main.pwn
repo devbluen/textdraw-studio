@@ -5,7 +5,8 @@
     - Add Export no Grupo para Prefabs
     - Add Import de Prefabs
     - Add Rollback
-    
+    - Add suporte para acentos
+
 */
 
         // Pragmas

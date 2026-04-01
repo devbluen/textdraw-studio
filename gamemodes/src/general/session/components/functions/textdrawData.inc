@@ -296,9 +296,8 @@ static stock SessionTextDrawData_GetGenId(uniqueId) {
 stock SessionTextDrawData_GetUniqueId(index)
     return e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID];
 
-stock SessionTextDrawData_GetString(index, dest[], maxlength = sizeof dest) {
+stock SessionTextDrawData_GetString(index, dest[], maxlength = sizeof dest)
     strcat(dest, e_SessionDraw[index][E_SESSIONDRAW_TEXT], maxlength);
-}
 
 stock SessionTextDrawData_GetPosition(index, &Float:x, &Float:y) {
     x = e_SessionDraw[index][E_SESSIONDRAW_POSITION][0];
@@ -633,7 +632,11 @@ stock SessionTextDrawData_SetString(index, const string[], bool:execute_query = 
         );
     }
 
-    TextDrawSetString(SessionTextDrawData_GetDraw(index), string);
+    new stringBuff[1024 + 1];
+    strcat(stringBuff, string);
+
+    Util_ConverterTextdrawText(stringBuff);
+    TextDrawSetString(SessionTextDrawData_GetDraw(index), stringBuff);
 }
 
 stock SessionTextDrawData_SetMode(index, E_TYPEMODE:type, bool:execute_query = true) {

@@ -88,6 +88,11 @@ stock TaskBarEventUpdate_Buttons(playerid) {
                 }
             }
         }
+
+        case false:
+        {
+            SessionPlayer_ResetLocalGroup(playerid);
+        }
     }
 
     TaskBarEventUpdate_Sprite(playerid, index);

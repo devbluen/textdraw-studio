@@ -23,6 +23,8 @@ stock SessionTextDraw_Create(index) {
     ;
 
     SessionTextDrawData_GetString(index, string);
+    Util_ConverterTextdrawText(string);
+    
     SessionTextDrawData_GetPosition(index, position[0], position[1]);
     e_SessionDraw[index][E_SESSIONDRAW_DRAW] = TextDrawCreate(position[0], position[1], string);
 
@@ -81,6 +83,9 @@ stock SessionTextDraw_Destroy(index, bool:resetHeader = true) {
 
         foreach(new i: SessionDrawsPlayers[index])
             TaskBarTextDraw_UnSelect(i);
+
+        foreach(new i: Users)
+            SessionPlayer_RemoveDraw(i, index);
 
         Iter_Clear(SessionDrawsPlayers[index]);
         Iter_Remove(SessionDraws, index);

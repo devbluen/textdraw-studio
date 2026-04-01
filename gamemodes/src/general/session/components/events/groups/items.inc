@@ -11,6 +11,11 @@ static enum E_DATA {
 };
 
 static enum {
+    E_INTERACTION_ADD_TEXTDRAW = -999,
+    E_INTERACTION_DESTROY_GROUP,
+    E_INTERACTION_NEXT,
+    E_INTERACTION_PREVIOUS,
+    E_INTERACTION_OPTIONS,
     E_INTERACTION_EXPORT_ALL,
     E_INTERACTION_DESTROY_ALL,
     E_INTERACTION_REMOVE_ALL,
@@ -93,11 +98,11 @@ static stock SessionEventGroupItem_Page(playerid, page) {
         ;
 
         DialogMod_Add(playerid, "ID\tName");
-        DialogMod_Add(playerid, "Add Textdraw", -1321);
-        DialogMod_Add(playerid, "Destroy Group", -1311);
+        DialogMod_Add(playerid, "Add Textdraw", E_INTERACTION_ADD_TEXTDRAW);
+        DialogMod_Add(playerid, "Destroy Group", E_INTERACTION_DESTROY_GROUP);
 
-        if((page && pages) &&  (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
-        if(page >= 1) DialogMod_Add(playerid, "<<", -1337);
+        if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
+        if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
 
         new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
                                                                 t.text, \
@@ -116,7 +121,7 @@ static stock SessionEventGroupItem_Page(playerid, page) {
         {
             if(DB_GetRowCount(cache)) 
             {
-                DialogMod_Add(playerid, "Options\t{CCCCCC}(Add Item, Moviment, Texts and Others)", -1322);
+                DialogMod_Add(playerid, "Options\t{CCCCCC}(Add Item, Moviment, Texts and Others)", E_INTERACTION_OPTIONS);
                 DialogMod_Add(playerid, " ");
 
                 new 
@@ -139,7 +144,7 @@ static stock SessionEventGroupItem_Page(playerid, page) {
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Itens (%d/%d)", page + 1, pages), "Select", "Back", "D_GROUP_ITEMS", using inline OnSessionGroupItemsShow);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Itens (%d/%d)", page + 1, pages), "Select", "Previous", "D_GROUP_ITEMS", using inline OnSessionGroupItemsShow);
 }
 
 static stock SessionEventGroupItem_SetPage(playerid, value)
@@ -222,7 +227,7 @@ static stock SessionEventGroupItem_Options(playerid) {
         // DialogMod_Add(playerid, "- Change Variable", E_INTERACTION_VARIABLE);
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Options", "Select", "Back", "D_GROUP_OPTIONS", using inline OnSessionGroupItemsOptions);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Options", "Select", "Previous", "D_GROUP_OPTIONS", using inline OnSessionGroupItemsOptions);
 }
 
 static stock SessionEventGroupItem_Color(playerid)
@@ -400,11 +405,11 @@ DialogMod:D_GROUP_ITEMS(playerid, response, inputtext[], params) {
 
         switch(params) {
             case -1: SessionEventGroupItem_SamePage(playerid);
-            case -1321: SessionEventGroupDraws_Show(playerid, SessionEventGroupItem_GetGroupIndex(playerid));
-            case -1322: SessionEventGroupItem_Options(playerid);
-            case -1311: Dialog_Show(playerid, D_GROUP_DESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Are you sure?", "Yes", "Cancel");
-            case -1338: SessionEventGroupItem_Page(playerid, SessionEventGroupItem_GetPage(playerid) + 1);
-            case -1337: SessionEventGroupItem_Page(playerid, SessionEventGroupItem_GetPage(playerid) - 1);
+            case E_INTERACTION_ADD_TEXTDRAW: SessionEventGroupDraws_Show(playerid, SessionEventGroupItem_GetGroupIndex(playerid));
+            case E_INTERACTION_OPTIONS: SessionEventGroupItem_Options(playerid);
+            case E_INTERACTION_DESTROY_GROUP: Dialog_Show(playerid, D_GROUP_DESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Are you sure?", "Yes", "Cancel");
+            case E_INTERACTION_NEXT: SessionEventGroupItem_Page(playerid, SessionEventGroupItem_GetPage(playerid) + 1);
+            case E_INTERACTION_PREVIOUS: SessionEventGroupItem_Page(playerid, SessionEventGroupItem_GetPage(playerid) - 1);
             default:
             {
                 SessionEventGroupItem_SetDrawIndex(playerid, params);
@@ -436,7 +441,7 @@ DialogMod:D_GROUP_OPTIONS(playerid, response, inputtext[], enumId) {
             case E_INTERACTION_COLOR: SessionEventGroupItem_Color(playerid);
             case E_INTERACTION_COLOR_BACKGROUND: SessionEventGroupItem_Color(playerid);
             case E_INTERACTION_COLOR_BOX: SessionEventGroupItem_Color(playerid);
-            case E_INTERACTION_TEXT: Dialog_Show(playerid, D_GROUP_SET_TEXT, DIALOG_STYLE_INPUT, "Text", "Enter the text you want to change for the entire group below.", "Change", "Back");
+            case E_INTERACTION_TEXT: Dialog_Show(playerid, D_GROUP_SET_TEXT, DIALOG_STYLE_INPUT, "Text", "Enter the text you want to change for the entire group below.", "Change", "Previous");
             case E_INTERACTION_TO_PLAYER: {SessionGroupDataDraw_SetMode(indexGroup, E_TYPEMODE_PLAYER); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_TO_GLOBAL: {SessionGroupDataDraw_SetMode(indexGroup, E_TYPEMODE_GLOBAL); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_ENABLE_BOX: {SessionGroupDataDraw_SetBox(indexGroup, true); SessionEventGroupItem_Options(playerid);}
@@ -452,9 +457,9 @@ DialogMod:D_GROUP_OPTIONS(playerid, response, inputtext[], enumId) {
             case E_INTERACTION_RIGHT_ALIGN: {SessionGroupDataDraw_SetAlign(indexGroup, E_TYPEALIGNMENT_RIGHT); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_ENABLE_PROPORTION: {SessionGroupDataDraw_SetPropor(indexGroup, true); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_DISABLE_PROPORTION: {SessionGroupDataDraw_SetPropor(indexGroup, false); SessionEventGroupItem_Options(playerid);}
-            case E_INTERACTION_OUTLINE: Dialog_Show(playerid, D_GROUP_SET_OUTLINE, DIALOG_STYLE_INPUT, "Outline", "Enter the outline you want to change for the entire group below.", "Change", "Back");
-            case E_INTERACTION_SHADOW: Dialog_Show(playerid, D_GROUP_SET_SHADOW, DIALOG_STYLE_INPUT, "Shadow", "Enter the shadow you want to change for the entire group below.", "Change", "Back");
-            case E_INTERACTION_VARIABLE: Dialog_Show(playerid, D_GROUP_SET_VARIABLE, DIALOG_STYLE_INPUT, "Variable", "Change the variable for the entire group.", "Change", "Back");
+            case E_INTERACTION_OUTLINE: Dialog_Show(playerid, D_GROUP_SET_OUTLINE, DIALOG_STYLE_INPUT, "Outline", "Enter the outline you want to change for the entire group below.", "Change", "Previous");
+            case E_INTERACTION_SHADOW: Dialog_Show(playerid, D_GROUP_SET_SHADOW, DIALOG_STYLE_INPUT, "Shadow", "Enter the shadow you want to change for the entire group below.", "Change", "Previous");
+            case E_INTERACTION_VARIABLE: Dialog_Show(playerid, D_GROUP_SET_VARIABLE, DIALOG_STYLE_INPUT, "Variable", "Change the variable for the entire group.", "Change", "Previous");
         }
         return true;
     }

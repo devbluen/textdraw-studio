@@ -82,6 +82,8 @@ stock bool:TaskBar_GetCursor(playerid)
 
 static stock TaskBar_Reset(playerid) {
 
+    SessionPlayer_ResetLocalGroup(playerid);
+    
     static const e_Clear[E_TASKBAR];
     e_TaskBar[playerid] = e_Clear;
 }

@@ -155,7 +155,7 @@ DialogMod:WEBCOLORS(playerid, response, inputtext[], params) {
                                                 - Numbers"
                                             );
 
-                Dialog_Show(playerid, D_WEBCOLOR, DIALOG_STYLE_INPUT, "Colors", dialog, "Confirm", "Back");
+                Dialog_Show(playerid, D_WEBCOLOR, DIALOG_STYLE_INPUT, "Colors", dialog, "Confirm", "Previous");
             }
 
             case -3: Util_WebColorCall(playerid, -2);

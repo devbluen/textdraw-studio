@@ -315,6 +315,32 @@ public OnTaskBarMovimentUpdate(playerid) {
             TaskBarEventSettings_SetY(playerid, offset);
             TaskBarMessage_Create(playerid, va_return("Offset: ~g~%d", TaskBarEventSettings_GetY(playerid)), 4);
         }
+
+        else if((typeKey == E_TYPEKEY_GROUP_LOCAL_POSITION || typeKey == E_TYPEKEY_GROUP_LOCAL_SIZE || typeKey == E_TYPEKEY_GROUP_LOCAL_LETTER_SIZE) && (updown != 0 || leftright != 0)) {
+
+            new
+                Float:offset[2],
+                Float:offsetSet[2],
+                Float:defSpeed = TaskBarEventMoviment_GetSpeed(playerid)
+            ;
+
+            defSpeed = keys == KEY_SPRINT ? MAX_SPEED_HIGH : defSpeed;
+            if(typeKey == E_TYPEKEY_GROUP_LOCAL_LETTER_SIZE)
+                defSpeed = defSpeed / 100;
+
+            if(leftright == KEY_LEFT) offset[0] = -defSpeed;
+            if(leftright == KEY_RIGHT) offset[0] = defSpeed;
+            if(updown == KEY_UP) offset[1] = -defSpeed;
+            if(updown == KEY_DOWN) offset[1] = defSpeed;
+
+            SessionPlayer_SetPosition(playerid, offset[0], offset[1], false);
+
+            TaskBarEventMoviment_GetOffset(playerid, offsetSet[0], offsetSet[1]);
+            offsetSet[0] += offset[0];
+            offsetSet[1] += offset[1];
+            TaskBarEventMoviment_SetOffset(playerid, offsetSet[0], offsetSet[1]);
+            TaskBarMessage_Create(playerid, va_return("~y~OffsetX:~w~ %0.2f     ~y~OffsetY:~w~ %0.2f     ~r~Speed:~w~ %0.1f", offsetSet[0], offsetSet[1], defSpeed), 4);
+        }
     }
 }
 
@@ -392,6 +418,10 @@ stock TaskBarEventMoviment_Close(playerid, bool:reCheck = true) {
 
             case E_TYPEKEY_COLOR, E_TYPEKEY_COLOR_BACKGROUND, E_TYPEKEY_COLOR_BOX: {
                 TaskBarTextDrawUpdate_SetColor(typeButton, index, TaskBarTextDrawUpdate_GetColor(typeButton, index));
+            }
+
+            case E_TYPEKEY_GROUP_LOCAL_POSITION: {
+                SessionPlayer_SetPosition(playerid, 0.0, 0.0, true, true);
             }
         }
     }

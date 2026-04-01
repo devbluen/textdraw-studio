@@ -98,7 +98,7 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, "Textdraws", "Add", "Back", "D_GROUP_DRAWLIST", using inline OnSessionGroupDrawsShow);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, "Textdraws", "Add", "Previous", "D_GROUP_DRAWLIST", using inline OnSessionGroupDrawsShow);
 }
 
 static stock SessionEventGroupDraw_Status(playerid, bool:status) {

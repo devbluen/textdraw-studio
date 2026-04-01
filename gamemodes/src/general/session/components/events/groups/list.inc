@@ -2,7 +2,14 @@
             // Definers
 static const    MAX_GROUP_LIST = 15;
 
+static enum {
+    E_INTERACTION_CREATE_GROUP = -999,
+    E_INTERACTION_NEXT,
+    E_INTERACTION_PREVIOUS
+};
+
 static enum E_DATA {
+    E_DATA_CALLBACK[30 + 1],
     E_DATA_PAGE,
     E_DATA_PAGES
 };
@@ -10,7 +17,6 @@ static enum E_DATA {
 static
     e_Data[MAX_PLAYERS][E_DATA]
 ;
-
 
 
 /*
@@ -25,8 +31,10 @@ static
 
 */
 
-stock SessionEventGroupList_Show(playerid) {
+stock SessionEventGroupList_Show(playerid, const callback[]) {
     
+    SessionEventGroupList_SetCallback(playerid, callback);
+
     new uniqueId = Session_GetId();
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT count(*) AS `count` FROM groups WHERE project_id = %i", uniqueId);
 
@@ -40,7 +48,7 @@ stock SessionEventGroupList_Show(playerid) {
     }
 }
 
-stock SessionEventGroupList_Page(playerid, page) {
+static stock SessionEventGroupList_Page(playerid, page) {
 
     new uniqueId = Session_GetId();
     new pages = SessionEventGroupList_GetPages(playerid);
@@ -59,10 +67,10 @@ stock SessionEventGroupList_Page(playerid, page) {
 
         DialogMod_Add(playerid, "ID\tName");
 
-        DialogMod_Add(playerid, "Create Group", -1321);
+        DialogMod_Add(playerid, "Create Group", E_INTERACTION_CREATE_GROUP);
 
-        if((page && pages) && page <= (pages - 1)) DialogMod_Add(playerid, ">>", -1338);
-        if(page >= 1) DialogMod_Add(playerid, "<<", -1337);
+        if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
+        if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
 
         new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
                                                             indexGroup \
@@ -103,6 +111,13 @@ stock SessionEventGroupList_Page(playerid, page) {
     DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Groups (%d/%d)", page + 1, pages), "Select", "Close", "D_GROUP_LIST", using inline OnSessionGroupListShow);
 }
 
+static stock SessionEventGroupList_Callback(playerid, index) {
+
+    new callback[30 + 1];
+    SessionEventGroupList_GetCallback(playerid, callback);
+    CallLocalFunction(va_return("gp_%s", callback), "ii", playerid, index);
+}
+
 stock SessionEventGroupList_SamePage(playerid)
     SessionEventGroupList_Page(playerid, SessionEventGroupList_GetPage(playerid));
 
@@ -112,11 +127,17 @@ static stock SessionEventGroupList_SetPage(playerid, value)
 static stock SessionEventGroupList_SetPages(playerid, value)
     e_Data[playerid][E_DATA_PAGES] = value;
 
+static stock SessionEventGroupList_SetCallback(playerid, const callback[])
+    strcopy(e_Data[playerid][E_DATA_CALLBACK], callback);
+
 static stock SessionEventGroupList_GetPage(playerid)
     return e_Data[playerid][E_DATA_PAGE];
 
 static stock SessionEventGroupList_GetPages(playerid)
     return e_Data[playerid][E_DATA_PAGES];
+
+static stock SessionEventGroupList_GetCallback(playerid, dest[], maxlength = sizeof dest)
+    strcat(dest, e_Data[playerid][E_DATA_CALLBACK], maxlength);
 
 
 
@@ -149,7 +170,7 @@ Dialog:D_GROUP_CREATE(playerid, response, listitem, inputtext[]) {
             return true;
         }
 
-        SessionEventGroupItem_Show(playerid, indexGroup);
+        SessionEventGroupList_Callback(playerid, indexGroup);
         return true;
     }
 
@@ -185,10 +206,10 @@ DialogMod:D_GROUP_LIST(playerid, response, inputtext[], index) {
 
         switch(index) {
             case -1: SessionEventGroupList_SamePage(playerid);
-            case -1321: Dialog_Show(playerid, D_GROUP_CREATE, DIALOG_STYLE_INPUT, "Name", "Define the group name below.", "Create", "Back");
-            case -1338: SessionEventGroupList_Page(playerid, SessionEventGroupList_GetPage(playerid) + 1);
-            case -1337: SessionEventGroupList_Page(playerid, SessionEventGroupList_GetPage(playerid) - 1);
-            default: SessionEventGroupItem_Show(playerid, index);
+            case E_INTERACTION_CREATE_GROUP: Dialog_Show(playerid, D_GROUP_CREATE, DIALOG_STYLE_INPUT, "Name", "Define the group name below.", "Create", "Previous");
+            case E_INTERACTION_NEXT: SessionEventGroupList_Page(playerid, SessionEventGroupList_GetPage(playerid) + 1);
+            case E_INTERACTION_PREVIOUS: SessionEventGroupList_Page(playerid, SessionEventGroupList_GetPage(playerid) - 1);
+            default: SessionEventGroupList_Callback(playerid, index);
         }
     }
     return true;

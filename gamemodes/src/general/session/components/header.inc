@@ -1,4 +1,9 @@
 
+            // Macro
+#define Group:%0(%1) \
+    forward gp_%0(%1); \
+    public gp_%0(%1)
+
             // Definers
 #define     MAX_TEXTDRAWS_PLAYER_STUDIO         (256)
 #define     MAX_TEXTDRAWS_GLOBAL_STUDIO         (2048)
@@ -48,6 +53,7 @@ new
     Iterator:SessionDrawsPlayers[MAX_TEXTDRAWS_STUDIO]<MAX_PLAYERS>,
     Iterator:SessionGroups<MAX_STUDIO_GROUPS>,
     Iterator:SessionGroupsDraws[MAX_STUDIO_GROUPS]<MAX_TEXTDRAWS_STUDIO>,
+    Iterator:SessionPlayersGroups[MAX_PLAYERS]<MAX_TEXTDRAWS_STUDIO>,
     e_Session[E_SESSION],
     e_SessionDraw[MAX_TEXTDRAWS_STUDIO][E_SESSIONDRAW],
     e_SessionGroup[MAX_STUDIO_GROUPS][E_SESSIONGROUP]

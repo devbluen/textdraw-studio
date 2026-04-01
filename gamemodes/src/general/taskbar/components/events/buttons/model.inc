@@ -156,9 +156,9 @@ DialogMod:D_ITEM_MODEL(playerid, response, inputtext[], params) {
     if(response) {
 
         switch(params) {
-            case 0: Dialog_Show(playerid, D_ITEMMODEL_OBJ, DIALOG_STYLE_INPUT, "ModelId", "Which model do you want to change to?", "Change", "Back");
-            case 1: Dialog_Show(playerid, D_ITEMMODEL_COLOR1, DIALOG_STYLE_INPUT, "Color", "Enter the vehicle's primary color below to change it.", "Change", "Back");
-            case 2: Dialog_Show(playerid, D_ITEMMODEL_COLOR2, DIALOG_STYLE_INPUT, "Color", "Enter the vehicle's secondary color below to change it.", "Change", "Back");
+            case 0: Dialog_Show(playerid, D_ITEMMODEL_OBJ, DIALOG_STYLE_INPUT, "ModelId", "Which model do you want to change to?", "Change", "Previous");
+            case 1: Dialog_Show(playerid, D_ITEMMODEL_COLOR1, DIALOG_STYLE_INPUT, "Color", "Enter the vehicle's primary color below to change it.", "Change", "Previous");
+            case 2: Dialog_Show(playerid, D_ITEMMODEL_COLOR2, DIALOG_STYLE_INPUT, "Color", "Enter the vehicle's secondary color below to change it.", "Change", "Previous");
             case 3: TaskBarKey_Set(playerid, E_TYPEKEY_MODEL_ROTATION);
         }
     }
