@@ -78,17 +78,19 @@ stock SessionTextDraw_Destroy(index, bool:resetHeader = true) {
 
     if(resetHeader) {
 
-        static const e_Clear[E_SESSIONDRAW];
-        e_SessionDraw[index] = e_Clear;
-
         foreach(new i: SessionDrawsPlayers[index])
             TaskBarTextDraw_UnSelect(i);
 
         foreach(new i: Users)
             SessionPlayer_RemoveDraw(i, index);
 
+        SessionGroup_RemoveAllByDrawIndex(index, false);
+
         Iter_Clear(SessionDrawsPlayers[index]);
         Iter_Remove(SessionDraws, index);
+
+        static const e_Clear[E_SESSIONDRAW];
+        e_SessionDraw[index] = e_Clear;
     }
 }
 
@@ -113,11 +115,20 @@ stock SessionTextDraw_UpdateButtonAll() {
         TaskBarEventUpdate_Buttons(i);
 }
 
-stock SessionTextDraw_ShowAlLForPlayer(playerid) {
+stock SessionTextDraw_ShowAllForPlayer(playerid) {
 
     foreach(new i: SessionDraws)
         TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(i));
 }
+
+stock SessionTextDraw_HideAllForPlayer(playerid) {
+
+    foreach(new i: SessionDraws)
+        TextDrawHideForPlayer(playerid, SessionTextDrawData_GetDraw(i));
+}
+
+stock bool:SessionTextDraw_IsEmpty()
+    return Iter_IsEmpty(SessionDraws);
 
 stock SessionTextDraw_SetSelect(playerid, index)
     Iter_Add(SessionDrawsPlayers[index], playerid);

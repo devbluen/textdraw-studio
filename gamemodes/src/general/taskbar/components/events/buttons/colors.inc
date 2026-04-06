@@ -60,7 +60,7 @@ WebColor:DRAWSCOLOR(playerid, color) {
     new E_TYPETASKBUTTON:typeButton = TaskBarEventColors_GetButton(playerid);
 
     if(color == -2) TaskBarKey_Set(playerid, TaskBarTextDrawUpdate_GetKeyByButton(typeButton)); 
-    else if(color == -3) TaskBarEventColors_Show(playerid);
+    else if(color == -3) return;    // TaskBarEventColors_Show(playerid);
     else
     {
         new currentIndex = TaskBarTextDraw_GetSelected(playerid);

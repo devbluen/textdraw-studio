@@ -55,3 +55,18 @@
         CONSTRAINT groups_textdraws_id_textdraws_id FOREIGN KEY(draw_id) REFERENCES textdraws(id) ON DELETE CASCADE ON UPDATE CASCADE, \
         CONSTRAINT groups_id_textdraws_id FOREIGN KEY(group_id) REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE \
     )"
+
+#define eTableSprites \
+    "CREATE TABLE sprites ( \
+        id INTEGER, \
+        type INTEGER, \
+        sprite TEXT UNIQUE, \
+        PRIMARY KEY(id) \
+    )"
+
+#define eTableSpritesFavorites \
+    "CREATE TABLE sprites_favorites ( \
+        user TEXT, \
+        sprite_id INTEGER, \
+        CONSTRAINT sprites_favorites_sprite_id_sprites_id FOREIGN KEY(sprite_id) REFERENCES sprites(id) ON DELETE CASCADE ON UPDATE CASCADE \
+    )"

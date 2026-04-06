@@ -43,7 +43,9 @@ static enum {
     E_INTERACTION_DISABLE_PROPORTION,
     E_INTERACTION_OUTLINE,
     E_INTERACTION_SHADOW,
-    E_INTERACTION_VARIABLE
+    E_INTERACTION_VARIABLE,
+    E_INTERACTION_CLONE,
+    E_INTERACTION_CLONE_CHOOSE
 };
 
 static
@@ -85,8 +87,8 @@ static stock SessionEventGroupItem_Page(playerid, page) {
 
     new pages = SessionEventGroupItem_GetPages(playerid);
 
-    if(page < 0) page = 0;
     if(page >= pages) page = pages - 1;
+    if(page < 0 || pages <= 0) page = 0;
 
     SessionEventGroupItem_SetPage(playerid, page);
 
@@ -98,11 +100,12 @@ static stock SessionEventGroupItem_Page(playerid, page) {
         ;
 
         DialogMod_Add(playerid, "ID\tName");
-        DialogMod_Add(playerid, "Add Textdraw", E_INTERACTION_ADD_TEXTDRAW);
-        DialogMod_Add(playerid, "Destroy Group", E_INTERACTION_DESTROY_GROUP);
 
         if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
         if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
+
+        DialogMod_Add(playerid, "Add Textdraw", E_INTERACTION_ADD_TEXTDRAW);
+        DialogMod_Add(playerid, "Destroy Group", E_INTERACTION_DESTROY_GROUP);
 
         new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
                                                                 t.text, \
@@ -196,10 +199,14 @@ static stock SessionEventGroupItem_Options(playerid) {
         DialogMod_Add(playerid, " ");
         DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Colors:");
         DialogMod_Add(playerid, "- Change Color", E_INTERACTION_COLOR);
-        DialogMod_Add(playerid, "- Change Background Color", E_INTERACTION_COLOR_BACKGROUND);
+        DialogMod_Add(playerid, "- Change Background Color", E_INTERACTION_COLOR_BACKGROUND); 
         DialogMod_Add(playerid, "- Change Box Color", E_INTERACTION_COLOR_BOX);
         DialogMod_Add(playerid, "- Enable Box", E_INTERACTION_ENABLE_BOX);
         DialogMod_Add(playerid, "- Disable Box", E_INTERACTION_DISABLE_BOX);
+        DialogMod_Add(playerid, " ");
+        DialogMod_Add(playerid, "{"HEX_DEFAULT"}Clonings:");
+        DialogMod_Add(playerid, "- Clone All (Don't add to group)", E_INTERACTION_CLONE);
+        DialogMod_Add(playerid, "- Clone All and Choose (Don't add to group)", E_INTERACTION_CLONE_CHOOSE);
         DialogMod_Add(playerid, " ");
         DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Fonts:");
         DialogMod_Add(playerid, "- Font 0", E_INTERACTION_FONT0);
@@ -460,6 +467,8 @@ DialogMod:D_GROUP_OPTIONS(playerid, response, inputtext[], enumId) {
             case E_INTERACTION_OUTLINE: Dialog_Show(playerid, D_GROUP_SET_OUTLINE, DIALOG_STYLE_INPUT, "Outline", "Enter the outline you want to change for the entire group below.", "Change", "Previous");
             case E_INTERACTION_SHADOW: Dialog_Show(playerid, D_GROUP_SET_SHADOW, DIALOG_STYLE_INPUT, "Shadow", "Enter the shadow you want to change for the entire group below.", "Change", "Previous");
             case E_INTERACTION_VARIABLE: Dialog_Show(playerid, D_GROUP_SET_VARIABLE, DIALOG_STYLE_INPUT, "Variable", "Change the variable for the entire group.", "Change", "Previous");
+            case E_INTERACTION_CLONE: SessionGroup_CloneAll(playerid, indexGroup);
+            case E_INTERACTION_CLONE_CHOOSE: {SessionGroup_CloneAll(playerid, indexGroup, true); TaskBarEvent_MultipleOptions(playerid);}
         }
         return true;
     }

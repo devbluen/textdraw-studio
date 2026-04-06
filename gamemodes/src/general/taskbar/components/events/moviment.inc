@@ -38,7 +38,7 @@ hook OnUserLogout(playerid) {
 
 hook OnPlayerTaskBarDrawUnSelected(playerid) {
 
-    TaskBarEventMoviment_Close(playerid);
+    TaskBarKey_Set(playerid, E_TYPEKEY_DISABLED);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -66,7 +66,7 @@ public OnTaskBarMovimentUpdate(playerid) {
 
     GetPlayerKeys(playerid, keys, updown, leftright);
 
-    if(keys & KEY_SECONDARY_ATTACK) TaskBarEventMoviment_Close(playerid);
+    if(keys & KEY_SECONDARY_ATTACK) TaskBarKey_Set(playerid, E_TYPEKEY_DISABLED);
     else if(keys & KEY_YES && !TaskBarEventMoviment_HasDelay(playerid)) {
         TaskBarEventMoviment_SetTips(playerid, !TaskBarEventMoviment_GetTips(playerid));
         TaskBarEventMoviment_SetDelay(playerid, 500);
@@ -333,13 +333,45 @@ public OnTaskBarMovimentUpdate(playerid) {
             if(updown == KEY_UP) offset[1] = -defSpeed;
             if(updown == KEY_DOWN) offset[1] = defSpeed;
 
-            SessionPlayer_SetPosition(playerid, offset[0], offset[1], false);
+            if(typeKey == E_TYPEKEY_GROUP_LOCAL_POSITION)
+                SessionPlayerData_SetPosition(playerid, offset[0], offset[1], false);
+            else if(typeKey == E_TYPEKEY_GROUP_LOCAL_SIZE)
+                SessionPlayerData_SetSize(playerid, offset[0], offset[1], false);
+            else if(typeKey == E_TYPEKEY_GROUP_LOCAL_LETTER_SIZE)
+                SessionPlayerData_SetLetterSize(playerid, offset[0], offset[1], false);
 
             TaskBarEventMoviment_GetOffset(playerid, offsetSet[0], offsetSet[1]);
             offsetSet[0] += offset[0];
             offsetSet[1] += offset[1];
             TaskBarEventMoviment_SetOffset(playerid, offsetSet[0], offsetSet[1]);
             TaskBarMessage_Create(playerid, va_return("~y~OffsetX:~w~ %0.2f     ~y~OffsetY:~w~ %0.2f     ~r~Speed:~w~ %0.1f", offsetSet[0], offsetSet[1], defSpeed), 4);
+        }
+
+        else if(typeKey == E_TYPEKEY_MOVE_INDEX) {
+
+            new 
+                maxIndex = SessionPlayer_GetMaxIndex(playerid),
+                nextIndex = SessionPlayer_GetNextIndex(playerid),
+                currentIndex = SessionPlayer_GetIndex(playerid)
+            ;
+
+            if(leftright != 0 && !TaskBarEventMoviment_HasDelay(playerid)) {
+                
+                if(leftright == KEY_RIGHT)
+                    nextIndex++;
+                else if(leftright == KEY_LEFT)
+                    nextIndex--;
+
+                if(nextIndex > maxIndex) nextIndex = maxIndex - 1;
+                if(nextIndex < 0) nextIndex = 0;
+
+                SessionTextDrawData_SetIndex(currentIndex, nextIndex);
+                TaskBarTextDraw_Select(playerid, nextIndex);
+                SessionPlayer_MoveIndexInit(playerid, nextIndex);
+                TaskBarEventMoviment_SetDelay(playerid, 500);
+            }
+
+            TaskBarMessage_Create(playerid, va_return("Index: ~y~%d/%d", nextIndex, maxIndex), 4);
         }
     }
 }
@@ -388,46 +420,57 @@ stock TaskBarEventMoviment_Unload(playerid) {
     TaskBarEventMoviment_Tips(playerid, false);
 }
 
-stock TaskBarEventMoviment_Close(playerid, bool:reCheck = true) {
+stock TaskBarEventMoviment_Close(playerid) {
     
-    new index = TaskBarTextDraw_GetSelected(playerid);
-    if(index != -1) {
+    new 
+        index = TaskBarTextDraw_GetSelected(playerid),
+        E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
+        E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey)
+    ;
 
-        new 
-            E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
-            E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey)
-        ;
-
-        switch(typeKey) 
-        {
-            case E_TYPEKEY_SIZE, E_TYPEKEY_POSITION, E_TYPEKEY_LETTER_SIZE: {
+    switch(typeKey) 
+    {
+        case E_TYPEKEY_SIZE, E_TYPEKEY_POSITION, E_TYPEKEY_LETTER_SIZE: {
+            if(index != -1) {
                 new Float:position[2];
                 TaskBarTextDrawUpdate_GetPos(typeButton, index, position[0], position[1]);
                 TaskBarTextDrawUpdate_SetPos(typeButton, index, position[0], position[1]);
             }
+        }
 
-            case E_TYPEKEY_MODEL_ROTATION: {
+        case E_TYPEKEY_MODEL_ROTATION: {
+            if(index != -1) {
                 new Float:rotation[4];
                 SessionTextDrawData_GetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
                 SessionTextDrawData_SetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
             }
+        }
 
-            case E_TYPEKEY_GROUP_POSITION, E_TYPEKEY_GROUP_SIZE, E_TYPEKEY_GROUP_LETTER_SIZE: {
-                SessionEventGroupItem_SetOffset(playerid, 0.0, 0.0, true, true);
-            }
+        case E_TYPEKEY_GROUP_POSITION, E_TYPEKEY_GROUP_SIZE, E_TYPEKEY_GROUP_LETTER_SIZE: {
+            SessionEventGroupItem_SetOffset(playerid, 0.0, 0.0, true, true);
+        }
 
-            case E_TYPEKEY_COLOR, E_TYPEKEY_COLOR_BACKGROUND, E_TYPEKEY_COLOR_BOX: {
+        case E_TYPEKEY_COLOR, E_TYPEKEY_COLOR_BACKGROUND, E_TYPEKEY_COLOR_BOX: {
+            if(index != -1)
                 TaskBarTextDrawUpdate_SetColor(typeButton, index, TaskBarTextDrawUpdate_GetColor(typeButton, index));
-            }
+        }
 
-            case E_TYPEKEY_GROUP_LOCAL_POSITION: {
-                SessionPlayer_SetPosition(playerid, 0.0, 0.0, true, true);
-            }
+        case E_TYPEKEY_GROUP_LOCAL_POSITION: {
+            SessionPlayerData_SetPosition(playerid, 0.0, 0.0, true, true);
+        }
+
+        case E_TYPEKEY_GROUP_LOCAL_SIZE: {
+            SessionPlayerData_SetSize(playerid, 0.0, 0.0, true, true);
+        }
+
+        case E_TYPEKEY_GROUP_LOCAL_LETTER_SIZE: {
+            SessionPlayerData_SetLetterSize(playerid, 0.0, 0.0, true, true);
+        }
+
+        case E_TYPEKEY_MOVE_INDEX: {
+            SessionPlayer_MoveIndex(playerid);
         }
     }
-
-    if(reCheck)
-        TaskBarKey_Set(playerid, E_TYPEKEY_DISABLED);
 }
 
 static stock TaskBarEventMoviment_KillTimer(playerid) {

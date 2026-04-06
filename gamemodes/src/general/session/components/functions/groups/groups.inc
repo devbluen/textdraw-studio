@@ -191,6 +191,30 @@ stock SessionGroup_RemoveAllByDrawIndex(indexDraw, bool:execute_query = true) {
             SessionGroup_RemoveDraw(i, indexDraw, execute_query);
 }
 
+stock SessionGroup_CloneAll(playerid, indexGroup, bool:choose = false) {
+
+    new 
+        index,
+        Iterator:tempGroups<MAX_TEXTDRAWS_STUDIO> 
+    ;
+
+    if(choose)
+        SessionPlayer_ResetLocalGroup(playerid);
+
+    foreach(new i: SessionGroupsDraws[indexGroup]) {
+        index = SessionTextDrawData_Copy(i);
+
+        if(choose) 
+            Iter_Add(tempGroups, index);
+
+    }
+
+    if(choose) {
+        foreach(new i: tempGroups)
+            SessionPlayer_AddDraw(playerid, i);
+    }
+}
+
 stock SessionGroup_DestroyAll() {
 
     foreach(new i: SessionGroups)

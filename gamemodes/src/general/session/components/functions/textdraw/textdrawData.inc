@@ -117,13 +117,14 @@ stock SessionTextDrawData_Load(index, id) {
     }
 }
 
-stock SessionTextDrawData_Destroy(index) {
+stock SessionTextDrawData_Destroy(index, bool:execute_query = true) {
 
-    DB_FreeResultSet(
-        DB_ExecuteQuery(IDConnection, "DELETE FROM textdraws WHERE id = %i", SessionTextDrawData_GetUniqueId(index))
-    );
+    if(execute_query) {
+        DB_FreeResultSet(
+            DB_ExecuteQuery(IDConnection, "DELETE FROM textdraws WHERE id = %i", SessionTextDrawData_GetUniqueId(index))
+        );
+    }
     
-    SessionGroup_RemoveAllByDrawIndex(index, false);
     SessionTextDraw_Destroy(index);
 }
 
@@ -144,7 +145,7 @@ stock SessionTextDrawData_Create(E_TYPEITEM:type) {
                 .itemType = type, 
                 .text = "DEFAULT", 
                 .position = Float:{270.0, 170.0}, 
-                .size = Float:{640.0, 0.0},
+                .size = Float:{640.0, 640.0},
                 .letterSize = Float:{0.3, 1.5}, 
                 .font = E_TYPEFONT_1, 
                 .align = E_TYPEALIGNMENT_LEFT, 
@@ -238,6 +239,7 @@ stock SessionTextDrawData_Copy(index) {
     if(lastInsert)
         SessionTextDrawData_Load(indexIter, lastInsert);
 
+    // Iter_Add(SessionDraws, indexIter);
     return indexIter;
 }
 
@@ -292,6 +294,9 @@ static stock SessionTextDrawData_GetGenId(uniqueId) {
 
     return -1;
 }
+
+stock bool:SessionTextDrawData_Has(index)
+    return Iter_Contains(SessionDraws, index);
 
 stock SessionTextDrawData_GetUniqueId(index)
     return e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID];
@@ -560,7 +565,7 @@ stock SessionTextDrawData_SetModel(index, model, bool:execute_query = true) {
     SessionTextDrawData_Update(index);
 }
 
-stock SessionTextDrawData_SetModelRot(index, &Float:x, &Float:y, &Float:z, &Float:zoom, bool:execute_query = true) {
+stock SessionTextDrawData_SetModelRot(index, Float:x, Float:y, Float:z, Float:zoom, bool:execute_query = true) {
 
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][1] = y;
@@ -577,7 +582,7 @@ stock SessionTextDrawData_SetModelRot(index, &Float:x, &Float:y, &Float:z, &Floa
     SessionTextDrawData_Update(index);
 }
 
-stock SessionTextDrawData_SetLettSize(index, &Float:x, &Float:y, bool:execute_query = true) {
+stock SessionTextDrawData_SetLettSize(index, Float:x, Float:y, bool:execute_query = true) {
 
     e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][1] = y;
@@ -592,7 +597,7 @@ stock SessionTextDrawData_SetLettSize(index, &Float:x, &Float:y, bool:execute_qu
     SessionTextDrawData_Update(index);
 }
 
-stock SessionTextDrawData_SetSize(index, &Float:x, &Float:y, bool:execute_query = true) {
+stock SessionTextDrawData_SetSize(index, Float:x, Float:y, bool:execute_query = true) {
 
     e_SessionDraw[index][E_SESSIONDRAW_SIZE][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_SIZE][1] = y;
@@ -607,7 +612,7 @@ stock SessionTextDrawData_SetSize(index, &Float:x, &Float:y, bool:execute_query 
     SessionTextDrawData_Update(index);
 }
 
-stock SessionTextDrawData_SetPosition(index, &Float:x, &Float:y, bool:execute_query = true) {
+stock SessionTextDrawData_SetPosition(index, Float:x, Float:y, bool:execute_query = true) {
 
     e_SessionDraw[index][E_SESSIONDRAW_POSITION][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_POSITION][1] = y;
@@ -684,10 +689,64 @@ stock SessionTextDrawData_SetVariable(index, const string[], bool:execute_query 
 
 stock SessionTextDrawData_Show(index) {
     e_SessionDraw[index][E_SESSIONDRAW_SHOW] = true;
-    TextDrawShowForAll(SessionTextDrawData_GetDraw(index));
+    SessionTextDrawData_ShowInternal(index);
 }
 
 static stock SessionTextDrawData_Update(index) {
     if(!e_SessionDraw[index][E_SESSIONDRAW_SHOW]) return;
-    TextDrawShowForAll(SessionTextDrawData_GetDraw(index));
+    SessionTextDrawData_ShowInternal(index);
+}
+
+static stock SessionTextDrawData_ShowInternal(index) {
+
+    foreach(new i: Users)
+        if(!SpriteBrowser_Created(i))
+            TextDrawShowForPlayer(i, SessionTextDrawData_GetDraw(index));
+}
+
+stock SessionTextDrawData_ReorganizeIndexs(project_id) {
+
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET indexDraw = ( \
+                                                            SELECT  \
+                                                                (newIndex - 1) \
+                                                            FROM ( \
+                                                                SELECT  \
+                                                                    id,  \
+                                                                    row_number() OVER (ORDER BY indexDraw) AS newIndex  \
+                                                                FROM textdraws \
+                                                                WHERE project_id = %i \
+                                                            ) AS mapping \
+                                                            WHERE mapping.id = textdraws.id \
+                                                        ) \
+                                                        WHERE project_id = %i",
+
+                                                        project_id,
+                                                        project_id
+                                                    );
+
+    if(cache)
+    {
+        DB_FreeResultSet(cache);
+        SessionTextDrawData_Refresh();
+    }
+}
+
+stock SessionTextDrawData_SetIndex(index, newIndex) {
+
+    if(SessionTextDrawData_Has(newIndex)) {
+        DB_FreeResultSet(
+            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET indexDraw = %i WHERE id = %i", index, SessionTextDrawData_GetUniqueId(newIndex))
+        );
+    }
+
+    DB_FreeResultSet(
+        DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET indexDraw = %i WHERE id = %i", newIndex, SessionTextDrawData_GetUniqueId(index))
+    );
+
+    SessionTextDrawData_Refresh();
+}
+
+stock SessionTextDrawData_Refresh() {
+    SessionTextDraw_DestroyAll();
+    SessionTextDrawData_LoadAll();
 }

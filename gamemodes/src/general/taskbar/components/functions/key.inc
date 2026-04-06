@@ -36,7 +36,7 @@ stock TaskBarKey_Set(playerid, E_TYPEKEY:type) {
         return;
 
     if(TaskBarKey_GetType(playerid) != E_TYPEKEY_DISABLED)
-        TaskBarEventMoviment_Close(playerid, false);   // reset and save other
+        TaskBarEventMoviment_Close(playerid);
     
     e_Data[playerid][E_DATA_TYPE] = type;
 

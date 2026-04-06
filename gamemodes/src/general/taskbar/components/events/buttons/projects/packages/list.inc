@@ -53,8 +53,8 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
 
     new pages = TaskBarEventProjectList_GetPages(playerid);
 
-    if(page < 0) page = 0;
     if(page >= pages) page = pages - 1;
+    if(page < 0 || pages <= 0) page = 0;
     
     TaskBarEventProjectList_SetPage(playerid, page);
 
@@ -65,6 +65,7 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
                                                                 name, \
                                                                 `date` \
                                                             FROM projects \
+                                                            ORDER BY id DESC \
                                                             LIMIT %i OFFSET %i",
                                                         
                                                             MAX_TASKBAR_PROJECT_VIEW,

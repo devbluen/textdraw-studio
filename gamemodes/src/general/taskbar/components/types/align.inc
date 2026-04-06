@@ -1,6 +1,7 @@
 
 // if need TEXT_DRAW_ALIGN
 enum E_TYPEALIGNMENT {
+    E_TYPEALIGNMENT_INVALID = 0,
     E_TYPEALIGNMENT_LEFT = 1,
     E_TYPEALIGNMENT_CENTER = 2,
     E_TYPEALIGNMENT_RIGHT = 3
@@ -9,7 +10,7 @@ enum E_TYPEALIGNMENT {
 static enum E_DATAINFO {
     E_TYPEALIGNMENT:E_DATAINFO_TYPE,
     E_DATAINFO_SPRITE[20 + 1],
-    E_DATAINFO_NAME[30 + 1]
+    E_DATAINFO_NAME[45 + 1]
 };
 
 static const 
@@ -69,7 +70,7 @@ stock TaskBarTypeAlign_GetSprite(E_TYPEALIGNMENT:type) {
 
 stock TaskBarTypeAlign_GetName(type) {
     new 
-        string[20 + 1],
+        string[45 + 1],
         index = GetIndexInternal_Type(E_TYPEALIGNMENT:type)
     ;
 

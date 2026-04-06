@@ -102,8 +102,7 @@
     },
     "password": "",
     "pawn": {
-        "legacy_plugins": [
-        ],
+        "legacy_plugins": [],
         "main_scripts": [
             "main"
         ],

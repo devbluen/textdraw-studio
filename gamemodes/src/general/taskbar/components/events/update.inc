@@ -113,7 +113,7 @@ stock TaskBarEventUpdate_Sprite(playerid, index) {
 
     TaskBarButton_SetImage(playerid, E_TYPETASKBUTTON_ALIGN, 
         TaskBarTypeAlign_GetSprite(
-            index >= 0 ? SessionTextDrawData_GetAlign(index) : E_TYPEALIGNMENT_LEFT
+            index >= 0 && SessionTextDrawData_GetAlign(index) != E_TYPEALIGNMENT_INVALID ? SessionTextDrawData_GetAlign(index) : E_TYPEALIGNMENT_LEFT
         )
     );
 

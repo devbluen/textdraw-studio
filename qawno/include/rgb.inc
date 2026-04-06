@@ -4,10 +4,10 @@
     Copyright © 2022 Abyss Morgan. All rights reserved.
 
     Functions:
-        RGB::RGBToHexA(color,&red,&green,&blue,&alpha);
-        RGB::RGBToHex(color,&red,&green,&blue);
+        RGB::HexAToRGB(color,&red,&green,&blue,&alpha);
+        RGB::HexToRGB(color,&red,&green,&blue);
         RGB::RGBAToHex(red,green,blue,alpha);
-        RGB::ARGBToHex(red,green,blue,alpha);
+        RGB::ARGBToHex(alpha,red,green,blue);
         RGB::RGBToHex(red,green,blue);
         RGB::RGBAToRGB(color);
         RGB::RGBToRGBA(color,alpha);

@@ -7,19 +7,23 @@
 
 hook OnUserLogin(playerid) {
 
-    SessionTextDraw_ShowAlLForPlayer(playerid);
+    SessionTextDraw_ShowAllForPlayer(playerid);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
             // Components
                 // Functions
 #include "src/general/session/components/functions/general.inc"
-#include "src/general/session/components/functions/textdraw.inc"
-#include "src/general/session/components/functions/textdrawData.inc"
-#include "src/general/session/components/functions/textdrawExport.inc"
-#include "src/general/session/components/functions/groups.inc"
-#include "src/general/session/components/functions/groupsDataDraws.inc"
-#include "src/general/session/components/functions/player.inc"
+                    // Textdraws
+#include "src/general/session/components/functions/textdraw/textdraw.inc"
+#include "src/general/session/components/functions/textdraw/textdrawData.inc"
+#include "src/general/session/components/functions/textdraw/textdrawExport.inc"
+                    // Groups
+#include "src/general/session/components/functions/groups/groups.inc"
+#include "src/general/session/components/functions/groups/groupsData.inc"
+                    // Players
+#include "src/general/session/components/functions/player/player.inc"
+#include "src/general/session/components/functions/player/playerData.inc"
                 // Events
 #include "src/general/session/components/events/groups/list.inc"
 #include "src/general/session/components/events/groups/items.inc"

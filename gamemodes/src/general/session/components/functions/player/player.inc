@@ -1,4 +1,12 @@
 
+static enum E_DATA {
+    E_DATA_MAX_INDEX,
+    E_DATA_INDEX,
+    E_DATA_NEW_INDEX
+};
+
+static e_Data[MAX_PLAYERS][E_DATA];
+
 
 
 /*
@@ -25,19 +33,6 @@ stock bool:SessionPlayer_HasAny(playerid)
 stock bool:SessionPlayer_Has(playerid, indexDraw)
     return Iter_Contains(SessionPlayersGroups[playerid], indexDraw);
 
-stock SessionPlayer_SetPosition(playerid, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
-
-    new Float:position[2];
-    foreach(new i: SessionPlayersGroups[playerid]) {
-        SessionTextDrawData_GetPosition(i, position[0], position[1]);
-        if(!onlySave) {
-            position[0] += offsetX;
-            position[1] += offsetY;
-        }
-        SessionTextDrawData_SetPosition(i, position[0], position[1], execute_query);
-    }
-}
-
 stock SessionPlayer_OpenListGroups(playerid)
     SessionEventGroupList_Show(playerid, "OPEN_PROJECT");
 
@@ -63,7 +58,7 @@ stock SessionPlayer_CloneAll(playerid, bool:choose = false) {
 
     new 
         index,
-        Iterator:tempGroups<MAX_TEXTDRAWS_STUDIO>
+        Iterator:tempGroups<MAX_TEXTDRAWS_STUDIO> 
     ;
 
     foreach(new i: SessionPlayersGroups[playerid]) {
@@ -81,6 +76,38 @@ stock SessionPlayer_CloneAll(playerid, bool:choose = false) {
     }
 }
 
+stock SessionPlayer_MoveIndexInit(playerid, index) {
+
+    e_Data[playerid][E_DATA_MAX_INDEX] = Iter_Last(SessionDraws);
+    e_Data[playerid][E_DATA_INDEX] = index;
+    
+    SessionPlayer_SetNextIndex(playerid, index);
+    TaskBarKey_Set(playerid, E_TYPEKEY_MOVE_INDEX);
+}
+
+stock SessionPlayer_MoveIndex(playerid) {
+
+    new 
+        indexDraw = SessionPlayer_GetIndex(playerid),
+        newIndexToMove = SessionPlayer_GetNextIndex(playerid)
+    ;
+
+    if(indexDraw == newIndexToMove) return;
+    SessionTextDrawData_SetIndex(indexDraw, newIndexToMove);
+}
+
+stock SessionPlayer_GetMaxIndex(playerid)
+    return e_Data[playerid][E_DATA_MAX_INDEX];
+
+stock SessionPlayer_GetNextIndex(playerid)
+    return e_Data[playerid][E_DATA_NEW_INDEX];
+
+stock SessionPlayer_GetIndex(playerid)
+    return e_Data[playerid][E_DATA_INDEX];
+
+stock SessionPlayer_SetNextIndex(playerid, index)
+    e_Data[playerid][E_DATA_NEW_INDEX] = index;
+
 
 
 /*
@@ -95,9 +122,8 @@ stock SessionPlayer_CloneAll(playerid, bool:choose = false) {
 
 */
 
-Group:OPEN_PROJECT(playerid, indexGroup) {
+Group:OPEN_PROJECT(playerid, indexGroup)
     SessionEventGroupItem_Show(playerid, indexGroup);
-}
 
 Group:SET_SELECTED_ON_GROUP(playerid, indexGroup) {
 

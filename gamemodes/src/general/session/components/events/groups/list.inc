@@ -53,8 +53,8 @@ static stock SessionEventGroupList_Page(playerid, page) {
     new uniqueId = Session_GetId();
     new pages = SessionEventGroupList_GetPages(playerid);
 
-    if(page < 0) page = 0;
     if(page >= pages) page = pages - 1;
+    if(page < 0 || pages <= 0) page = 0;
 
     SessionEventGroupList_SetPage(playerid, page);
 

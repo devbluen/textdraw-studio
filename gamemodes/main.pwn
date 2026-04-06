@@ -1,11 +1,9 @@
 /*
 
-    - Add Sprite Browser
     - Add Export no Grupo
     - Add Export no Grupo para Prefabs
     - Add Import de Prefabs
     - Add Rollback
-    - Add suporte para acentos
 
 */
 
@@ -66,6 +64,7 @@
 #include "src/general/auth/auth.inc"
 #include "src/general/taskbar/taskbar.inc"
 #include "src/general/session/session.inc"
+#include "src/general/spriteBrowser/spriteBrowser.inc"
 
 main() {
     print(" ");

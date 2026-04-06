@@ -81,6 +81,9 @@ stock TaskBarButton_ShowAll(playerid) {
         TaskBarButton_Show(playerid, E_TYPETASKBUTTON:i);
 
     TaskBarView_Show(playerid);
+
+    TaskBarButton_DisableAll(playerid);
+    TaskBarEventUpdate_Buttons(playerid);
 }
 
 stock TaskBarButton_DisableAll(playerid) {

@@ -7,10 +7,11 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     if(type != E_TYPETASKBUTTON_CREATE)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
-    new dialog[40 * 3];
+    new dialog[64 * 4];
     strcat(dialog, "Normal Textdraw\n");
-    strcat(dialog, "Sprite Textdraw {CCCCCC}(TXD and Custom TXD's)\n");
-    strcat(dialog, "Models {CCCCCC}(Objects, Vehicles and Actors)");
+    strcat(dialog, "Sprite Browser {CCCCCC}(TXD and Custom TXD's)\n");
+    strcat(dialog, "Models {CCCCCC}(Objects, Vehicles and Actors)\n");
+    strcat(dialog, "Create Sprite White (default)");
 
     Dialog_Show(playerid, D_CREATION, DIALOG_STYLE_TABLIST, "Creation", dialog, "Select", "Cancel");
     return Y_HOOKS_BREAK_RETURN_1;
@@ -38,8 +39,9 @@ Dialog:D_CREATION(playerid, response, listitem, inputtext[]) {
 
         switch(listitem) {
             case 0: index = SessionTextDrawData_Create(E_TYPEITEM_TEXT);
-            case 1: index = SessionTextDrawData_Create(E_TYPEITEM_SPRITE);
+            case 1: {SpriteBrowser_Show(playerid); return true;}
             case 2: index = SessionTextDrawData_Create(E_TYPEITEM_MODEL);
+            case 3: index = SessionTextDrawData_Create(E_TYPEITEM_SPRITE);
         }
     
         TaskBarTextDraw_Select(playerid, index);
