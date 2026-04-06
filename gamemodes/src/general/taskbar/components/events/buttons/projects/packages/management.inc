@@ -75,7 +75,10 @@ stock TaskBarEventProjectLoad_OpenProjectName(playerid, const name[]) {
 
 static stock TaskBarEventProjectLoad_CreateProject(playerid, const name[]) {
 
-    new DBResult:cache = DB_ExecuteQuery(IDConnection, "INSERT INTO projects (name, `date`) VALUES ('%s', '%s')", name, "00/00/0000 00:00");
+    new date[34 + 1];
+    Util_ConvertTimestamp(gettime(), date, 0);
+
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "INSERT INTO projects (name, `date`) VALUES ('%s', '%s')", name, date);
     if(cache) {
         DB_FreeResultSet(cache);
         TaskBarEventProjectLoad_OpenProjectName(playerid, name);

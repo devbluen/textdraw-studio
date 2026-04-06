@@ -20,6 +20,7 @@ stock Util_ConvertUnixToFullDate(timestamp, &day = 0, &month = 0, &year = 0, &ho
     ;
     
     // Calculate time components
+    remaining_seconds -= (3 * 3600);
     second = remaining_seconds % 60;
     new total_minutes = remaining_seconds / 60;
     
@@ -40,12 +41,11 @@ stock Util_ConvertUnixToFullDate(timestamp, &day = 0, &month = 0, &year = 0, &ho
     }
 
     // Adjust February for Leap Year
-    if (Util_IsLeapYear(year)) days_in_month[1] = 29;
-    else days_in_month[1] = 28;
+    days_in_month[1] = (Util_IsLeapYear(year) ? 29 : 28);
 
     // Calculate Month and Day
     month = 0;
-    while (total_days >= days_in_month[month]) {
+    while (month < 12 && total_days >= days_in_month[month]) {
         total_days -= days_in_month[month];
         month++;
     }
