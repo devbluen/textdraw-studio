@@ -164,6 +164,7 @@ static stock TaskBarEvent_Page(playerid, page) {
                         Util_CutString(text, 28);
 
                         SessionTextDrawData_GetVariable(index, dest);
+                        stringclear(color);
 
                         if(SessionPlayer_Has(playerid, index)) strcat(color, "{FFFF00}");
                         else if(currentIndex == index) color = "{"#HEX_DEFAULT"}";
