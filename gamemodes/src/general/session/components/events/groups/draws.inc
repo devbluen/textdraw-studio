@@ -2,6 +2,13 @@
             // Definers
 static const        MAX_GROUP_ITEMS_VIEW = 20;
 
+static enum {
+    E_INTERACTION_ADD_PAGE = -999,
+    E_INTERACTION_REMOVE_PAGE,
+    E_INTERACTION_NEXT,
+    E_INTERACTION_PREVIOUS
+};
+
 static enum E_DATA {
     E_DATA_PAGE,
     E_DATA_PAGES,
@@ -57,6 +64,9 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
 
         DialogMod_Add(playerid, "ID\tName\tStatus");
 
+        if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
+        if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
+
         new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
                                                                 text, \
                                                                 indexDraw \
@@ -74,8 +84,8 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
         {
             if(DB_GetRowCount(cache)) 
             {
-                DialogMod_Add(playerid, "Add this page", -2);
-                DialogMod_Add(playerid, "Remove this page", -3);
+                DialogMod_Add(playerid, "Add this page", E_INTERACTION_ADD_PAGE); 
+                DialogMod_Add(playerid, "Remove this page", E_INTERACTION_REMOVE_PAGE); 
 
                 new 
                     string[1024 + 1],
@@ -193,11 +203,13 @@ static stock SessionEventGroupDraws_SamePage(playerid)
 DialogMod:D_GROUP_DRAWLIST(playerid, response, inputtext[], params) {
 
     if(response) {
-        
+
         switch(params) {
             case -1: SessionEventGroupDraws_SamePage(playerid);
-            case -2: SessionEventGroupDraw_Status(playerid, true);
-            case -3: SessionEventGroupDraw_Status(playerid, false);
+            case E_INTERACTION_NEXT: SessionEventGroupDraws_Page(playerid, SessionEventGroupDraws_GetPage(playerid) + 1);
+            case E_INTERACTION_PREVIOUS: SessionEventGroupDraws_Page(playerid, SessionEventGroupDraws_GetPage(playerid) - 1);
+            case E_INTERACTION_ADD_PAGE: SessionEventGroupDraw_Status(playerid, true);
+            case E_INTERACTION_REMOVE_PAGE: SessionEventGroupDraw_Status(playerid, false);
             default:
             {
                 new indexGroup = SessionEventGroupDraws_GetIndexGroup(playerid);

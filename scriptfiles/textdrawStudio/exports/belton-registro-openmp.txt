@@ -1,0 +1,273 @@
+/*
+- Textdraw Studio - v1.1.2
+- Exported on 10/04/2026 17:24:58
+*/
+ 
+ 
+new PlayerText:TSPlayer[MAX_PLAYERS][19];
+ 
+TSPlayer[playerid][0] = CreatePlayerTextDraw(playerid, -61.000000, -63.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][0], 790.000000, 690.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][0], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][0], 303174399);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][0], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][0], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][0], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][0], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][0], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][0], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][0], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][0], false);
+ 
+TSPlayer[playerid][1] = CreatePlayerTextDraw(playerid, 320.000000, 151.000000, "Agradecemos pela sua recem chegada. Crie seu cadastro abaixo pa
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][1], 0.000000, 118.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][1], TEXT_DRAW_ALIGN_CENTER);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][1], 1768516095);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][1], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][1], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][1], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][1], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][1], 0.150000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][1], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][1], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][1], false);
+ 
+TSPlayer[playerid][2] = CreatePlayerTextDraw(playerid, 320.000000, 108.000000, "BELTON");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][2], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][2], TEXT_DRAW_ALIGN_CENTER);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][2], -873069569);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][2], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][2], TEXT_DRAW_FONT_3);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][2], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][2], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][2], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][2], 0.509000, 2.098000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][2], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][2], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][2], false);
+ 
+TSPlayer[playerid][3] = CreatePlayerTextDraw(playerid, 320.000000, 128.000000, "Roleplay");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][3], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][3], TEXT_DRAW_ALIGN_CENTER);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][3], -1448498689);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][3], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][3], TEXT_DRAW_FONT_0);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][3], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][3], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][3], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][3], 0.379000, 1.399000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][3], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][3], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][3], false);
+ 
+TSPlayer[playerid][4] = CreatePlayerTextDraw(playerid, 262.000000, 197.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][4], 116.000000, 20.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][4], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][4], 589505535);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][4], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][4], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][4], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][4], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][4], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][4], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][4], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][4], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][4], false);
+ 
+TSPlayer[playerid][5] = CreatePlayerTextDraw(playerid, 263.000000, 187.000000, "Usuario");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][5], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][5], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][5], -2139062017);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][5], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][5], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][5], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][5], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][5], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][5], 0.150000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][5], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][5], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][5], false);
+ 
+TSPlayer[playerid][6] = CreatePlayerTextDraw(playerid, 267.000000, 203.000000, "devblueN");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][6], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][6], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][6], -1);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][6], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][6], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][6], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][6], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][6], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][6], 0.150000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][6], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][6], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][6], false);
+ 
+TSPlayer[playerid][7] = CreatePlayerTextDraw(playerid, 262.000000, 234.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][7], 116.000000, 20.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][7], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][7], 589505535);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][7], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][7], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][7], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][7], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][7], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][7], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][7], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][7], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][7], false);
+ 
+TSPlayer[playerid][8] = CreatePlayerTextDraw(playerid, 263.000000, 224.000000, "Senha");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][8], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][8], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][8], -2139062017);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][8], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][8], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][8], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][8], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][8], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][8], 0.150000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][8], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][8], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][8], false);
+ 
+TSPlayer[playerid][9] = CreatePlayerTextDraw(playerid, 267.000000, 240.000000, "Coloque sua senha aqui");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][9], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][9], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][9], -1);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][9], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][9], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][9], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][9], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][9], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][9], 0.150000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][9], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][9], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][9], false);
+ 
+TSPlayer[playerid][10] = CreatePlayerTextDraw(playerid, 262.000000, 313.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][10], 116.000000, 20.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][10], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][10], -873069784);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][10], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][10], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][10], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][10], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][10], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][10], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][10], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][10], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][10], false);
+ 
+TSPlayer[playerid][11] = CreatePlayerTextDraw(playerid, 264.000000, 311.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][11], 116.000000, 20.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][11], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][11], -873069569);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][11], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][11], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][11], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][11], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][11], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][11], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][11], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][11], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][11], false);
+ 
+TSPlayer[playerid][12] = CreatePlayerTextDraw(playerid, 322.000000, 317.000000, "REGISTRAR");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][12], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][12], TEXT_DRAW_ALIGN_CENTER);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][12], 255);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][12], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][12], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][12], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][12], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][12], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][12], 0.158000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][12], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][12], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][12], false);
+ 
+TSPlayer[playerid][13] = CreatePlayerTextDraw(playerid, 263.000000, 234.000000, "senhaClick");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][13], 115.000000, 20.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][13], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][13], -1);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][13], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][13], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][13], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][13], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][13], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][13], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][13], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][13], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][13], true);
+ 
+TSPlayer[playerid][14] = CreatePlayerTextDraw(playerid, 263.000000, 311.000000, "conectarClick");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][14], 117.000000, 21.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][14], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][14], -1);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][14], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][14], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][14], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][14], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][14], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][14], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][14], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][14], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][14], true);
+ 
+TSPlayer[playerid][15] = CreatePlayerTextDraw(playerid, 262.000000, 271.000000, "LD_SPAC:white");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][15], 116.000000, 20.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][15], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][15], 589505535);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][15], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][15], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][15], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][15], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][15], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][15], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][15], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][15], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][15], false);
+ 
+TSPlayer[playerid][16] = CreatePlayerTextDraw(playerid, 263.000000, 261.000000, "Confirmacao de Senha");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][16], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][16], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][16], -2139062017);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][16], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][16], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][16], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][16], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][16], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][16], 0.150000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][16], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][16], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][16], false);
+ 
+TSPlayer[playerid][17] = CreatePlayerTextDraw(playerid, 267.000000, 277.000000, "Coloque sua senha aqui");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][17], 640.000000, 640.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][17], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][17], -1);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][17], 150);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][17], TEXT_DRAW_FONT_1);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][17], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][17], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][17], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][17], 0.150000, 0.799000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][17], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][17], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][17], false);
+ 
+TSPlayer[playerid][18] = CreatePlayerTextDraw(playerid, 263.000000, 271.000000, "senhaClick");
+PlayerTextDrawTextSize(playerid, TSPlayer[playerid][18], 115.000000, 20.000000);
+PlayerTextDrawAlignment(playerid, TSPlayer[playerid][18], TEXT_DRAW_ALIGN_LEFT);
+PlayerTextDrawColour(playerid, TSPlayer[playerid][18], -1);
+PlayerTextDrawBackgroundColour(playerid, TSPlayer[playerid][18], 255);
+PlayerTextDrawFont(playerid, TSPlayer[playerid][18], TEXT_DRAW_FONT_SPRITE_DRAW);
+PlayerTextDrawSetShadow(playerid, TSPlayer[playerid][18], 0);
+PlayerTextDrawSetOutline(playerid, TSPlayer[playerid][18], 0);
+PlayerTextDrawSetProportional(playerid, TSPlayer[playerid][18], true);
+PlayerTextDrawLetterSize(playerid, TSPlayer[playerid][18], 0.300000, 1.500000);
+PlayerTextDrawUseBox(playerid, TSPlayer[playerid][18], false);
+PlayerTextDrawBoxColour(playerid, TSPlayer[playerid][18], 150);
+PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][18], true);
