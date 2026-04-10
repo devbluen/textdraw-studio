@@ -40,19 +40,10 @@ stock SessionTextDraw_Create(index) {
     SessionTextDrawData_SetPropor(index, SessionTextDrawData_GetPropor(index), false);
     SessionTextDrawData_SetSelect(index, SessionTextDrawData_GetSelect(index), false);
     
-    switch(SessionTextDrawData_GetType(index)) {
-        case E_TYPEITEM_TEXT: {
-
-            new Float:letterSize[2];
-
-            SessionTextDrawData_GetLettSize(index, letterSize[0], letterSize[1]);
-            SessionTextDrawData_SetLettSize(index, letterSize[0], letterSize[1], false);
-            SessionTextDrawData_SetBox(index, SessionTextDrawData_GetBox(index), false);
-            SessionTextDrawData_SetColorBox(index, SessionTextDrawData_GetColorBox(index), false);
-        }
-
-        case E_TYPEITEM_MODEL: {
-
+    switch(SessionTextDrawData_GetFont(index)) {
+        case E_TYPEFONT_SPRITE: {}
+        case E_TYPEFONT_MODEL: 
+        {
             new 
                 Float:model_rotation[4], 
                 model_colors[2]
@@ -65,6 +56,14 @@ stock SessionTextDraw_Create(index) {
 
             SessionTextDrawData_GetModelCol(index, model_colors[0], model_colors[1]);
             SessionTextDrawData_SetModelCol(index, model_colors[0], model_colors[1], false);
+        }
+        default: 
+        {
+            new Float:letterSize[2];
+            SessionTextDrawData_GetLettSize(index, letterSize[0], letterSize[1]);
+            SessionTextDrawData_SetLettSize(index, letterSize[0], letterSize[1], false);
+            SessionTextDrawData_SetBox(index, SessionTextDrawData_GetBox(index), false);
+            SessionTextDrawData_SetColorBox(index, SessionTextDrawData_GetColorBox(index), false);
         }
     }
     

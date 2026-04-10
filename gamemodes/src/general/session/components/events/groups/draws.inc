@@ -112,7 +112,7 @@ static stock SessionEventGroupDraw_Status(playerid, bool:status) {
                                                         FROM textdraws t \
                                                         LEFT JOIN groups_textdraws gt ON gt.draw_id = t.id \
                                                         WHERE t.project_id = %i \
-                                                        ORDER BY indexDraw ASC \
+                                                        ORDER BY t.indexDraw ASC \
                                                         LIMIT %i OFFSET %i",
 
                                                         uniqueId,

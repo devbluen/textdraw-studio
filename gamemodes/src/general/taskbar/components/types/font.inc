@@ -82,3 +82,12 @@ stock TaskBarTypeFont_GetName(type) {
     strcat(string, e_DataInfo[index][E_DATAINFO_NAME]);
     return string;
 }
+
+stock E_TYPEFONT:TaskBarTypeFont_GetType(const string[]) {
+
+    for(new i = 0; i < sizeof e_DataInfo; i++)
+        if(isequal(e_DataInfo[i][E_DATAINFO_NAME], string, true))
+            return e_DataInfo[i][E_DATAINFO_TYPE];
+
+    return E_TYPEFONT_0;
+}

@@ -84,7 +84,7 @@ stock SessionTextDrawData_Load(index, id) {
             e_SessionDraw[index][E_SESSIONDRAW_COLOR_BOX] = DB_GetFieldIntByName(cache, "colorBox");
             e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE] = DB_GetFieldIntByName(cache, "selectable");
             e_SessionDraw[index][E_SESSIONDRAW_MODE] = _:DB_GetFieldIntByName(cache, "mode");
-            e_SessionDraw[index][E_SESSIONDRAW_TYPE] = _:DB_GetFieldIntByName(cache, "itemType");
+            // e_SessionDraw[index][E_SESSIONDRAW_TYPE] = _:DB_GetFieldIntByName(cache, "itemType");
             e_SessionDraw[index][E_SESSIONDRAW_MODEL] = DB_GetFieldIntByName(cache, "model");
             e_SessionDraw[index][E_SESSIONDRAW_BOX] = DB_GetFieldIntByName(cache, "box");
 
@@ -142,7 +142,6 @@ stock SessionTextDrawData_Create(E_TYPEITEM:type) {
             SessionTextDrawData_Insert(
                 .project_id = project_id, 
                 .index = index, 
-                .itemType = type, 
                 .text = "DEFAULT", 
                 .position = Float:{270.0, 170.0}, 
                 .size = Float:{640.0, 640.0},
@@ -169,7 +168,6 @@ stock SessionTextDrawData_Create(E_TYPEITEM:type) {
             SessionTextDrawData_Insert(
                 .project_id = project_id, 
                 .index = index, 
-                .itemType = type, 
                 .text = "LD_SPAC:white", 
                 .position = Float:{250.0, 150.0}, 
                 .size = Float:{90.0, 90.0},
@@ -196,7 +194,6 @@ stock SessionTextDrawData_Create(E_TYPEITEM:type) {
             SessionTextDrawData_Insert(
                 .project_id = project_id, 
                 .index = index, 
-                .itemType = type, 
                 .text = "_", 
                 .position = Float:{250.0, 150.0}, 
                 .size = Float:{90.0, 90.0},
@@ -243,31 +240,32 @@ stock SessionTextDrawData_Copy(index) {
     return indexIter;
 }
 
-stock SessionTextDrawData_Insert(project_id, index, E_TYPEITEM:itemType, const text[], const Float:position[2], const Float:size[2], const Float:letterSize[2], E_TYPEFONT:font, E_TYPEALIGNMENT:align, bool:proportion, outline, shadow, color, colorBackground, colorBox, bool:selectable, E_TYPEMODE:mode, bool:box, model, const Float:modelRotation[4], const modelColors[2]) {
+stock SessionTextDrawData_Insert(project_id, index, const text[], const Float:position[2], const Float:size[2], const Float:letterSize[2], E_TYPEFONT:font, E_TYPEALIGNMENT:align, bool:proportion, outline, shadow, color, colorBackground, colorBox, bool:selectable, E_TYPEMODE:mode, bool:box, model, const Float:modelRotation[4], const modelColors[2]) {
 
-    new DBResult:cache = DB_ExecuteQuery(IDConnection, "INSERT INTO textdraws (project_id, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, itemType, model, model_colors, model_rotation, box) VALUES (%i, '%f, %f', '%f, %f', '%f, %f', '%s', %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, '%i,%i', '%f,%f,%f,%f', %i)", 
-        project_id,
-        position[0], position[1],
-        size[0], size[1],
-        letterSize[0], letterSize[1],
-        text,
-        _:font,
-        _:align,
-        proportion,
-        outline,
-        shadow,
-        color,
-        colorBackground,
-        colorBox,
-        selectable,
-        _:mode,
-        index,
-        _:itemType,
-        model,
-        modelColors[0], modelColors[1],
-        modelRotation[0], modelRotation[1], modelRotation[2], modelRotation[3],
-        box
-    );
+    new 
+        DBResult:cache = DB_ExecuteQuery(IDConnection, "INSERT INTO textdraws (project_id, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, model, model_colors, model_rotation, box) VALUES (%i, '%f, %f', '%f, %f', '%f, %f', '%s', %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, '%i,%i', '%f,%f,%f,%f', %i)", 
+            project_id,
+            position[0], position[1],
+            size[0], size[1],
+            letterSize[0], letterSize[1],
+            text,
+            _:font,
+            _:align,
+            proportion,
+            outline,
+            shadow,
+            color,
+            colorBackground,
+            colorBox,
+            selectable,
+            _:mode,
+            index,
+            model,
+            modelColors[0], modelColors[1],
+            modelRotation[0], modelRotation[1], modelRotation[2], modelRotation[3],
+            box
+        )
+    ;
 
     if(cache) 
         DB_FreeResultSet(cache);
@@ -334,8 +332,8 @@ stock SessionTextDrawData_GetModelCol(index, &Float:color1, &Float:color2) {
 stock E_TYPEALIGNMENT:SessionTextDrawData_GetAlign(index)
     return e_SessionDraw[index][E_SESSIONDRAW_ALIGN];
 
-stock E_TYPEITEM:SessionTextDrawData_GetType(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_TYPE];
+// stock E_TYPEITEM:SessionTextDrawData_GetType(index)
+//     return e_SessionDraw[index][E_SESSIONDRAW_TYPE];
 
 stock SessionTextDrawData_GetColor(index)
     return e_SessionDraw[index][E_SESSIONDRAW_COLOR];
@@ -422,16 +420,16 @@ stock SessionTextDrawData_SetAlign(index, E_TYPEALIGNMENT:type, bool:execute_que
     SessionTextDraw_UpdateButton(index);
 }
 
-stock SessionTextDrawData_SetType(index, E_TYPEITEM:type, bool:execute_query = true) {
+// stock SessionTextDrawData_SetType(index, E_TYPEITEM:type, bool:execute_query = true) {
 
-    e_SessionDraw[index][E_SESSIONDRAW_TYPE] = type;
+//     e_SessionDraw[index][E_SESSIONDRAW_TYPE] = type;
 
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET itemType = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-}
+//     if(execute_query) {
+//         DB_FreeResultSet(
+//             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET itemType = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
+//         );
+//     }
+// }
 
 stock SessionTextDrawData_SetColor(index, color, bool:execute_query = true) {
 

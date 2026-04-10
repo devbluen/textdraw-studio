@@ -77,3 +77,12 @@ stock TaskBarTypeAlign_GetName(type) {
     strcat(string, e_DataInfo[index][E_DATAINFO_NAME]);
     return string;
 }
+
+stock E_TYPEALIGNMENT:TaskBarTypeAlign_GetType(const string[]) {
+
+    for(new i = 0; i < sizeof e_DataInfo; i++)
+        if(isequal(e_DataInfo[i][E_DATAINFO_NAME], string, true))
+            return e_DataInfo[i][E_DATAINFO_TYPE];
+
+    return E_TYPEALIGNMENT_INVALID;
+}

@@ -28,7 +28,7 @@
         selectable INTEGER, \
         mode INTEGER, \
         indexDraw INTEGER, \
-        itemType INTEGER, \
+        itemType INTEGER DEFAULT 0, \
         model INTEGER DEFAULT 1, \
         model_rotation TEXT DEFAULT '0.0,0.0,0.0,1.0', \
         model_colors TEXT DEFAULT '0,0', \

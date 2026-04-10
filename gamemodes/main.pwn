@@ -65,6 +65,8 @@
 #include "src/general/taskbar/taskbar.inc"
 #include "src/general/session/session.inc"
 #include "src/general/spriteBrowser/spriteBrowser.inc"
+                // Misc
+#include "src/general/misc/imports/imports.inc"
 
 main() {
     print(" ");

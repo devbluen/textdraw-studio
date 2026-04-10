@@ -58,12 +58,21 @@ stock TaskBarEventUpdate_Buttons(playerid) {
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_SIZE);
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR);
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_SELECTABLE);
-                    TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ROLLBACK);
+                    // TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ROLLBACK);
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_POSITION);
 
-                    switch(SessionTextDrawData_GetType(index)) 
+                    switch(SessionTextDrawData_GetFont(index)) 
                     {
-                        case E_TYPEITEM_TEXT: 
+                        case E_TYPEFONT_SPRITE: 
+                        {
+                            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_TEXT);
+                        }
+                        case E_TYPEFONT_MODEL: 
+                        {
+                            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR_BG);
+                            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_MODELS);
+                        }
+                        default: 
                         {
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_TEXT);
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_LETTERSIZE);
@@ -74,15 +83,6 @@ stock TaskBarEventUpdate_Buttons(playerid) {
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_SHADOW);
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR_BG);
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_BOX);
-                        }
-                        case E_TYPEITEM_SPRITE: 
-                        {
-                            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_TEXT);
-                        }
-                        case E_TYPEITEM_MODEL: 
-                        {
-                            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR_BG);
-                            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_MODELS);
                         }
                     }
                 }
@@ -100,7 +100,7 @@ stock TaskBarEventUpdate_Buttons(playerid) {
 
 stock TaskBarEventUpdate_Sprite(playerid, index) {
 
-    if(index >= 0 && SessionTextDrawData_GetType(index) == E_TYPEITEM_TEXT) {
+    if(index >= 0 && (SessionTextDrawData_GetFont(index) >= E_TYPEFONT_0 && SessionTextDrawData_GetFont(index) <= E_TYPEFONT_3)) {
         if(SessionTextDrawData_GetBox(index))
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR_BOX);
         else

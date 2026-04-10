@@ -171,7 +171,7 @@ DialogMod:D_TASKBAR_PROJECTS(playerid, response, inputtext[], listitem) {
             }
 
             case E_BUTTON_EXPORT: TaskBarEventProjectExport_Show(playerid);
-            // case E_BUTTON_IMPORT:
+            case E_BUTTON_IMPORT: TaskBarEventProjectImport_Show(playerid);
         }
     }
     return true;

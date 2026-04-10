@@ -89,3 +89,10 @@ stock Util_ConverterTextdrawText(string[]) {
     if(len > 0 && string[len - 1] == ' ') 
         string[len - 1] = '\0';
 }
+
+stock Util_DeleteCharacters(dest[], amount, bool:start = false) {
+    if(!start)
+        strdel(dest, strlen(dest) - amount, strlen(dest));
+    else
+        strdel(dest, 0, amount);
+}
