@@ -45,7 +45,8 @@ static enum {
     E_INTERACTION_OUTLINE,
     E_INTERACTION_SHADOW,
     E_INTERACTION_REORGANIZE,
-    E_INTERACTION_MOVE_INDEX
+    E_INTERACTION_MOVE_INDEX,
+    E_INTERACTION_SELECT_ARROWS
 };
 
 static enum E_DATA {
@@ -137,8 +138,11 @@ static stock TaskBarEvent_Page(playerid, page) {
                     if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
                     if(pages > 1) DialogMod_Add(playerid, "Goto Page", E_INTERACTION_GOTO_PAGE);
 
-                    if(!SessionTextDraw_IsEmpty())
+                    if(!SessionTextDraw_IsEmpty()) {
                         DialogMod_Add(playerid, "Reorganize Index", E_INTERACTION_REORGANIZE);
+                        if(TaskBarTextDraw_Selected(playerid))
+                            DialogMod_Add(playerid, "Select Index [Arrows]", E_INTERACTION_SELECT_ARROWS);
+                    }
 
                     DialogMod_Add(playerid, "Options {CCCCCC}(Select, Multiple Move and Others)", E_INTERACTION_MULTIPLE_SELECTION);
                     DialogMod_Add(playerid, " ");
@@ -440,6 +444,7 @@ DialogMod:D_TASKBAR_LIST(playerid, response, inputtext[], index) {
             case E_INTERACTION_NEXT: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) + 1);
             case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_GOTOPAGE, DIALOG_STYLE_INPUT, "Goto Page", "Which page do you want to go to?", "Confirm", "Previous");
             case E_INTERACTION_MULTIPLE_SELECTION: TaskBarEvent_MultipleOptions(playerid);
+            case E_INTERACTION_SELECT_ARROWS: TaskBarKey_Set(playerid, E_TYPEKEY_SELECT_INDEX);
             default: TaskBarEvent_ShowOptions(playerid, index);
         }
     }

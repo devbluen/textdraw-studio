@@ -373,6 +373,25 @@ public OnTaskBarMovimentUpdate(playerid) {
 
             TaskBarMessage_Create(playerid, va_return("Index: ~y~%d/%d", nextIndex, maxIndex), 4);
         }
+
+        else if(typeKey == E_TYPEKEY_SELECT_INDEX && (leftright != 0) && !TaskBarEventMoviment_HasDelay(playerid)) {
+
+            new 
+                currentIndex = TaskBarTextDraw_GetSelected(playerid),
+                nextIndex
+            ;
+
+            if(leftright == KEY_LEFT) nextIndex = SessionTextDraw_GetPrevious(currentIndex);
+            else if(leftright == KEY_RIGHT) nextIndex = SessionTextDraw_GetNext(currentIndex);
+
+            if(nextIndex == SessionTextDraw_GetMax() || nextIndex == ITER_NONE)
+                return;
+            
+            TaskBarTextDraw_Select(playerid, nextIndex);
+            TaskBarMessage_Create(playerid, va_return("Index: ~y~%d/%d", nextIndex, SessionTextDraw_GetCount() - 1), 4);
+
+            TaskBarEventMoviment_SetDelay(playerid, 500);
+        }
     }
 }
 

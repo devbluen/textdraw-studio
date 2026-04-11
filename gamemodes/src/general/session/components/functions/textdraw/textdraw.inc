@@ -134,3 +134,18 @@ stock SessionTextDraw_SetSelect(playerid, index)
 
 stock SessionTextDraw_RemoveSelect(playerid, index)
     Iter_Remove(SessionDrawsPlayers[index], playerid);
+
+stock SessionTextDraw_GetPrevious(byIndex)
+    return Iter_Prev(SessionDraws, byIndex);
+
+stock SessionTextDraw_GetNext(byIndex)
+    return Iter_Next(SessionDraws, byIndex);
+
+stock SessionTextDraw_GetCount()
+    return Iter_Count(SessionDraws);
+
+stock SessionTextDraw_GetLast()
+    return Iter_Last(SessionDraws);
+
+stock SessionTextDraw_GetMax()
+    return MAX_TEXTDRAWS_STUDIO;

@@ -1,6 +1,6 @@
 /*
-- Textdraw Studio - v1.1.2
-- Exported on 10/04/2026 17:24:58
+- Textdraw Studio - v1.1.3
+- Exported on 11/04/2026 10:59:25
 */
  
  
@@ -20,7 +20,7 @@ PlayerTextDrawUseBox(playerid, TSPlayer[playerid][0], false);
 PlayerTextDrawBoxColor(playerid, TSPlayer[playerid][0], 150);
 PlayerTextDrawSetSelectable(playerid, TSPlayer[playerid][0], false);
  
-TSPlayer[playerid][1] = CreatePlayerTextDraw(playerid, 320.000000, 151.000000, "Agradecemos pela sua recem chegada. Crie seu cadastro abaixo pa
+TSPlayer[playerid][1] = CreatePlayerTextDraw(playerid, 320.000000, 151.000000, "Agradecemos pela sua recem chegada. Crie seu cadastro abaixo para que voce possa voltar mais vezes e ter suas informações salva");
 PlayerTextDrawTextSize(playerid, TSPlayer[playerid][1], 0.000000, 118.000000);
 PlayerTextDrawAlignment(playerid, TSPlayer[playerid][1], 2);
 PlayerTextDrawColor(playerid, TSPlayer[playerid][1], 1768516095);

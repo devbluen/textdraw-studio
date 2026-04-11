@@ -1,6 +1,6 @@
 
     // Informations
-#define     STUDIO_VERSION       "v1.1.3"
+#define     STUDIO_VERSION       "v1.1.4"
 #define     STUDIO_FOLDER        "textdrawStudio"
 #define     STUDIO_EXPORT        "exports"
 #define     STUDIO_IMPORT        "imports"
@@ -12,6 +12,7 @@
 
         // Colors
 #define     TEXTDRAW_HOVER      0x303030FF
+#define     TEXTDRAW_FEEDBACK   0x9428c9FF
 #define     HEX_DEFAULT         "badc58"    // d4af37
 #define     HEX_INFO            "f24f1d"
 

@@ -1,6 +1,6 @@
 /*
-- Textdraw Studio - v1.1.2
-- Exported on 10/04/2026 17:25:16
+- Textdraw Studio - v1.1.3
+- Exported on 11/04/2026 10:59:33
 */
  
  

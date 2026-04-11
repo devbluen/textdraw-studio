@@ -28,8 +28,15 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 Dialog:D_ITEM_DELETE(playerid, response) {
 
     if(response) {
-        new index = TaskBarTextDraw_GetSelected(playerid);
+        new 
+            index = TaskBarTextDraw_GetSelected(playerid),
+            nextIndex = SessionTextDraw_GetPrevious(index)
+        ;
+
         SessionTextDrawData_Destroy(index);
+
+        if(nextIndex != ITER_NONE && nextIndex != SessionTextDraw_GetMax())
+            TaskBarTextDraw_Select(playerid, nextIndex);
     }
     return true;
 }
