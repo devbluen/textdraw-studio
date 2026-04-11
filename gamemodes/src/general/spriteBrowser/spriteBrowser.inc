@@ -297,8 +297,8 @@ static stock SpriteBrowser_Page(playerid, page) {
         count
     ;
 
-    if(page < 0 || pages <= 0) page = 0;
     if(page >= pages) page = pages - 1;
+    if(page < 0 || pages <= 0) page = 0;
 
     SpriteBrowser_GetFilter(playerid, filter);
     SpriteBrowser_SetPage(playerid, page);
@@ -359,8 +359,8 @@ static stock SpriteBrowser_SideBarPage(playerid, page) {
     
     new pages = Util_GetPages(sizeof e_SpriteArray, sizeof e_SpriteSideBar);
     
-    if(page < 0 || pages <= 0) page = 0;
     if(page >= pages) page = pages - 1;
+    if(page < 0 || pages <= 0) page = 0;
 
     SpriteBrowser_SetSideBarPage(playerid, page);
 

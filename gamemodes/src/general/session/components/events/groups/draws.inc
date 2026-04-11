@@ -53,8 +53,8 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
 
     new pages = SessionEventGroupDraws_GetPages(playerid);
 
-    if(page < 0 || pages <= 0) page = 0;
     if(page >= pages) page = pages - 1;
+    if(page < 0 || pages <= 0) page = 0;
 
     SessionEventGroupDraws_SetPage(playerid, page);
 

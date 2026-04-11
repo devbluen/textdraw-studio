@@ -106,8 +106,8 @@ static stock TaskBarEvent_Page(playerid, page) {
 
         new pages = Util_GetPages(count, MAX_TASKBAR_LIST_VIEW);
 
-        if(page < 0 || pages <= 0) page = 0;
         if(page >= pages) page = pages - 1;
+        if(page < 0 || pages <= 0) page = 0;
 
         TaskBarEvent_SetPage(playerid, page);
         TaskBarEvent_SetPages(playerid, pages);
