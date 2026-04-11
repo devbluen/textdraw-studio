@@ -107,7 +107,8 @@ stock Export_Add(index, E_TYPEEXPORT:type, const input[]) {
         {
             new 
                 Float:position[2],
-                string[1024 + 1]
+                string[1024 + 1],
+                output[52 + 45 + sizeof string]
             ;
 
             sscanf(input, ""#PATTERN_EXPORT_SSCANF"a<f>[2]s[1024]", findMode, variable, position, string);
@@ -117,9 +118,11 @@ stock Export_Add(index, E_TYPEEXPORT:type, const input[]) {
                 string[len - 1] = '\0';
 
             if(isequal(findMode, "CreatePlayerTextDraw", true))
-                Export_AddInFile(index, va_return("%s = CreatePlayerTextDraw(playerid, %f, %f, \"%s\");", variable, position[0], position[1], string));
+                format(output, sizeof output, "%s = CreatePlayerTextDraw(playerid, %f, %f, \"%s\");", variable, position[0], position[1], string);
             else if(isequal(findMode, "TextDrawCreate", true))
-                Export_AddInFile(index, va_return("%s = TextDrawCreate(%f, %f, \"%s\");", variable, position[0], position[1], string));
+                format(output, sizeof output, "%s = TextDrawCreate(%f, %f, \"%s\");", variable, position[0], position[1], string);
+                
+            Export_AddInFile(index, output);
         }
 
         case E_TYPEEXPORT_COLOR: // TextDrawColor or PlayerTextDrawColor(variable, color)
