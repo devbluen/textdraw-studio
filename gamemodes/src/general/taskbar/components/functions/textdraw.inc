@@ -61,9 +61,11 @@ public OnTaskBar_RestoreColor(playerid, index)
 
 */
 
-stock TaskBarTextDraw_Select(playerid, index) {
+stock TaskBarTextDraw_Select(playerid, index, bool:effect = true) {
 
-    TaskBarTextDraw_SetColorVisual(playerid, index);    // Feedback Visual
+    if(effect)
+        TaskBarTextDraw_SetColorVisual(playerid, index);    // Feedback Visual
+    
     TaskBarTextDraw_SetSelected(playerid, index);
     CallLocalFunction("OnPlayerTaskBarDrawSelected", "ii", playerid, index);
 }
@@ -113,6 +115,7 @@ stock TaskBarTextDraw_SetSelected(playerid, index) {
     }
 
     if(index != -1) SessionTextDraw_SetSelect(playerid, index);
+    if(index == -1) TaskBarTextDraw_RestoreColorKillTimer(playerid);
 
     e_Data[playerid][E_DATA_SELECT] = index != -1;
     e_Data[playerid][E_DATA_SELECTED_ID] = index;

@@ -1,13 +1,13 @@
 
     // Informations
-#define     STUDIO_VERSION       "v1.2.0"
+#define     STUDIO_VERSION       "v1.2.1"
 #define     STUDIO_FOLDER        "textdrawStudio"
 #define     STUDIO_EXPORT        "exports"
 #define     STUDIO_IMPORT        "imports"
 
     // Custom Tags
         // Messages
-#define     MESSAGE_RED         "{f72d2d}[!]: {FFFFFF}"
+#define     MESSAGE_RED         "{f72d2d}[X]: {FFFFFF}"
 #define     MESSAGE_GREEN       "{52b8f2}[!]: {FFFFFF}"
 
         // Colors

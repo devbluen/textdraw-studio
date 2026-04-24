@@ -44,7 +44,7 @@ Dialog:D_CREATION(playerid, response, listitem, inputtext[]) {
             case 3: index = SessionTextDrawData_Create(E_TYPEITEM_SPRITE);
         }
     
-        TaskBarTextDraw_Select(playerid, index);
+        TaskBarTextDraw_Select(playerid, index, false);
     }
     return true;
 }

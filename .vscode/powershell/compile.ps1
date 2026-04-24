@@ -9,8 +9,9 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 Clear-Host
 
 # Compiler and Server
-$compiler = ".\qawno\pawncc.exe"
-$server   = "omp-server.exe"
+$compiler   = ".\qawno\pawncc.exe"
+$mode       = "omp-server"
+$server     = $mode + ".exe"
 
 # Variables Global
 $currentPath = (Resolve-Path $file).Path
@@ -155,12 +156,28 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "[ENTER]" -ForegroundColor Green -NoNewline
     Write-Host " to launch server..." -ForegroundColor Gray
 
-    $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-    if ($key.VirtualKeyCode -eq 13) {
+    $timeout = 10 # segundos
+    $timer = [System.Diagnostics.Stopwatch]::StartNew()
+    $keyPressed = $false
+
+    # Loop aguardando tecla ou timeout
+    while ($timer.Elapsed.TotalSeconds -lt $timeout) {
+        if ($Host.UI.RawUI.KeyAvailable) {
+            $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            if ($key.VirtualKeyCode -eq 13) {
+                $keyPressed = $true
+                break
+            }
+        }
+        Start-Sleep -Milliseconds 100
+    }
+    $timer.Stop()
+
+    if ($keyPressed) {
         try {
             $fullServerPath = (Resolve-Path $server).Path
             $serverDir = Split-Path $fullServerPath
-            Stop-Process -Name "omp-server" -ErrorAction SilentlyContinue
+            Stop-Process -Name $mode -ErrorAction SilentlyContinue
 
             $shell = New-Object -ComObject Shell.Application
             $shell.ShellExecute($fullServerPath, "", $serverDir, "open", 1)
@@ -169,6 +186,9 @@ if ($LASTEXITCODE -eq 0) {
         catch {
             Write-Host "`n > Error: $server not found." -ForegroundColor Red 
         }
+    }
+    else {
+        Write-Host "`n > Time's up. Operation cancelled." -ForegroundColor Yellow
     }
 } 
 else 
