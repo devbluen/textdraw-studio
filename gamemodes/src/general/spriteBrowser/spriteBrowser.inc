@@ -496,7 +496,7 @@ DialogMod:D_SPRITEBROWSEROPTIONS(playerid, response, inputtext[], listitem) {
 
                     new index = SessionTextDrawData_Create(E_TYPEITEM_SPRITE);
                     SessionTextDrawData_SetString(index, sprite);
-                    TaskBarTextDraw_Select(playerid, index);
+                    TaskBarTextDraw_Select(playerid, index, false);
                 }
             }
 
