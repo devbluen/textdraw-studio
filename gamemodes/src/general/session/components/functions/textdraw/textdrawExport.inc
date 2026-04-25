@@ -89,6 +89,7 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
         variable[30 + 1],
         text[1024 + 1],
         colors[2],
+        bool:selectable,
         Float:rotation[4],
         Float:sizeBuff[2]
     ;
@@ -118,9 +119,9 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
         Export_Add(index, E_TYPEEXPORT_OUTLINE, va_return("PlayerTextDrawSetOutline(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "outline")));
         Export_Add(index, E_TYPEEXPORT_PROPORTIONAL, va_return("PlayerTextDrawSetProportional(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "proportion")));
         
-        switch(E_TYPEITEM:DB_GetFieldIntByName(cache, "itemType")) 
+        switch(E_TYPEFONT:DB_GetFieldIntByName(cache, "font")) 
         {
-            case E_TYPEITEM_TEXT:
+            case E_TYPEFONT_0, E_TYPEFONT_1, E_TYPEFONT_2, E_TYPEFONT_3:
             {
                 DB_GetFieldStringByName(cache, "letter_size", stringBuff);
                 sscanf(stringBuff, "p<,>a<f>[2]", sizeBuff);
@@ -130,7 +131,7 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
                 Export_Add(index, E_TYPEEXPORT_BOX_COLOR, va_return("PlayerTextDrawBoxColor(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "colorBox")));
             }
 
-            case E_TYPEITEM_MODEL:
+            case E_TYPEFONT_MODEL:
             {
                 Export_Add(index, E_TYPEEXPORT_MODEL_ID, va_return("PlayerTextDrawSetPreviewModel(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "model")));
 
@@ -144,7 +145,9 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
             }
         }
 
-        Export_Add(index, E_TYPEEXPORT_SELECTABLE, va_return("PlayerTextDrawSetSelectable(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "selectable")));
+        if((selectable = DB_GetFieldIntByName(cache, "selectable")))
+            Export_Add(index, E_TYPEEXPORT_SELECTABLE, va_return("PlayerTextDrawSetSelectable(%s, %i)", variableBuff, selectable));
+        
         count++;
     }
     while(DB_SelectNextRow(cache));
