@@ -61,7 +61,7 @@ stock SessionGroupDataDraw_SetColorBox(index, color, bool:execute_query = true) 
         SessionTextDrawData_SetColorBox(i, color, execute_query);
 }
 
-stock SessionGroupDataDraw_SetPosition(index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
+stock SessionGroupDataDraw_SetPosition(playerid, index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
     foreach(new i: SessionGroupsDraws[index]) {
@@ -70,11 +70,13 @@ stock SessionGroupDataDraw_SetPosition(index, Float:offsetX, Float:offsetY, bool
             position[0] += offsetX;
             position[1] += offsetY;
         }
+        else SessionEventGroupItem_Options(playerid);
+
         SessionTextDrawData_SetPosition(i, position[0], position[1], execute_query);
     }
 }
 
-stock SessionGroupDataDraw_SetSize(index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
+stock SessionGroupDataDraw_SetSize(playerid, index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
     foreach(new i: SessionGroupsDraws[index]) {
@@ -83,11 +85,13 @@ stock SessionGroupDataDraw_SetSize(index, Float:offsetX, Float:offsetY, bool:exe
             position[0] += offsetX;
             position[1] += offsetY;
         }
+        else SessionEventGroupItem_Options(playerid);
+
         SessionTextDrawData_SetSize(i, position[0], position[1], execute_query);
     }
 }
 
-stock SessionGroupDataDraw_SetLettSize(index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
+stock SessionGroupDataDraw_SetLettSize(playerid, index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
     foreach(new i: SessionGroupsDraws[index]) {
@@ -96,6 +100,8 @@ stock SessionGroupDataDraw_SetLettSize(index, Float:offsetX, Float:offsetY, bool
             position[0] += offsetX;
             position[1] += offsetY;
         }
+        else SessionEventGroupItem_Options(playerid);
+        
         SessionTextDrawData_SetLettSize(i, position[0], position[1], execute_query);
     }
 }

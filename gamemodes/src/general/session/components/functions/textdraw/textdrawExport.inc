@@ -145,7 +145,7 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
             }
         }
 
-        if((selectable = DB_GetFieldIntByName(cache, "selectable")))
+        if((selectable = bool:DB_GetFieldIntByName(cache, "selectable")))
             Export_Add(index, E_TYPEEXPORT_SELECTABLE, va_return("PlayerTextDrawSetSelectable(%s, %i)", variableBuff, selectable));
         
         count++;

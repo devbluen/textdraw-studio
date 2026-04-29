@@ -22,6 +22,7 @@ stock SessionPlayerData_SetPosition(playerid, Float:offsetX, Float:offsetY, bool
             position[0] += offsetX;
             position[1] += offsetY;
         }
+        else TaskBarEvent_MultipleOptions(playerid);
 
         SessionTextDrawData_SetPosition(i, position[0], position[1], execute_query);
     }
@@ -36,6 +37,8 @@ stock SessionPlayerData_SetSize(playerid, Float:offsetX, Float:offsetY, bool:exe
             position[0] += offsetX;
             position[1] += offsetY;
         }
+        else TaskBarEvent_MultipleOptions(playerid);
+
         SessionTextDrawData_SetSize(i, position[0], position[1], execute_query);
     }
 }
@@ -49,6 +52,8 @@ stock SessionPlayerData_SetLetterSize(playerid, Float:offsetX, Float:offsetY, bo
             position[0] += offsetX;
             position[1] += offsetY;
         }
+        else TaskBarEvent_MultipleOptions(playerid);
+        
         SessionTextDrawData_SetLettSize(i, position[0], position[1], execute_query);
     }
 }

@@ -143,7 +143,7 @@ static stock SessionEventGroupDraw_Status(playerid, bool:status) {
             do
             {
                 indexDraw = DB_GetFieldIntByName(cache, "indexDraw");
-                hasGroup = DB_GetFieldIntByName(cache, "hasGroup");
+                hasGroup = bool:DB_GetFieldIntByName(cache, "hasGroup");
 
                 if(status && !hasGroup)
                     SessionGroup_AddDraw(indexGroup, indexDraw);

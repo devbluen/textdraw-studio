@@ -183,7 +183,7 @@ static stock SessionEventGroupItem_GetDrawIndex(playerid)
 static stock SessionEventGroupItem_GetEnumId(playerid)
     return e_Data[playerid][E_DATA_ENUM_ID];
 
-static stock SessionEventGroupItem_Options(playerid) {
+stock SessionEventGroupItem_Options(playerid) {
 
     inline OnSessionGroupItemsOptions() {
 
@@ -245,9 +245,9 @@ stock SessionEventGroupItem_SetOffset(playerid, Float:offsetX, Float:offsetY, bo
     new indexGroup = SessionEventGroupItem_GetGroupIndex(playerid);
 
     switch(SessionEventGroupItem_GetEnumId(playerid)) {
-        case E_INTERACTION_POSITION: SessionGroupDataDraw_SetPosition(indexGroup, offsetX, offsetY, execute_query, onlySave);
-        case E_INTERACTION_SIZE: SessionGroupDataDraw_SetSize(indexGroup, offsetX, offsetY, execute_query, onlySave);
-        case E_INTERACTION_LETTER_SIZE: SessionGroupDataDraw_SetLettSize(indexGroup, offsetX, offsetY, execute_query, onlySave);
+        case E_INTERACTION_POSITION: SessionGroupDataDraw_SetPosition(playerid, indexGroup, offsetX, offsetY, execute_query, onlySave);
+        case E_INTERACTION_SIZE: SessionGroupDataDraw_SetSize(playerid, indexGroup, offsetX, offsetY, execute_query, onlySave);
+        case E_INTERACTION_LETTER_SIZE: SessionGroupDataDraw_SetLettSize(playerid, indexGroup, offsetX, offsetY, execute_query, onlySave);
     }
 
     if(onlySave && Session_Has())

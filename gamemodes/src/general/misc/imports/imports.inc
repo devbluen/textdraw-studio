@@ -28,7 +28,7 @@ stock Import_Get(playerid, const name[]) {
 
     new 
         File:handle = fopen(fileStream, io_read),
-        Float:string[1024 + 1],
+        string[1024 + 1],
         intBuff,
         intsBuff[2],
         stringBuff[32 + 1],
@@ -64,7 +64,6 @@ stock Import_Get(playerid, const name[]) {
         }
         else if(index >= 0) 
         {
-
             // Text-Size
             if(!sscanf(buff, "P<(,)>'PlayerTextDrawTextSize'"#PATTERN_PLAYER"a<f>[2]", position) 
             || !sscanf(buff, "P<(,)>'DynamicPlayerTextDrawTextSize'"#PATTERN_PLAYER"a<f>[2]", position)
@@ -79,10 +78,9 @@ stock Import_Get(playerid, const name[]) {
             || !sscanf(buff, "P<(,)>'DynamicTextDrawAlignment'"#PATTERN_GLOBAL"i", intBuff))
                 SessionTextDrawData_SetAlign(index, E_TYPEALIGNMENT:intBuff);
 
-            else if(!sscanf(buff, "P<(,)>'PlayerTextDrawAlignment'"#PATTERN_PLAYER"s[15]", stringBuff) 
-            || !sscanf(buff, "P<(,)>'TextDrawAlignment'"#PATTERN_GLOBAL"s[15]", stringBuff)) {
-                Util_DeleteCharacters(string, 1, true);
-                Util_DeleteCharacters(string, 3);
+            else if(!sscanf(buff, "P<(,)>'PlayerTextDrawAlignment'"#PATTERN_PLAYER"s[32]", stringBuff) 
+            || !sscanf(buff, "P<(,)>'TextDrawAlignment'"#PATTERN_GLOBAL"s[32]", stringBuff)) {
+                Util_DeleteCharacters(stringBuff, 2);
                 SessionTextDrawData_SetAlign(index, TaskBarTypeAlign_GetType(stringBuff));
             }
             
@@ -113,7 +111,7 @@ stock Import_Get(playerid, const name[]) {
             || !sscanf(buff, "P<(,)>'TextDrawBoxColour'"#PATTERN_GLOBAL"i", intBuff) 
             || !sscanf(buff, "P<(,)>'TextDrawBoxColor'"#PATTERN_GLOBAL"i", intBuff)
             || !sscanf(buff, "P<(,)>'DynamicTextDrawBoxColour'"#PATTERN_GLOBAL"i", intBuff))
-                SessionTextDrawData_SetBox(index, intBuff);
+                SessionTextDrawData_SetBox(index, bool:intBuff);
 
             // Font
             else if(!sscanf(buff, "P<(,)>'PlayerTextDrawFont'"#PATTERN_PLAYER"i", intBuff) 
@@ -122,10 +120,9 @@ stock Import_Get(playerid, const name[]) {
             || !sscanf(buff, "P<(,)>'DynamicTextDrawFont'"#PATTERN_GLOBAL"i", intBuff))
                 SessionTextDrawData_SetFont(index, E_TYPEFONT:intBuff);
 
-            else if(!sscanf(buff, "P<(,)>'PlayerTextDrawFont'"#PATTERN_PLAYER"s[15]", stringBuff) 
-            || !sscanf(buff, "P<(,)>'TextDrawFont'"#PATTERN_GLOBAL"s[15]", stringBuff)) {
-                Util_DeleteCharacters(string, 1, true);
-                Util_DeleteCharacters(string, 3);
+            else if(!sscanf(buff, "P<(,)>'PlayerTextDrawFont'"#PATTERN_PLAYER"s[32]", stringBuff) 
+            || !sscanf(buff, "P<(,)>'TextDrawFont'"#PATTERN_GLOBAL"s[32]", stringBuff)) {
+                Util_DeleteCharacters(stringBuff, 2);
                 SessionTextDrawData_SetFont(index, TaskBarTypeFont_GetType(stringBuff));
             }
 

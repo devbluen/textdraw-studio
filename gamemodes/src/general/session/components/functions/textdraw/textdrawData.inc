@@ -74,19 +74,19 @@ stock SessionTextDrawData_Load(index, id) {
 
             // Ints
             e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID] = id;
-            e_SessionDraw[index][E_SESSIONDRAW_FONT] = _:DB_GetFieldIntByName(cache, "font");
-            e_SessionDraw[index][E_SESSIONDRAW_ALIGN] = _:DB_GetFieldIntByName(cache, "align");
-            e_SessionDraw[index][E_SESSIONDRAW_PROPORTION] = DB_GetFieldIntByName(cache, "proportion");
+            e_SessionDraw[index][E_SESSIONDRAW_FONT] = E_TYPEFONT:DB_GetFieldIntByName(cache, "font");
+            e_SessionDraw[index][E_SESSIONDRAW_ALIGN] = E_TYPEALIGNMENT:DB_GetFieldIntByName(cache, "align");
+            e_SessionDraw[index][E_SESSIONDRAW_PROPORTION] = bool:DB_GetFieldIntByName(cache, "proportion");
             e_SessionDraw[index][E_SESSIONDRAW_OUTLINE] = DB_GetFieldIntByName(cache, "outline");
             e_SessionDraw[index][E_SESSIONDRAW_SHADOW] = DB_GetFieldIntByName(cache, "shadow");
             e_SessionDraw[index][E_SESSIONDRAW_COLOR] = DB_GetFieldIntByName(cache, "color");
             e_SessionDraw[index][E_SESSIONDRAW_COLOR_BACKGROUND] = DB_GetFieldIntByName(cache, "colorBackground");
             e_SessionDraw[index][E_SESSIONDRAW_COLOR_BOX] = DB_GetFieldIntByName(cache, "colorBox");
-            e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE] = DB_GetFieldIntByName(cache, "selectable");
-            e_SessionDraw[index][E_SESSIONDRAW_MODE] = _:DB_GetFieldIntByName(cache, "mode");
+            e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE] = bool:DB_GetFieldIntByName(cache, "selectable");
+            e_SessionDraw[index][E_SESSIONDRAW_MODE] = E_TYPEMODE:DB_GetFieldIntByName(cache, "mode");
             // e_SessionDraw[index][E_SESSIONDRAW_TYPE] = _:DB_GetFieldIntByName(cache, "itemType");
             e_SessionDraw[index][E_SESSIONDRAW_MODEL] = DB_GetFieldIntByName(cache, "model");
-            e_SessionDraw[index][E_SESSIONDRAW_BOX] = DB_GetFieldIntByName(cache, "box");
+            e_SessionDraw[index][E_SESSIONDRAW_BOX] = bool:DB_GetFieldIntByName(cache, "box");
 
             // Strings
             DB_GetFieldStringByName(cache, "text", e_SessionDraw[index][E_SESSIONDRAW_TEXT]);
@@ -324,7 +324,7 @@ stock SessionTextDrawData_GetModelRot(index, &Float:x, &Float:y, &Float:z, &Floa
     zoom = e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][3];
 }
 
-stock SessionTextDrawData_GetModelCol(index, &Float:color1, &Float:color2) {
+stock SessionTextDrawData_GetModelCol(index, &color1, &color2) {
     color1 = e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][0];
     color2 = e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][1];
 }
@@ -389,7 +389,7 @@ stock SessionTextDrawData_GetVariable(index, dest[], maxlength = sizeof dest) {
 stock SessionTextDrawData_SetUniqueId(index, uniqueId)
     e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID] = uniqueId;
 
-stock SessionTextDrawData_SetModelCol(index, Float:color1, Float:color2, bool:execute_query = true) {
+stock SessionTextDrawData_SetModelCol(index, color1, color2, bool:execute_query = true) {
 
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][0] = color1;
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][1] = color2;
@@ -414,7 +414,8 @@ stock SessionTextDrawData_SetAlign(index, E_TYPEALIGNMENT:type, bool:execute_que
         );
     }
 
-    TextDrawAlignment(SessionTextDrawData_GetDraw(index), _:type);
+    new typeBuff = _:type;
+    TextDrawAlignment(SessionTextDrawData_GetDraw(index), TEXT_DRAW_ALIGN:typeBuff);
     SessionTextDrawData_Update(index);
 
     SessionTextDraw_UpdateButton(index);
@@ -511,7 +512,8 @@ stock SessionTextDrawData_SetFont(index, E_TYPEFONT:type, bool:execute_query = t
         );
     }
 
-    TextDrawFont(SessionTextDrawData_GetDraw(index), _:type);
+    new typeBuff = _:type;
+    TextDrawFont(SessionTextDrawData_GetDraw(index), TEXT_DRAW_FONT:typeBuff);
     SessionTextDrawData_Update(index);
 
     SessionTextDraw_UpdateButton(index);

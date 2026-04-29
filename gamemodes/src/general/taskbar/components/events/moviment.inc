@@ -124,7 +124,8 @@ public OnTaskBarMovimentUpdate(playerid) {
             new 
                 dialog[164 + 1],
                 colorRGBA[4],
-                color = TaskBarTextDrawUpdate_GetColor(typeKey, index),
+                E_TYPETASKBUTTON:typeButton = TaskBarTextDrawUpdate_GetButtonByKey(typeKey),
+                color = TaskBarTextDrawUpdate_GetColor(typeButton, index),
                 currentColumn = TaskBarEventMoviment_GetColumn(playerid)
             ;
 

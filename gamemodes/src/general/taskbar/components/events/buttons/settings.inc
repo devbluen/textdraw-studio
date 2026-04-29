@@ -11,6 +11,12 @@ static
     e_Data[MAX_PLAYERS][E_DATA]
 ;
 
+hook OnUserLogout(playerid) {
+
+    TaskBarEventSettings_Reset(playerid);
+    return Y_HOOKS_CONTINUE_RETURN_1;
+}
+
 hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
     if(type != E_TYPETASKBUTTON_CONFIG)
@@ -79,6 +85,12 @@ stock TaskBarEventSettings_GetMaxY(playerid)
 
 stock TaskBarEventSettings_GetY(playerid)
     return e_Data[playerid][E_DATA_TASKBAR_Y];
+
+static stock TaskBarEventSettings_Reset(playerid) {
+
+    static const e_Clear[E_DATA];
+    e_Data[playerid] = e_Clear;
+}
 
 
 
