@@ -86,7 +86,7 @@ static stock TaskBarTextDraw_SetColorVisual(playerid, index) {
     TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(index));
 
     e_Data[playerid][E_DATA_COLOR_INDEX] = index;
-    e_Data[playerid][E_DATA_COLOR_TIMER] = SetTimerEx("OnTaskBar_RestoreColor", 1000 * 2, false, "ii", playerid, index);
+    e_Data[playerid][E_DATA_COLOR_TIMER] = SetTimerEx("OnTaskBar_RestoreColor", 1200, false, "ii", playerid, index);
 }
 
 static stock TaskBarTextDraw_RestoreColor(playerid, index) {

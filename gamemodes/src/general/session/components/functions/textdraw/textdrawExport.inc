@@ -13,7 +13,6 @@
                                         t.color, \
                                         t.colorBackground, \
                                         t.colorBox, \
-                                        t.itemType, \
                                         t.selectable, \
                                         t.box, \
                                         t.model, \
@@ -192,9 +191,9 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
         Export_Add(index, E_TYPEEXPORT_OUTLINE, va_return("TextDrawSetOutline(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "outline")));
         Export_Add(index, E_TYPEEXPORT_PROPORTIONAL, va_return("TextDrawSetProportional(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "proportion")));
         
-        switch(E_TYPEITEM:DB_GetFieldIntByName(cache, "itemType")) 
+        switch(E_TYPEFONT:DB_GetFieldIntByName(cache, "font")) 
         {
-            case E_TYPEITEM_TEXT:
+            case E_TYPEFONT_0, E_TYPEFONT_1, E_TYPEFONT_2, E_TYPEFONT_3:
             {
                 DB_GetFieldStringByName(cache, "letter_size", stringBuff);
                 sscanf(stringBuff, "p<,>a<f>[2]", sizeBuff);
@@ -204,7 +203,7 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
                 Export_Add(index, E_TYPEEXPORT_BOX_COLOR, va_return("TextDrawBoxColor(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "colorBox")));
             }
 
-            case E_TYPEITEM_MODEL:
+            case E_TYPEFONT_MODEL:
             {
                 Export_Add(index, E_TYPEEXPORT_MODEL_ID, va_return("TextDrawSetPreviewModel(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "model")));
 
