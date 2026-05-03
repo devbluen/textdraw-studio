@@ -111,7 +111,7 @@ stock Import_Get(playerid, const name[]) {
             || !sscanf(buff, "P<(,)>'TextDrawBoxColour'"#PATTERN_GLOBAL"i", intBuff) 
             || !sscanf(buff, "P<(,)>'TextDrawBoxColor'"#PATTERN_GLOBAL"i", intBuff)
             || !sscanf(buff, "P<(,)>'DynamicTextDrawBoxColour'"#PATTERN_GLOBAL"i", intBuff))
-                SessionTextDrawData_SetBox(index, bool:intBuff);
+                SessionTextDrawData_SetColorBox(index, intBuff);
 
             // Font
             else if(!sscanf(buff, "P<(,)>'PlayerTextDrawFont'"#PATTERN_PLAYER"i", intBuff) 

@@ -80,6 +80,9 @@ stock TaskBar_Cursor(playerid, bool:status) {
 stock bool:TaskBar_GetCursor(playerid)
     return e_TaskBar[playerid][E_TASKBAR_CURSOR];
 
+stock TaskBar_CursorToggle(playerid)
+    TaskBar_Cursor(playerid, !TaskBar_GetCursor(playerid));
+
 static stock TaskBar_Reset(playerid) {
 
     SessionPlayer_ResetLocalGroup(playerid);
