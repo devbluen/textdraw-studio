@@ -117,10 +117,8 @@ static stock SessionEventGroupDraw_Status(playerid, bool:status) {
     new page = SessionEventGroupDraws_GetPage(playerid);
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
-                                                            t.indexDraw, \
-                                                            gt.group_id IS NOT NULL AS hasGroup \
+                                                            t.indexDraw \
                                                         FROM textdraws t \
-                                                        LEFT JOIN groups_textdraws gt ON gt.draw_id = t.id \
                                                         WHERE t.project_id = %i \
                                                         ORDER BY t.indexDraw ASC \
                                                         LIMIT %i OFFSET %i",
@@ -136,18 +134,16 @@ static stock SessionEventGroupDraw_Status(playerid, bool:status) {
         {
             new
                 indexDraw,
-                indexGroup = SessionEventGroupDraws_GetIndexGroup(playerid),
-                bool:hasGroup
+                indexGroup = SessionEventGroupDraws_GetIndexGroup(playerid)
             ;
 
             do
             {
                 indexDraw = DB_GetFieldIntByName(cache, "indexDraw");
-                hasGroup = bool:DB_GetFieldIntByName(cache, "hasGroup");
 
-                if(status && !hasGroup)
+                if(status)
                     SessionGroup_AddDraw(indexGroup, indexDraw);
-                else if(!status && hasGroup)
+                else if(!status)
                     SessionGroup_RemoveDraw(indexGroup, indexDraw);
 
             }

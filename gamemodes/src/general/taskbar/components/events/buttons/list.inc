@@ -451,6 +451,19 @@ DialogMod:D_TASKBAR_LIST(playerid, response, inputtext[], index) {
     return true;
 }
 
+Dialog:D_TASKBAR_LISTDESTROY(playerid, response) {
+
+    if(response) {
+        new index = TaskBarEvent_GetIndex(playerid);
+        SessionTextDrawData_Destroy(index);
+        TaskBarEvent_SamePage(playerid);
+        return true;
+    }
+
+    TaskBarEvent_SamePageOptions(playerid);
+    return true;
+}
+
 DialogMod:D_TASKBAR_LISTOPTIONS(playerid, response, inputtext[], listitem) {
 
     if(response) {
@@ -458,10 +471,7 @@ DialogMod:D_TASKBAR_LISTOPTIONS(playerid, response, inputtext[], listitem) {
 
         switch(listitem) {
             case E_INTERACTION_SELECT: TaskBarTextDraw_Select(playerid, index);
-            case E_INTERACTION_DELETE: {
-                SessionTextDrawData_Destroy(index);
-                TaskBarEvent_SamePage(playerid);
-            }
+            case E_INTERACTION_DELETE: Dialog_Show(playerid, D_TASKBAR_LISTDESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Do you really want to delete it?", "Yes", "Back");
             case E_INTERACTION_SELECT_TO_ALL: {
                 SessionPlayer_AddDraw(playerid, index);
                 TaskBarEvent_SamePageOptions(playerid);
