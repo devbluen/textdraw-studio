@@ -1,20 +1,46 @@
 
             // Definers
+#define     MAX_WEBCOLORS_PAGES     15
+
+            // Macros
 #define WebColor:%0(%1) \
     forward wcb_%0(%1); \
     public wcb_%0(%1)
 
-enum E_WEBCOLORS {
+static enum {
+    E_INTERACTION_CHOOSE = -999,
+    E_INTERACTION_SAVED,
+    E_INTERACTION_MANUAL,
+    E_INTERACTION_PREVIOUS,
+    E_INTERACTION_NEXT,
+    E_INTERACTION_SAVE,
+    E_INTERACTION_REMOVE,
+    E_INTERACTION_ADD
+};
+
+static enum E_WEBCOLORS {
     E_WEBCOLORS_COLOR,
-    E_WEBCOLORS_NAME[32 + 1],
+    E_WEBCOLORS_NAME[32],
     bool:E_WEBCOLORS_BLOCK_PREVIEW
 };
 
-new const 
+static enum E_WEBCOLORSPLAYER {
+    E_WEBCOLORSPLAYER_PAGE,
+    E_WEBCOLORSPLAYER_PAGES,
+    E_WEBCOLORSPLAYER_COLOR,
+    bool:E_WEBCOLORSPLAYER_WITHCOLOR,
+    E_WEBCOLORSPLAYER_CALLBACK[32]
+};
+
+static 
+    e_WebColorsPlayer[MAX_PLAYERS][E_WEBCOLORSPLAYER]
+;
+
+static const 
     e_WebColors[][E_WEBCOLORS] = {
         {RGB::RGBAToHex(255, 255, 255, 0), "Transparent", true},
         {0xFFFFFFFF, "White", true},
-        {0x000000FF, "Black", true},
+        {0x000000FF, "Black"},
 
         {0x212121FF, "Deep Graphite"},    // [0] Backgrounds
         {0x424242FF, "Medium Grey"},      // [1] Borders
@@ -65,11 +91,6 @@ new const
     }
 ;
 
-static 
-    bool:e_WithChoose[MAX_PLAYERS],
-    e_Callback[MAX_PLAYERS][30 + 1]
-;
-
 
 
 /*
@@ -86,8 +107,8 @@ static
 
 stock Util_WebColorCreate(playerid, const callback[], bool:with_arrows = true) {
 
-    strcopy(e_Callback[playerid], callback);
-    e_WithChoose[playerid] = with_arrows;
+    e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_WITHCOLOR] = with_arrows;
+    strcopy(e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_CALLBACK], callback);
 
     Util_WebColorShow(playerid);
 }
@@ -97,10 +118,11 @@ static stock Util_WebColorShow(playerid) {
     inline WebColorsInternal() {
 
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "Choose Color", -2);
+        DialogMod_Add(playerid, "Choose Color", E_INTERACTION_CHOOSE);
+        DialogMod_Add(playerid, "Saved Colors", E_INTERACTION_SAVED);
 
-        if(e_WithChoose[playerid])
-            DialogMod_Add(playerid, "Edit Manual Color", -3);
+        if(e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_WITHCOLOR])
+            DialogMod_Add(playerid, "Edit Manual Color", E_INTERACTION_MANUAL);
 
         DialogMod_Add(playerid, " ");
         DialogMod_Add(playerid, DIALOG_LINE);
@@ -110,11 +132,116 @@ static stock Util_WebColorShow(playerid) {
             DialogMod_Add(playerid, "{%06x}%d. %s", i, (e_WebColors[i][E_WEBCOLORS_BLOCK_PREVIEW] ? (0xFFFFFFFF) : (e_WebColors[i][E_WEBCOLORS_COLOR])) >>> 8, i + 1, e_WebColors[i][E_WEBCOLORS_NAME]);
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Colors", "Select", "Close", "WEBCOLORS", using inline WebColorsInternal);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Colors", "Select", "Close", "D_WEBCOLORS", using inline WebColorsInternal);
+}
+
+static stock Util_WebColorSetPage(playerid, page)
+    e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_PAGE] = page;
+
+static stock Util_WebColorGetPage(playerid)
+    return e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_PAGE];
+
+static stock Util_WebColorSetPages(playerid, page)
+    e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_PAGES] = page;
+
+static stock Util_WebColorGetPages(playerid)
+    return e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_PAGES];
+
+static stock Util_WebColorFavorites(playerid) {
+
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT COUNT(*) AS count FROM colors");
+    if(cache)
+    {
+        Util_WebColorSetPages(playerid, Util_GetPages(DB_GetFieldIntByName(cache, "count"), MAX_WEBCOLORS_PAGES));
+        Util_WebColorPage(playerid, 0);
+
+        DB_FreeResultSet(cache);
+    }
+}
+
+static stock Util_WebColorSamePage(playerid)
+    Util_WebColorPage(playerid, Util_WebColorGetPage(playerid));
+
+static stock Util_SetWebColor(playerid, color)
+    e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_COLOR] = color;
+
+static stock Util_GetWebColor(playerid)
+    return e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_COLOR];
+
+static stock Util_WebColorPage(playerid, page) {
+
+    new pages = Util_WebColorGetPages(playerid);
+
+    if(page >= pages) page = pages - 1; 
+    if(page < 0) pages = 0;
+
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
+                                                            name, \
+                                                            color \
+                                                        FROM colors \
+                                                        LIMIT %i OFFSET %i",
+
+                                                        MAX_WEBCOLORS_PAGES,
+                                                        page * MAX_WEBCOLORS_PAGES
+                                                    );
+
+    if(cache)
+    {
+        inline WebColorFavorites() {
+
+            new
+                name[30 + 1],
+                color
+            ;
+
+            if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
+            if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
+            DialogMod_Add(playerid, "Save Color", E_INTERACTION_SAVE);
+
+            do
+            {
+                color = DB_GetFieldIntByName(cache, "color");
+                DB_GetFieldStringByName(cache, "name", name);
+
+                DialogMod_Add(playerid, "%s%s", color, RGB::GetColorRGBA(color), name);
+            }
+            while(DB_SelectNextRow(cache));
+            DB_FreeResultSet(cache);
+        }
+
+        DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Colors", "Select", "Cancel", "D_WEBCOLORS_FAV", using inline WebColorFavorites);
+    }
 }
 
 static stock Util_WebColorCall(playerid, color)
-    CallLocalFunction(va_return("wcb_%s", e_Callback[playerid]), "ii", playerid, color);
+    CallLocalFunction(va_return("wcb_%s",e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_CALLBACK]), "ii", playerid, color);
+
+static stock Util_WebDeleteColor(playerid)
+    DB_FreeResultSet(
+        DB_ExecuteQuery(IDConnection, "DELETE FROM colors WHERE color = %i", Util_GetWebColor(playerid))
+    );
+
+static stock Util_WebChoose(playerid, const callback[]) {
+
+    new dialog[356 + 1];
+    format(dialog, sizeof dialog, "{FFFFFF}Define the colors of your project as desired.\n \
+                                    You can choose one of the formats below to select the color.\n\n \
+                                    \
+                                    Formats:\n \
+                                    {hex}\n \
+                                    - 0xFFFFFFFF\n \
+                                    - #FFFFFF\n \
+                                    - rgba(255, 255, 255, 255)\n \
+                                    - rgb(255, 255, 255)\n \
+                                    - 255, 255, 255, 255\n \
+                                    - 255, 255, 255\n \
+                                    - 255 255 255 255\n \
+                                    - 255 255 255\n \
+                                    - Numbers"
+                                );
+
+    Dialog_Open(playerid, callback, DIALOG_STYLE_INPUT, "Colors", dialog, "Confirm", "Previous");
+}
 
 
 
@@ -130,38 +257,71 @@ static stock Util_WebColorCall(playerid, color)
 
 */
 
-DialogMod:WEBCOLORS(playerid, response, inputtext[], params) {
+Dialog:D_WEBCOLOR(playerid, response, listitem, inputtext[]) {
+
+    if(response && !isnull(inputtext))
+        Util_WebColorCall(playerid, Util_ParseColor(inputtext));
+    else
+        Util_WebColorSamePage(playerid);
+
+    return true;
+}
+
+DialogMod:D_WEBCOLORS_FAV(playerid, response, inputtext[], params) {
+
+    if(response) {
+
+        switch(params) {
+            case E_INTERACTION_NEXT: Util_WebColorPage(playerid, Util_WebColorGetPage(playerid) + 1);
+            case E_INTERACTION_PREVIOUS: Util_WebColorPage(playerid, Util_WebColorGetPage(playerid) - 1);
+            case E_INTERACTION_SAVE: Util_WebChoose(playerid, "D_WEBCOLORS_FAVSEL");
+            default:
+            {
+                Util_SetWebColor(playerid, params);
+                
+                inline WebColorOption() {
+
+                    DialogMod_Add(playerid, "Add", E_INTERACTION_ADD);
+                    DialogMod_Add(playerid, "Remove Favorite", E_INTERACTION_REMOVE);
+                }
+
+                DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Options", "Select", "Back", "D_WEBCOLORS_FAVOPTION", using inline WebColorOption);
+            }
+        }
+    }
+    return true;
+}
+
+DialogMod:D_WEBCOLORS_FAVOPTION(playerid, response, inputtext[], params) {
+
+    if(response) {
+        switch(params) {
+            case E_INTERACTION_ADD: Util_WebColorCall(playerid, Util_GetWebColor(playerid));
+            case E_INTERACTION_REMOVE: 
+            {
+                Util_WebDeleteColor(playerid);
+                Util_WebColorPage(playerid, 0);
+                SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"%s deleted a color preset", Auth_GetName(playerid));
+            }
+        }
+        return true;
+    }
+    
+    Util_WebColorSamePage(playerid);
+    return true;
+}
+
+DialogMod:D_WEBCOLORS(playerid, response, inputtext[], params) {
 
     if(response) {
 
         switch(params) {
             case -1: Util_WebColorShow(playerid);
-            case -2: 
-            {
-                new dialog[356 + 1];
-                format(dialog, sizeof dialog, "{FFFFFF}Define the colors of your project as desired.\n \
-                                                You can choose one of the formats below to select the color.\n\n \
-                                                \
-                                                Formats:\n \
-                                                {hex}\n \
-                                                - 0xFFFFFFFF\n \
-                                                - #FFFFFF\n \
-                                                - rgba(255, 255, 255, 255)\n \
-                                                - rgb(255, 255, 255)\n \
-                                                - 255, 255, 255, 255\n \
-                                                - 255, 255, 255\n \
-                                                - 255 255 255 255\n \
-                                                - 255 255 255\n \
-                                                - Numbers"
-                                            );
-
-                Dialog_Show(playerid, D_WEBCOLOR, DIALOG_STYLE_INPUT, "Colors", dialog, "Confirm", "Previous");
-            }
-
-            case -3: Util_WebColorCall(playerid, -2);
+            case E_INTERACTION_CHOOSE: Util_WebChoose(playerid, "D_WEBCOLOR");
+            case E_INTERACTION_SAVED: Util_WebColorFavorites(playerid);
+            case E_INTERACTION_MANUAL: Util_WebColorCall(playerid, -2);
             default: Util_WebColorCall(playerid, e_WebColors[params][E_WEBCOLORS_COLOR]);
         }
-        
         return true;
     }
 
@@ -169,12 +329,30 @@ DialogMod:WEBCOLORS(playerid, response, inputtext[], params) {
     return true;
 }
 
-Dialog:D_WEBCOLOR(playerid, response, listitem, inputtext[]) {
+Dialog:D_WEBCOLORS_FAVSEL(playerid, response, listitem, inputtext[]) {
 
-    if(response && !isnull(inputtext))
-        Util_WebColorCall(playerid, Util_ParseColor(inputtext));
-    else
-        Util_WebColorCall(playerid, -3);
+    if(response && !isnull(inputtext)) {
+        Util_SetWebColor(playerid, Util_ParseColor(inputtext));
+        Dialog_Show(playerid, D_WEBCOLORS_FAVNAME, DIALOG_STYLE_INPUT, "Name Color", "Please enter the name of the color you want below.", "Create", "Cancel");
+        return true;
+    }
 
+    Util_WebColorCall(playerid, -3);
+    return true;
+}
+
+Dialog:D_WEBCOLORS_FAVNAME(playerid, response, listitem, inputtext[]) {
+
+    if(response) {
+
+        if(isnull(inputtext))
+            return Dialog_ReShow(playerid, "You can't go on with nothing.");
+
+        DB_FreeResultSet(
+            DB_ExecuteQuery(IDConnection, "INSERT INTO colors (name, color) VALUES ('%s', %i)", inputtext, Util_GetWebColor(playerid))
+        );
+
+        SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"%s created a preset of a new color %s", Auth_GetName(playerid), inputtext);
+    }
     return true;
 }

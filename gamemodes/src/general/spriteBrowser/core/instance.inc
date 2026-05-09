@@ -4,6 +4,8 @@
 
 hook OnGameModeInit() {
 
+    new secondsTime = gettime();
+
     Logger("Loading sprites into the database, please wait a few seconds.");
 
     SpriteBrowser_Insert(E_TYPESPRITE_LD_BEAT, "LD_BEAT:chit");
@@ -601,7 +603,7 @@ hook OnGameModeInit() {
     SpriteBrowser_Insert(E_TYPESPRITE_PLANTS, "plant1:txgrass1_2");
     SpriteBrowser_Insert(E_TYPESPRITE_PLANTS, "plant1:txgrass1_3");
 
-    Logger("Sprites were loaded successfully.");
+    Logger("Sprites were loaded successfully. (%ds)", gettime() - secondsTime);
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
@@ -622,6 +624,6 @@ hook OnGameModeInit() {
 static stock SpriteBrowser_Insert(E_TYPESPRITE:type, const sprite[]) {
 
     DB_FreeResultSet(
-        DB_ExecuteQuery(IDConnection, "INSERT INTO sprites (sprite, `type`) VALUES ('%s', %i)", sprite, _:type)
+        DB_ExecuteQuery(IDConnection, "INSERT OR IGNORE INTO sprites (sprite, `type`) VALUES ('%s', %i)", sprite, _:type)
     );
 }

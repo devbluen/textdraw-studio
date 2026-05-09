@@ -70,3 +70,11 @@
         sprite_id INTEGER, \
         CONSTRAINT sprites_favorites_sprite_id_sprites_id FOREIGN KEY(sprite_id) REFERENCES sprites(id) ON DELETE CASCADE ON UPDATE CASCADE \
     )"
+
+#define eTablesColors \
+    "CREATE TABLE IF NOT EXISTS colors ( \
+        id INTEGER NOT NULL, \
+        name TEXT NULL, \
+        color INTEGER NULL, \
+        PRIMARY KEY (id) \
+    )"
