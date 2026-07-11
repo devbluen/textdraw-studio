@@ -41,7 +41,7 @@ stock TaskBarEventProjectList_Show(playerid) {
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT count(*) AS `count` FROM projects");
 
     if(cache) {
-        new count = DB_GetRowCount(cache);
+        new count = DB_GetFieldIntByName(cache, "count");
         DB_FreeResultSet(cache);
 
         TaskBarEventProjectList_SetPages(playerid, Util_GetPages(count, MAX_TASKBAR_PROJECT_VIEW));
