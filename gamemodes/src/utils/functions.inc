@@ -31,8 +31,8 @@ stock Util_ParseColor(const input[]) {
         hex
     ;
     
-    if(!sscanf(input, "'rgba'p<, ()>dddd", r, g, b, a)) return RGB::RGBAToHex(r, g, b, a);                         // Format: rgba(r,g,b,a)
-    else if(!sscanf(input, "'rgb'p<, ()>ddd", r, g, b)) return RGB::RGBAToHex(r, g, b, a);                         // Format: rgb(r,g,b)
+    if(!sscanf(input, "'rgba'P<, ()>dddD(255)", r, g, b, a)) return RGB::RGBAToHex(r, g, b, a);                     // Format: rgba(r,g,b,a)
+    else if(!sscanf(input, "'rgb'P<, ()>ddd", r, g, b)) return RGB::RGBAToHex(r, g, b, a);                          // Format: rgb(r,g,b)
     else if(!sscanf(input, "'#'x", hex) || !sscanf(input, "'0x'x", hex) || !sscanf(input, "'{'x'}'", hex)) {        // Format: 0xFFFFFFFF or #FFFFFF or {FFFFFF}
         if (hex >= 0 && hex <= 0xFFFFFF)
             return (hex << 8 | 0xFF);

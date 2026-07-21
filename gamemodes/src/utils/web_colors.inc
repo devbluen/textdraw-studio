@@ -15,7 +15,8 @@ static enum {
     E_INTERACTION_NEXT,
     E_INTERACTION_SAVE,
     E_INTERACTION_REMOVE,
-    E_INTERACTION_ADD
+    E_INTERACTION_ADD,
+    E_INTERACTION_COPY
 };
 
 static enum E_WEBCOLORS {
@@ -120,6 +121,7 @@ static stock Util_WebColorShow(playerid) {
         DialogMod_Add(playerid, " ");
         DialogMod_Add(playerid, "Choose Color", E_INTERACTION_CHOOSE);
         DialogMod_Add(playerid, "Saved Colors", E_INTERACTION_SAVED);
+        DialogMod_Add(playerid, "Copy Color", E_INTERACTION_COPY);
 
         if(e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_WITHCOLOR])
             DialogMod_Add(playerid, "Edit Manual Color", E_INTERACTION_MANUAL);
@@ -213,7 +215,7 @@ static stock Util_WebColorPage(playerid, page) {
     }
 }
 
-static stock Util_WebColorCall(playerid, color)
+stock Util_WebColorCall(playerid, color)
     CallLocalFunction(va_return("wcb_%s",e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_CALLBACK]), "ii", playerid, color);
 
 static stock Util_WebDeleteColor(playerid)
@@ -320,6 +322,7 @@ DialogMod:D_WEBCOLORS(playerid, response, inputtext[], params) {
             case E_INTERACTION_CHOOSE: Util_WebChoose(playerid, "D_WEBCOLOR");
             case E_INTERACTION_SAVED: Util_WebColorFavorites(playerid);
             case E_INTERACTION_MANUAL: Util_WebColorCall(playerid, -2);
+            case E_INTERACTION_COPY: SessionTextDrawColor_Show(playerid);
             default: Util_WebColorCall(playerid, e_WebColors[params][E_WEBCOLORS_COLOR]);
         }
         return true;
