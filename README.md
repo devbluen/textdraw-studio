@@ -2,7 +2,7 @@
 Explore your imagination and modernize your creations with **Textdraws Studio**<br>
 Created by **blueN** in collaboration with **Samp Lab** (https://discord.gg/EqeFr5yj82).
 
-# ⁉️ How compile?
+# ⁉️How compile?
 1. Press F5 in your VSCODE
 2. Select build with PowerShell (check source-code -> *.vscode->powershell->compiler.ps1*)
 3. Done.
