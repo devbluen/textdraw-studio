@@ -1,0 +1,4 @@
+*.amx
+log.txt
+scriptfiles/*.db
+scriptfiles/textdrawStudio/**/*.txt

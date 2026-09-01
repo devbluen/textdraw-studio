@@ -1,0 +1,6 @@
+
+enum E_TYPEITEM {
+    E_TYPEITEM_TEXT = 0,
+    E_TYPEITEM_SPRITE = 1,
+    E_TYPEITEM_MODEL = 2
+};

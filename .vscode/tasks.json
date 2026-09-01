@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build PowerShell",
+            "type": "shell",
+            "command": "powershell",
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "args": [
+                "-ExecutionPolicy", "Bypass",
+                "-File", "${workspaceFolder}/.vscode/powershell/compile.ps1",
+                "-file", "${file}",
+                "-include", "${workspaceFolder}/qawno/include",
+                "-dir", "${fileDirname}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "focus": true
+            },
+            "problemMatcher": []
+        }
+    ],
+}
