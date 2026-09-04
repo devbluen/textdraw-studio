@@ -14,9 +14,9 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     ;
 
     SessionTextDrawData_GetString(index, string);
-    format(dialog, sizeof dialog, "Which text do you want?\n\n{f52746}Current:\n{FFFFFF} %s", string);
+    LangF(playerid, dialog, sizeof dialog, E_LANG_TEXT_BODY, string);
 
-    Dialog_Show(playerid, D_ITEM_TEXT, DIALOG_STYLE_INPUT, "Change Text", dialog, "Change", "Cancel");
+    Dialog_Show(playerid, D_ITEM_TEXT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_TEXT_TITLE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
     return Y_HOOKS_BREAK_RETURN_1;
 }
 

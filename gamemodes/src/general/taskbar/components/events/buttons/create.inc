@@ -8,12 +8,12 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
         return Y_HOOKS_CONTINUE_RETURN_1;
 
     new dialog[64 * 4];
-    strcat(dialog, "Normal Textdraw\n");
-    strcat(dialog, "Sprite Browser {CCCCCC}(TXD and Custom TXD's)\n");
-    strcat(dialog, "Models {CCCCCC}(Objects, Vehicles and Actors)\n");
-    strcat(dialog, "Create Sprite White (default)");
+    strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_NORMAL));
+    strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_SPRITE_BROWSER));
+    strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_MODELS));
+    strcat(dialog, L(playerid, E_LANG_CREATE_SPRITE_WHITE));
 
-    Dialog_Show(playerid, D_CREATION, DIALOG_STYLE_TABLIST, "Creation", dialog, "Select", "Cancel");
+    Dialog_Show(playerid, D_CREATION, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_CREATION), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL));
     return Y_HOOKS_BREAK_RETURN_1;
 }
 

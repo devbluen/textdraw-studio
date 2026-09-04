@@ -79,8 +79,11 @@ stock Camera_Get(E_TYPECAMERA:type, &Float:x, &Float:y, &Float:z, &Float:angle) 
     angle = e_DataInfo[index][E_DATAINFO_POSITION][3];
 }
 
-stock Camera_GetNameByPlayer(playerid, dest[], maxLength = sizeof dest)
-    Camera_GetName(eType[playerid], dest, maxLength);
+stock Camera_GetNameByPlayer(playerid, dest[], maxLength = sizeof dest) {
+    new E_LANG:camKey = E_LANG_CAM_PLAYER;
+    camKey = E_LANG:(_:camKey + _:eType[playerid]);
+    strcat(dest, L(playerid, camKey), maxLength);
+}
 
 stock Camera_Set(playerid, E_TYPECAMERA:type) {
 
@@ -107,12 +110,15 @@ stock Camera_Show(playerid) {
     
     inline CameraOptionsData() {
 
-        for(new i = 0; i < sizeof e_DataInfo; i++)
-            DialogMod_Add(playerid, e_DataInfo[i][E_DATAINFO_NAME], i);
+        for(new i = 0; i < sizeof e_DataInfo; i++) {
+            new E_LANG:camKey = E_LANG_CAM_PLAYER;
+            camKey = E_LANG:(_:camKey + i);
+            DialogMod_Add(playerid, L(playerid, camKey), i);
+        }
 
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Cameras", "Select", "Cancel", "D_CAMERA_MODE", using inline CameraOptionsData);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_CAMERAS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL), "D_CAMERA_MODE", using inline CameraOptionsData);
 }
 
 

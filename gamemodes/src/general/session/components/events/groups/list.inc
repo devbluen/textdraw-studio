@@ -65,9 +65,9 @@ static stock SessionEventGroupList_Page(playerid, page) {
             indexGroup
         ;
 
-        DialogMod_Add(playerid, "ID\tName");
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_HDR_ID));
 
-        DialogMod_Add(playerid, "Create Group", E_INTERACTION_CREATE_GROUP);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_CREATE), E_INTERACTION_CREATE_GROUP);
 
         if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
         if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
@@ -108,7 +108,9 @@ static stock SessionEventGroupList_Page(playerid, page) {
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Groups (%d/%d)", page + 1, pages), "Select", "Close", "D_GROUP_LIST", using inline OnSessionGroupListShow);
+    new groupTitle[32];
+    LangF(playerid, groupTitle, sizeof groupTitle, E_LANG_GRP_HDR, page + 1, pages);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, groupTitle, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_GROUP_LIST", using inline OnSessionGroupListShow);
 }
 
 static stock SessionEventGroupList_Callback(playerid, index) {
@@ -160,13 +162,13 @@ Dialog:D_GROUP_CREATE(playerid, response, listitem, inputtext[]) {
         new uniqueId = Session_GetId();
 
         if(SessionGroup_Exists(uniqueId, inputtext)) {
-            SendMessage(playerid, -1, ""#MESSAGE_RED"This group already exists");
+            SendLang(playerid, -1, E_LANG_ERR_GROUP_EXISTS);
             return true;
         }
 
         new indexGroup = SessionGroup_Create(uniqueId, inputtext);
         if(indexGroup == -1) {
-            SendMessage(playerid, -1, ""#MESSAGE_RED"Maximum group limit reached. ("#MAX_STUDIO_GROUPS")");
+            SendLang(playerid, -1, E_LANG_ERR_GROUP_LIMIT);
             return true;
         }
 
@@ -206,7 +208,7 @@ DialogMod:D_GROUP_LIST(playerid, response, inputtext[], index) {
 
         switch(index) {
             case -1: SessionEventGroupList_SamePage(playerid);
-            case E_INTERACTION_CREATE_GROUP: Dialog_Show(playerid, D_GROUP_CREATE, DIALOG_STYLE_INPUT, "Name", "Define the group name below.", "Create", "Previous");
+            case E_INTERACTION_CREATE_GROUP: Dialog_Show(playerid, D_GROUP_CREATE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_NAME), L(playerid, E_LANG_GRP_NAME_BODY), L(playerid, E_LANG_BTN_CREATE), L(playerid, E_LANG_BTN_PREVIOUS));
             case E_INTERACTION_NEXT: SessionEventGroupList_Page(playerid, SessionEventGroupList_GetPage(playerid) + 1);
             case E_INTERACTION_PREVIOUS: SessionEventGroupList_Page(playerid, SessionEventGroupList_GetPage(playerid) - 1);
             default: SessionEventGroupList_Callback(playerid, index);

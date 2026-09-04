@@ -74,15 +74,9 @@ public OnTaskBarMovimentUpdate(playerid) {
     else if(keys & KEY_CTRL_BACK) {
 
         new dialog[186 + 1];
-        format(dialog, sizeof dialog, "{FFFFFF}The current speed is {"#HEX_INFO"}%0.1f{FFFFFF}\n\n \
-                                        \
-                                        [!] Enter the desired new speed below.\n \
-                                        Remember that you can use small values like {"#HEX_DEFAULT"}0.03{FFFFFF} or {"#HEX_DEFAULT"}0.3", 
+        LangF(playerid, dialog, sizeof dialog, E_LANG_MOV_SPEED_BODY, TaskBarEventMoviment_GetSpeed(playerid));
 
-                                        TaskBarEventMoviment_GetSpeed(playerid)
-                                    );
-
-        Dialog_Show(playerid, D_MOVIMENT_SPEED, DIALOG_STYLE_INPUT, "Change Speed", dialog, "Change", "Cancel");
+        Dialog_Show(playerid, D_MOVIMENT_SPEED, DIALOG_STYLE_INPUT, L(playerid, E_LANG_MOV_SPEED_TITLE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
     }
     
     else if(keys & KEY_NO) {
@@ -102,21 +96,9 @@ public OnTaskBarMovimentUpdate(playerid) {
 
             TaskBarTextDrawUpdate_GetPos(typeButton, index, position[0], position[1]);
 
-            format(dialog, sizeof dialog, "{FFFFFF}Enter the values below to set:\n\n \
-                                            X: {"#HEX_DEFAULT"}%0.3f{FFFFFF}\n \
-                                            Y: {"#HEX_DEFAULT"}%0.3f{FFFFFF}\n\n \
-                                            \
-                                            For {CCCCCC}X-axis{FFFFFF} editing use\n \
-                                            value {"#HEX_INFO"}0.0{FFFFFF}\n\n \
-                                            \
-                                            For {CCCCCC}Y-axis{FFFFFF} editing use\n \
-                                            {"#HEX_INFO"}0.0{FFFFFF} value", 
+            LangF(playerid, dialog, sizeof dialog, E_LANG_MOV_EDIT_BODY, position[0], position[1]);
 
-                                            position[0], 
-                                            position[1]
-                                        );
-
-            Dialog_Show(playerid, D_MOVIMENT_EDIT, DIALOG_STYLE_INPUT, "Edit Data", dialog, "Confirm", "Cancel");
+            Dialog_Show(playerid, D_MOVIMENT_EDIT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_MOV_EDIT_TITLE), dialog, L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_CANCEL));
         }
 
         else if(typeKey == E_TYPEKEY_COLOR || typeKey == E_TYPEKEY_COLOR_BACKGROUND || typeKey == E_TYPEKEY_COLOR_BOX) {
@@ -131,14 +113,9 @@ public OnTaskBarMovimentUpdate(playerid) {
 
             RGB::HexToRGBA(color, colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
 
-            format(dialog, sizeof dialog, "{FFFFFF}Enter a value between {"#HEX_DEFAULT"}0{FFFFFF} and {"#HEX_DEFAULT"}255{FFFFFF} below for your coloring result.\n\n \
-                                            \
-                                            The current color of the column is: {"#HEX_INFO"}%i",
-                                        
-                                            colorRGBA[currentColumn]
-                                        );
+            LangF(playerid, dialog, sizeof dialog, E_LANG_MOV_COLOR_BODY, colorRGBA[currentColumn]);
 
-            Dialog_Show(playerid, D_MOVIMENT_COLOR, DIALOG_STYLE_INPUT, "Coloring", dialog, "Change", "Cancel");
+            Dialog_Show(playerid, D_MOVIMENT_COLOR, DIALOG_STYLE_INPUT, L(playerid, E_LANG_MOV_COLOR_TITLE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
         }
 
         else if(typeKey == E_TYPEKEY_MODEL_ROTATION) {
@@ -149,21 +126,12 @@ public OnTaskBarMovimentUpdate(playerid) {
                 currentColumn = TaskBarEventMoviment_GetColumn(playerid)
             ;
 
-            static const eixs[][5] = {"X", "Y", "Z", "Zoom"};
-
             SessionTextDrawData_GetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3]);
+            new E_LANG:axisKey = E_LANG_AXIS_X;
+            axisKey = E_LANG:(_:axisKey + currentColumn);
+            LangF(playerid, dialog, sizeof dialog, E_LANG_MOV_MODEL_BODY, L(playerid, axisKey), rotation[currentColumn]);
 
-            format(dialog, sizeof dialog, "{FFFFFF}You are editing the {"#HEX_INFO"}%s{FFFFFF} rotation of your model. \
-                                        \
-                                        Currently: {"#HEX_DEFAULT"}%0.3f{FFFFFF} \
-                                        \
-                                        Please enter the desired new value below, between {"#HEX_INFO"}-360.0{FFFFFF} and {"#HEX_INFO"}360.0{FFFFFF}.", 
-
-                                        eixs[currentColumn],
-                                        rotation[currentColumn]
-                                    );
-
-            Dialog_Show(playerid, D_MOVIMENT_MODEL_ROT, DIALOG_STYLE_INPUT, "Model Rotation", dialog, "Change", "Cancel");
+            Dialog_Show(playerid, D_MOVIMENT_MODEL_ROT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_MOV_MODEL_TITLE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
         }
     }
     else
@@ -584,7 +552,7 @@ Dialog:D_MOVIMENT_EDIT(playerid, response, listitem, inputtext[]) {
         new Float:position[2];
 
         if(sscanf(inputtext, "ff", position[0], position[1])) 
-            return Dialog_ReShow(playerid, "Only put floats (Example: 0.0 0.0)");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_FLOATS_EX));
 
         new 
             Float:positionItem[2],
@@ -612,7 +580,7 @@ Dialog:D_MOVIMENT_SPEED(playerid, response, listitem, inputtext[]) {
         new Float:speed;
 
         if(sscanf(inputtext, "f", speed)) 
-            return Dialog_ReShow(playerid, "Only put floats");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_FLOATS));
 
         TaskBarEventMoviment_SetSpeed(playerid, speed);
         TaskBarMessage_Create(playerid, va_return("~r~New Speed:~w~ %0.1f", speed), 2);
@@ -627,10 +595,10 @@ Dialog:D_MOVIMENT_COLOR(playerid, response, listitem, inputtext[]) {
         new newColor;
         
         if(sscanf(inputtext, "i", newColor))
-            return Dialog_ReShow(playerid, "Only put numbers");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
 
         if(newColor < 0 || newColor > 255)
-            return Dialog_ReShow(playerid, "You can only enter values from 0 to 255.");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_COLOR_RANGE));
 
         new 
             E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
@@ -657,7 +625,7 @@ Dialog:D_MOVIMENT_MODEL_ROT(playerid, response, listitem, inputtext[]) {
 
         new Float:rotation;
         if(sscanf(inputtext, "f", rotation))
-            return Dialog_ReShow(playerid, "Only put floats");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_FLOATS));
 
         new 
             index = TaskBarTextDraw_GetSelected(playerid),

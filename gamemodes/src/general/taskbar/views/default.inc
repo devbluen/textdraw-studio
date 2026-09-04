@@ -325,8 +325,13 @@ stock TaskBarView_Create(playerid) {
     for(new i = 0; i < sizeof taskBarView[]; i++)
         PlayerTextDrawShow(playerid, taskBarView[playerid][i]);
 
+    TaskBarView_ApplyLang(playerid);
     TaskBarView_HideInfo(playerid);
     TaskBarView_HideTips(playerid);
+}
+
+stock TaskBarView_ApplyLang(playerid) {
+    PlayerTextDrawSetString(playerid, taskBarView[playerid][26], L(playerid, E_LANG_TIPS_MOVE));
 }
 
 stock TaskBarView_Show(playerid)

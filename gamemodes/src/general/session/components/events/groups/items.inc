@@ -99,13 +99,13 @@ static stock SessionEventGroupItem_Page(playerid, page) {
             groupId = SessionGroup_GetUniqueId(indeGroup) 
         ;
 
-        DialogMod_Add(playerid, "ID\tName");
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_HDR_ID));
 
         if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
         if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
 
-        DialogMod_Add(playerid, "Add Textdraw", E_INTERACTION_ADD_TEXTDRAW);
-        DialogMod_Add(playerid, "Destroy Group", E_INTERACTION_DESTROY_GROUP);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_ADD_TD), E_INTERACTION_ADD_TEXTDRAW);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_DESTROY), E_INTERACTION_DESTROY_GROUP);
 
         new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
                                                                 t.text, \
@@ -124,7 +124,7 @@ static stock SessionEventGroupItem_Page(playerid, page) {
         {
             if(DB_GetRowCount(cache)) 
             {
-                DialogMod_Add(playerid, "Options\t{CCCCCC}(Add Item, Moviment, Texts and Others)", E_INTERACTION_OPTIONS);
+                DialogMod_Add(playerid, L(playerid, E_LANG_GRP_OPTIONS), E_INTERACTION_OPTIONS);
                 DialogMod_Add(playerid, " ");
 
                 new 
@@ -147,7 +147,9 @@ static stock SessionEventGroupItem_Page(playerid, page) {
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Itens (%d/%d)", page + 1, pages), "Select", "Previous", "D_GROUP_ITEMS", using inline OnSessionGroupItemsShow);
+    new itemsTitle[32];
+    LangF(playerid, itemsTitle, sizeof itemsTitle, E_LANG_GRP_ITEMS, page + 1, pages);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, itemsTitle, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_GROUP_ITEMS", using inline OnSessionGroupItemsShow);
 }
 
 static stock SessionEventGroupItem_SetPage(playerid, value)
@@ -187,54 +189,54 @@ stock SessionEventGroupItem_Options(playerid) {
 
     inline OnSessionGroupItemsOptions() {
 
-        DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Management:");
-        DialogMod_Add(playerid, "- Export all Textdraws", E_INTERACTION_EXPORT_ALL);
-        DialogMod_Add(playerid, "- Remove all Textdraws", E_INTERACTION_REMOVE_ALL);
-        DialogMod_Add(playerid, "- Destroy all Textdraws", E_INTERACTION_DESTROY_ALL);
+        DialogMod_Add(playerid, L(playerid, E_LANG_SEC_MANAGEMENT));
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_EXPORT_ALL), E_INTERACTION_EXPORT_ALL);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_REMOVE_ALL), E_INTERACTION_REMOVE_ALL);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_DESTROY_ALL), E_INTERACTION_DESTROY_ALL);
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Resizing:");
-        DialogMod_Add(playerid, "- Modify Position", E_INTERACTION_POSITION);
-        DialogMod_Add(playerid, "- Modify Size", E_INTERACTION_SIZE);
-        DialogMod_Add(playerid, "- Modify Letter-Size", E_INTERACTION_LETTER_SIZE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_SEC_RESIZING));
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_MOD_POS), E_INTERACTION_POSITION);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_MOD_SIZE), E_INTERACTION_SIZE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_MOD_LETTER), E_INTERACTION_LETTER_SIZE);
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Colors:");
-        DialogMod_Add(playerid, "- Change Color", E_INTERACTION_COLOR);
-        DialogMod_Add(playerid, "- Change Background Color", E_INTERACTION_COLOR_BACKGROUND); 
-        DialogMod_Add(playerid, "- Change Box Color", E_INTERACTION_COLOR_BOX);
-        DialogMod_Add(playerid, "- Enable Box", E_INTERACTION_ENABLE_BOX);
-        DialogMod_Add(playerid, "- Disable Box", E_INTERACTION_DISABLE_BOX);
+        DialogMod_Add(playerid, L(playerid, E_LANG_SEC_COLORS));
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_COLOR), E_INTERACTION_COLOR);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_BG), E_INTERACTION_COLOR_BACKGROUND); 
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_BOX), E_INTERACTION_COLOR_BOX);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EN_BOX), E_INTERACTION_ENABLE_BOX);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_DIS_BOX), E_INTERACTION_DISABLE_BOX);
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "{"HEX_DEFAULT"}Clonings:");
-        DialogMod_Add(playerid, "- Clone All (Don't add to group)", E_INTERACTION_CLONE);
-        DialogMod_Add(playerid, "- Clone All and Choose (Don't add to group)", E_INTERACTION_CLONE_CHOOSE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_SEC_CLONINGS));
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_CLONE), E_INTERACTION_CLONE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_CLONE_CHOOSE), E_INTERACTION_CLONE_CHOOSE);
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Fonts:");
-        DialogMod_Add(playerid, "- Font 0", E_INTERACTION_FONT0);
-        DialogMod_Add(playerid, "- Font 1", E_INTERACTION_FONT1);
-        DialogMod_Add(playerid, "- Font 2", E_INTERACTION_FONT2);
-        DialogMod_Add(playerid, "- Font 3", E_INTERACTION_FONT3);
-        DialogMod_Add(playerid, "- Left Alignment", E_INTERACTION_LEFT_ALIGN);
-        DialogMod_Add(playerid, "- Center Alignment", E_INTERACTION_CENTER_ALIGN);
-        DialogMod_Add(playerid, "- Right Alignment", E_INTERACTION_RIGHT_ALIGN);
+        DialogMod_Add(playerid, L(playerid, E_LANG_SEC_FONTS));
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT0), E_INTERACTION_FONT0);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT1), E_INTERACTION_FONT1);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT2), E_INTERACTION_FONT2);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT3), E_INTERACTION_FONT3);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_ALIGN_L), E_INTERACTION_LEFT_ALIGN);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_ALIGN_C), E_INTERACTION_CENTER_ALIGN);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_ALIGN_R), E_INTERACTION_RIGHT_ALIGN);
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Text:");
-        DialogMod_Add(playerid, "- Change Text", E_INTERACTION_TEXT);
-        DialogMod_Add(playerid, "- Change Outline", E_INTERACTION_OUTLINE);
-        DialogMod_Add(playerid, "- Change Shadow", E_INTERACTION_SHADOW);
-        DialogMod_Add(playerid, "- Enable Text Proportion", E_INTERACTION_ENABLE_PROPORTION);
-        DialogMod_Add(playerid, "- Disable Text Proportion", E_INTERACTION_DISABLE_PROPORTION);
+        DialogMod_Add(playerid, L(playerid, E_LANG_SEC_TEXT));
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_TEXT), E_INTERACTION_TEXT);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EDIT_OUTLINE), E_INTERACTION_OUTLINE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EDIT_SHADOW), E_INTERACTION_SHADOW);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EN_PROP), E_INTERACTION_ENABLE_PROPORTION);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_DIS_PROP), E_INTERACTION_DISABLE_PROPORTION);
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Misc:");
-        DialogMod_Add(playerid, "- Enable Selection", E_INTERACTION_ENABLE_SELECTION);
-        DialogMod_Add(playerid, "- Disable Selection", E_INTERACTION_DISABLE_SELECTION);
-        DialogMod_Add(playerid, "- Define grouped textdraws as Player", E_INTERACTION_TO_PLAYER);
-        DialogMod_Add(playerid, "- Define grouped textdraws as Global", E_INTERACTION_TO_GLOBAL);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_SEC_MISC));
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_EN_SEL), E_INTERACTION_ENABLE_SELECTION);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_DIS_SEL), E_INTERACTION_DISABLE_SELECTION);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_AS_PLAYER), E_INTERACTION_TO_PLAYER);
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_AS_GLOBAL), E_INTERACTION_TO_GLOBAL);
         // DialogMod_Add(playerid, " ");
         // DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Variables:");
         // DialogMod_Add(playerid, "- Change Variable", E_INTERACTION_VARIABLE);
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Options", "Select", "Previous", "D_GROUP_OPTIONS", using inline OnSessionGroupItemsOptions);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_OPTIONS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_GROUP_OPTIONS", using inline OnSessionGroupItemsOptions);
 }
 
 static stock SessionEventGroupItem_Color(playerid)
@@ -309,7 +311,7 @@ Dialog:D_GROUP_ITEMS_REMOVE(playerid, response) {
         ;
     
         SessionGroup_RemoveDraw(indexGroup, indexDraw);
-        SendMessage(playerid, -1, ""#MESSAGE_GREEN"Textdraw was successfully removed from the group.");
+        SendLang(playerid, -1, E_LANG_MSG_GRP_REMOVED);
     }
 
     SessionEventGroupItem_SamePage(playerid);
@@ -344,7 +346,7 @@ Dialog:D_GROUP_DESTROY(playerid, response) {
         new indexGroup = SessionEventGroupItem_GetGroupIndex(playerid);
         SessionGroup_Destroy(indexGroup);
 
-        SendMessage(playerid, -1, ""#MESSAGE_GREEN"Group successfully destroyed.");
+        SendLang(playerid, -1, E_LANG_MSG_GRP_DESTROYED);
         return true;
     }
 
@@ -358,7 +360,7 @@ Dialog:D_GROUP_SET_OUTLINE(playerid, response, listitem, inputtext[]) {
 
         new value;
         if(sscanf(inputtext, "d", value))
-            return Dialog_ReShow(playerid, "Only put numbers");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
 
         new indexGroup = SessionEventGroupItem_GetGroupIndex(playerid);
         SessionGroupDataDraw_SetOuline(indexGroup, value);
@@ -374,7 +376,7 @@ Dialog:D_GROUP_SET_SHADOW(playerid, response, listitem, inputtext[]) {
 
         new value;
         if(sscanf(inputtext, "d", value))
-            return Dialog_ReShow(playerid, "Only put numbers");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
 
         new indexGroup = SessionEventGroupItem_GetGroupIndex(playerid);
         SessionGroupDataDraw_SetShadow(indexGroup, value);
@@ -414,13 +416,13 @@ DialogMod:D_GROUP_ITEMS(playerid, response, inputtext[], params) {
             case -1: SessionEventGroupItem_SamePage(playerid);
             case E_INTERACTION_ADD_TEXTDRAW: SessionEventGroupDraws_Show(playerid, SessionEventGroupItem_GetGroupIndex(playerid));
             case E_INTERACTION_OPTIONS: SessionEventGroupItem_Options(playerid);
-            case E_INTERACTION_DESTROY_GROUP: Dialog_Show(playerid, D_GROUP_DESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Are you sure?", "Yes", "Cancel");
+            case E_INTERACTION_DESTROY_GROUP: Dialog_Show(playerid, D_GROUP_DESTROY, DIALOG_STYLE_MSGBOX, L(playerid, E_LANG_CONFIRMATION), L(playerid, E_LANG_GRP_DESTROY), L(playerid, E_LANG_BTN_YES), L(playerid, E_LANG_BTN_CANCEL));
             case E_INTERACTION_NEXT: SessionEventGroupItem_Page(playerid, SessionEventGroupItem_GetPage(playerid) + 1);
             case E_INTERACTION_PREVIOUS: SessionEventGroupItem_Page(playerid, SessionEventGroupItem_GetPage(playerid) - 1);
             default:
             {
                 SessionEventGroupItem_SetDrawIndex(playerid, params);
-                Dialog_Show(playerid, D_GROUP_ITEMS_REMOVE, DIALOG_STYLE_MSGBOX, "Confirmation", "Do you want to remove this textdraw from the group?", "Yes", "Cancel");
+                Dialog_Show(playerid, D_GROUP_ITEMS_REMOVE, DIALOG_STYLE_MSGBOX, L(playerid, E_LANG_CONFIRMATION), L(playerid, E_LANG_GRP_REMOVE_TD), L(playerid, E_LANG_BTN_YES), L(playerid, E_LANG_BTN_CANCEL));
             }
         }
         return true;
@@ -448,7 +450,7 @@ DialogMod:D_GROUP_OPTIONS(playerid, response, inputtext[], enumId) {
             case E_INTERACTION_COLOR: SessionEventGroupItem_Color(playerid);
             case E_INTERACTION_COLOR_BACKGROUND: SessionEventGroupItem_Color(playerid);
             case E_INTERACTION_COLOR_BOX: SessionEventGroupItem_Color(playerid);
-            case E_INTERACTION_TEXT: Dialog_Show(playerid, D_GROUP_SET_TEXT, DIALOG_STYLE_INPUT, "Text", "Enter the text you want to change for the entire group below.", "Change", "Previous");
+            case E_INTERACTION_TEXT: Dialog_Show(playerid, D_GROUP_SET_TEXT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_TEXT), L(playerid, E_LANG_GRP_SET_TEXT), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
             case E_INTERACTION_TO_PLAYER: {SessionGroupDataDraw_SetMode(indexGroup, E_TYPEMODE_PLAYER); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_TO_GLOBAL: {SessionGroupDataDraw_SetMode(indexGroup, E_TYPEMODE_GLOBAL); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_ENABLE_BOX: {SessionGroupDataDraw_SetBox(indexGroup, true); SessionEventGroupItem_Options(playerid);}
@@ -464,9 +466,9 @@ DialogMod:D_GROUP_OPTIONS(playerid, response, inputtext[], enumId) {
             case E_INTERACTION_RIGHT_ALIGN: {SessionGroupDataDraw_SetAlign(indexGroup, E_TYPEALIGNMENT_RIGHT); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_ENABLE_PROPORTION: {SessionGroupDataDraw_SetPropor(indexGroup, true); SessionEventGroupItem_Options(playerid);}
             case E_INTERACTION_DISABLE_PROPORTION: {SessionGroupDataDraw_SetPropor(indexGroup, false); SessionEventGroupItem_Options(playerid);}
-            case E_INTERACTION_OUTLINE: Dialog_Show(playerid, D_GROUP_SET_OUTLINE, DIALOG_STYLE_INPUT, "Outline", "Enter the outline you want to change for the entire group below.", "Change", "Previous");
-            case E_INTERACTION_SHADOW: Dialog_Show(playerid, D_GROUP_SET_SHADOW, DIALOG_STYLE_INPUT, "Shadow", "Enter the shadow you want to change for the entire group below.", "Change", "Previous");
-            case E_INTERACTION_VARIABLE: Dialog_Show(playerid, D_GROUP_SET_VARIABLE, DIALOG_STYLE_INPUT, "Variable", "Change the variable for the entire group.", "Change", "Previous");
+            case E_INTERACTION_OUTLINE: Dialog_Show(playerid, D_GROUP_SET_OUTLINE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_OUTLINE), L(playerid, E_LANG_GRP_SET_OUTLINE), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
+            case E_INTERACTION_SHADOW: Dialog_Show(playerid, D_GROUP_SET_SHADOW, DIALOG_STYLE_INPUT, L(playerid, E_LANG_SHADOW), L(playerid, E_LANG_GRP_SET_SHADOW), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
+            case E_INTERACTION_VARIABLE: Dialog_Show(playerid, D_GROUP_SET_VARIABLE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_VARIABLE), L(playerid, E_LANG_GRP_SET_VAR), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
             case E_INTERACTION_CLONE: SessionGroup_CloneAll(playerid, indexGroup);
             case E_INTERACTION_CLONE_CHOOSE: {SessionGroup_CloneAll(playerid, indexGroup, true); TaskBarEvent_MultipleOptions(playerid);}
         }

@@ -40,6 +40,7 @@
             // Utils
 #include "src/utils/variables.inc"
 #include "src/utils/functions.inc"
+#include "src/utils/lang/lang.inc"
 #include "src/utils/times.inc"
 
             // Libs

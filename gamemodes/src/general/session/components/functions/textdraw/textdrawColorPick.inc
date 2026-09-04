@@ -56,7 +56,7 @@ static stock TaskBarEvent_Page(playerid, page) {
         DB_FreeResultSet(cache);
 
         if(!count) {
-            SendMessage(playerid, -1, ""#MESSAGE_RED"No items created to be displayed.");
+            SendLang(playerid, -1, E_LANG_ERR_NO_ITEMS);
             return;
         }
 
@@ -70,7 +70,7 @@ static stock TaskBarEvent_Page(playerid, page) {
 
         inline TaskBarEvent_ListItems() {
 
-            DialogMod_Add(playerid, "ID\tVariable\tName");
+            DialogMod_Add(playerid, L(playerid, E_LANG_LIST_HDR));
 
             new DBResult:cacheInside = DB_ExecuteQuery(IDConnection, "SELECT \
                                                                         indexDraw, \
@@ -91,7 +91,7 @@ static stock TaskBarEvent_Page(playerid, page) {
                 {
                     if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
                     if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
-                    if(pages > 1) DialogMod_Add(playerid, "Goto Page", E_INTERACTION_GOTO_PAGE);
+                    if(pages > 1) DialogMod_Add(playerid, L(playerid, E_LANG_LIST_GOTO_TITLE), E_INTERACTION_GOTO_PAGE);
 
                     DialogMod_Add(playerid, " ");
 
@@ -123,7 +123,7 @@ static stock TaskBarEvent_Page(playerid, page) {
             }
         }
 
-        DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("%d/%d", page + 1, pages), "Select", "Close", "D_TASKBAR_LISTDRAW", using inline TaskBarEvent_ListItems);
+        DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("%d/%d", page + 1, pages), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_TASKBAR_LISTDRAW", using inline TaskBarEvent_ListItems);
     }
 }
 
@@ -162,11 +162,11 @@ Dialog:D_TASKBAR_GOTOPAGETP(playerid, response, listitem, inputtext[]) {
 
         new page;
         if(sscanf(inputtext, "d", page))
-            return Dialog_ReShow(playerid, "Only put numbers");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
 
         new pages = TaskBarEvent_GetPages(playerid);
         if(page < 0 || page > pages)
-            return Dialog_ReShow(playerid, "Invalid page");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_PAGE));
 
         TaskBarEvent_Page(playerid, page - 1);
         return true;
@@ -206,19 +206,19 @@ DialogMod:D_TASKBAR_LISTDRAW(playerid, response, inputtext[], index) {
             case -1: TaskBarEvent_SamePage(playerid);
             case E_INTERACTION_PREVIOUS: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) - 1);
             case E_INTERACTION_NEXT: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) + 1);
-            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_GOTOPAGETP, DIALOG_STYLE_INPUT, "Goto Page", "Which page do you want to go to?", "Confirm", "Previous");
+            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_GOTOPAGETP, DIALOG_STYLE_INPUT, L(playerid, E_LANG_LIST_GOTO_TITLE), L(playerid, E_LANG_LIST_GOTO_BODY), L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_PREVIOUS));
             default: 
             {
                 e_Data[playerid][E_DATA_INDEX] = index;
 
                 inline ColorsMode() {
 
-                    DialogMod_Add(playerid, "Color", 0);
-                    DialogMod_Add(playerid, "Box Color", 1);
-                    DialogMod_Add(playerid, "Background Color", 2);
+                    DialogMod_Add(playerid, L(playerid, E_LANG_COLOR), 0);
+                    DialogMod_Add(playerid, L(playerid, E_LANG_COL_BOX), 1);
+                    DialogMod_Add(playerid, L(playerid, E_LANG_COL_BG), 2);
                 }
 
-                DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Options", "Select", "Previous", "D_TASKBAR_LISTDRAWOP", using inline ColorsMode);
+                DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_OPTIONS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_TASKBAR_LISTDRAWOP", using inline ColorsMode);
             }
         }
     }

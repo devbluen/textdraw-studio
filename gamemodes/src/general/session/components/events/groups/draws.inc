@@ -62,7 +62,7 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
 
         new uniqueId = Session_GetId();
 
-        DialogMod_Add(playerid, "ID\tName\tStatus");
+        DialogMod_Add(playerid, L(playerid, E_LANG_GRP_HDR_ID));
 
         if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
         if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
@@ -84,8 +84,8 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
         {
             if(DB_GetRowCount(cache)) 
             {
-                DialogMod_Add(playerid, "Add this page", E_INTERACTION_ADD_PAGE); 
-                DialogMod_Add(playerid, "Remove this page", E_INTERACTION_REMOVE_PAGE); 
+                DialogMod_Add(playerid, L(playerid, E_LANG_OPT_SEL_PAGE), E_INTERACTION_ADD_PAGE); 
+                DialogMod_Add(playerid, L(playerid, E_LANG_OPT_DESEL_PAGE), E_INTERACTION_REMOVE_PAGE); 
 
                 new 
                     string[1024 + 1],
@@ -108,7 +108,7 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, "Textdraws", "Add", "Previous", "D_GROUP_DRAWLIST", using inline OnSessionGroupDrawsShow);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, L(playerid, E_LANG_TDRAWS_TITLE), L(playerid, E_LANG_BTN_ADD), L(playerid, E_LANG_BTN_PREVIOUS), "D_GROUP_DRAWLIST", using inline OnSessionGroupDrawsShow);
 }
 
 static stock SessionEventGroupDraw_Status(playerid, bool:status) {

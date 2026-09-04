@@ -100,7 +100,7 @@ static stock TaskBarEvent_Page(playerid, page) {
         DB_FreeResultSet(cache);
 
         if(!count) {
-            SendMessage(playerid, -1, ""#MESSAGE_RED"No items created to be displayed.");
+            SendLang(playerid, -1, E_LANG_ERR_NO_ITEMS);
             return;
         }
 
@@ -114,7 +114,7 @@ static stock TaskBarEvent_Page(playerid, page) {
 
         inline TaskBarEvent_ListItems() {
 
-            DialogMod_Add(playerid, "ID\tVariable\tName\tType");
+            DialogMod_Add(playerid, L(playerid, E_LANG_LIST_HDR));
 
             new DBResult:cacheInside = DB_ExecuteQuery(IDConnection, "SELECT \
                                                                         indexDraw, \
@@ -136,15 +136,15 @@ static stock TaskBarEvent_Page(playerid, page) {
                 {
                     if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
                     if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
-                    if(pages > 1) DialogMod_Add(playerid, "Goto Page", E_INTERACTION_GOTO_PAGE);
+                    if(pages > 1) DialogMod_Add(playerid, L(playerid, E_LANG_LIST_GOTO_TITLE), E_INTERACTION_GOTO_PAGE);
 
                     if(!SessionTextDraw_IsEmpty()) {
-                        DialogMod_Add(playerid, "Reorganize Index", E_INTERACTION_REORGANIZE);
+                        DialogMod_Add(playerid, L(playerid, E_LANG_LIST_REORGANIZE), E_INTERACTION_REORGANIZE);
                         if(TaskBarTextDraw_Selected(playerid))
-                            DialogMod_Add(playerid, "Select Index [Arrows]", E_INTERACTION_SELECT_ARROWS);
+                            DialogMod_Add(playerid, L(playerid, E_LANG_LIST_SELECT_ARROWS), E_INTERACTION_SELECT_ARROWS);
                     }
 
-                    DialogMod_Add(playerid, "Options {CCCCCC}(Select, Multiple Move and Others)", E_INTERACTION_MULTIPLE_SELECTION);
+                    DialogMod_Add(playerid, L(playerid, E_LANG_LIST_OPTIONS), E_INTERACTION_MULTIPLE_SELECTION);
                     DialogMod_Add(playerid, " ");
 
                     new
@@ -177,7 +177,7 @@ static stock TaskBarEvent_Page(playerid, page) {
                         if(currentIndex == index) strcat(color, ">> ");
 
                         // Dialog
-                        DialogMod_Add(playerid, "%d\t{CCCCCC}%s\t%s%s\t%s", index, index, dest, color, text, TaskBarTypeMode_GetName(mode));
+                        DialogMod_Add(playerid, "%d\t{CCCCCC}%s\t%s%s\t%s", index, index, dest, color, text, L(playerid, mode == E_TYPEMODE_PLAYER ? E_LANG_MODE_PLAYER : E_LANG_MODE_GLOBAL));
                     }
                     while(DB_SelectNextRow(cacheInside));
                 }
@@ -186,7 +186,7 @@ static stock TaskBarEvent_Page(playerid, page) {
             }
         }
 
-        DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("%d/%d", page + 1, pages), "Select", "Close", "D_TASKBAR_LIST", using inline TaskBarEvent_ListItems);
+        DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("%d/%d", page + 1, pages), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_TASKBAR_LIST", using inline TaskBarEvent_ListItems);
     }
 }
 
@@ -220,16 +220,16 @@ static stock TaskBarEvent_ShowOptions(playerid, index) {
     
     inline TaskBarEventListOptionShow() {
 
-        DialogMod_Add(playerid, "Select Textdraw", E_INTERACTION_SELECT);
-        DialogMod_Add(playerid, "Delete Textdraw", E_INTERACTION_DELETE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_LIST_SELECT_TD), E_INTERACTION_SELECT);
+        DialogMod_Add(playerid, L(playerid, E_LANG_LIST_DELETE_TD), E_INTERACTION_DELETE);
         if(!SessionPlayer_Has(playerid, index))
-            DialogMod_Add(playerid, "{CCCCCC}Add to multi-select", E_INTERACTION_SELECT_TO_ALL);
+            DialogMod_Add(playerid, L(playerid, E_LANG_LIST_ADD_MULTI), E_INTERACTION_SELECT_TO_ALL);
         else
-            DialogMod_Add(playerid, "{"HEX_INFO"}Remove to multi-select", E_INTERACTION_UNSELECT_TO_ALL);
-        DialogMod_Add(playerid, "Move Index", E_INTERACTION_MOVE_INDEX);
+            DialogMod_Add(playerid, L(playerid, E_LANG_LIST_REM_MULTI), E_INTERACTION_UNSELECT_TO_ALL);
+        DialogMod_Add(playerid, L(playerid, E_LANG_LIST_MOVE_INDEX), E_INTERACTION_MOVE_INDEX);
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Textdraw", "Select", "Previous", "D_TASKBAR_LISTOPTIONS", using inline TaskBarEventListOptionShow);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_TEXTDRAW), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_TASKBAR_LISTOPTIONS", using inline TaskBarEventListOptionShow);
 }
 
 static stock TaskBarEvent_SelectAllFromPage(playerid, page, bool:status) {
@@ -274,57 +274,57 @@ stock TaskBarEvent_MultipleOptions(playerid) {
 
     inline OnTaskBarEventListMultiple() {
 
-        DialogMod_Add(playerid, "{"HEX_DEFAULT"}Selections:");
-        DialogMod_Add(playerid, "- Select Page", E_INTERACTION_SELECT_ALL_PAGE);
-        DialogMod_Add(playerid, "- Deselect Page", E_INTERACTION_DESELECT_ALL_PAGE);
-        DialogMod_Add(playerid, "- Select All Pages", E_INTERACTION_SELECT_ALL);
-        DialogMod_Add(playerid, "{"#HEX_INFO"}- Reset Selections", E_INTERACTION_DESELECT_ALL);
+        DialogMod_Add(playerid, L(playerid, E_LANG_SEC_SELECTIONS));
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_SEL_PAGE), E_INTERACTION_SELECT_ALL_PAGE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_DESEL_PAGE), E_INTERACTION_DESELECT_ALL_PAGE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_SEL_ALL), E_INTERACTION_SELECT_ALL);
+        DialogMod_Add(playerid, L(playerid, E_LANG_OPT_RESET_SEL), E_INTERACTION_DESELECT_ALL);
         
         if(SessionPlayer_HasAny(playerid)) {
             DialogMod_Add(playerid, " ");
-            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Groups:");
-            DialogMod_Add(playerid, "- Create Group from Selection", E_INTERACTION_GROUP_FROM_SELECTED);
+            DialogMod_Add(playerid, L(playerid, E_LANG_SEC_GROUPS));
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_GROUP_FROM_SEL), E_INTERACTION_GROUP_FROM_SELECTED);
             DialogMod_Add(playerid, " ");
-            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Resizing:");
-            DialogMod_Add(playerid, "- Modify Position", E_INTERACTION_POSITION);
-            DialogMod_Add(playerid, "- Modify Size", E_INTERACTION_SIZE);
-            DialogMod_Add(playerid, "- Modify Letter-Size", E_INTERACTION_LETTER_SIZE);
+            DialogMod_Add(playerid, L(playerid, E_LANG_SEC_RESIZING));
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_MOD_POS), E_INTERACTION_POSITION);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_MOD_SIZE), E_INTERACTION_SIZE);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_MOD_LETTER), E_INTERACTION_LETTER_SIZE);
             DialogMod_Add(playerid, " ");
-            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Colors:");
-            DialogMod_Add(playerid, "- Change Color", E_INTERACTION_COLOR);
-            DialogMod_Add(playerid, "- Change Background Color", E_INTERACTION_COLOR_BACKGROUND);
-            DialogMod_Add(playerid, "- Change Box Color", E_INTERACTION_COLOR_BOX);
-            DialogMod_Add(playerid, "- Enable Box", E_INTERACTION_ENABLE_BOX);
-            DialogMod_Add(playerid, "- Disable Box", E_INTERACTION_DISABLE_BOX);
+            DialogMod_Add(playerid, L(playerid, E_LANG_SEC_COLORS));
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_COLOR), E_INTERACTION_COLOR);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_BG), E_INTERACTION_COLOR_BACKGROUND);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_BOX), E_INTERACTION_COLOR_BOX);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EN_BOX), E_INTERACTION_ENABLE_BOX);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_DIS_BOX), E_INTERACTION_DISABLE_BOX);
             DialogMod_Add(playerid, " ");
-            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Clonings:");
-            DialogMod_Add(playerid, "- Clone All", E_INTERACTION_CLONE);
-            DialogMod_Add(playerid, "- Clone All and Choose", E_INTERACTION_CLONE_CHOOSE);
+            DialogMod_Add(playerid, L(playerid, E_LANG_SEC_CLONINGS));
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CLONE_ALL), E_INTERACTION_CLONE);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CLONE_CHOOSE), E_INTERACTION_CLONE_CHOOSE);
             DialogMod_Add(playerid, " ");
-            DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Fonts:");
-            DialogMod_Add(playerid, "- Font 0", E_INTERACTION_FONT0);
-            DialogMod_Add(playerid, "- Font 1", E_INTERACTION_FONT1);
-            DialogMod_Add(playerid, "- Font 2", E_INTERACTION_FONT2);
-            DialogMod_Add(playerid, "- Font 3", E_INTERACTION_FONT3);
-            DialogMod_Add(playerid, "- Left Alignment", E_INTERACTION_ALIGN_LEFT);
-            DialogMod_Add(playerid, "- Center Alignment", E_INTERACTION_ALIGN_CENTER);
-            DialogMod_Add(playerid, "- Right Alignment", E_INTERACTION_ALIGN_RIGHT);
+            DialogMod_Add(playerid, L(playerid, E_LANG_SEC_FONTS));
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT0), E_INTERACTION_FONT0);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT1), E_INTERACTION_FONT1);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT2), E_INTERACTION_FONT2);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_FONT3), E_INTERACTION_FONT3);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_ALIGN_L), E_INTERACTION_ALIGN_LEFT);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_ALIGN_C), E_INTERACTION_ALIGN_CENTER);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_ALIGN_R), E_INTERACTION_ALIGN_RIGHT);
             DialogMod_Add(playerid, " ");
-            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Text:");
-            DialogMod_Add(playerid, "- Change Text", E_INTERACTION_TEXT);
-            DialogMod_Add(playerid, "- Edit Outline", E_INTERACTION_OUTLINE);
-            DialogMod_Add(playerid, "- Edit Shadow", E_INTERACTION_SHADOW);
-            DialogMod_Add(playerid, "- Enable Proportional", E_INTERACTION_ENABLE_PROPOR);
-            DialogMod_Add(playerid, "- Disable Proportional", E_INTERACTION_DISABLE_PROPOR);
+            DialogMod_Add(playerid, L(playerid, E_LANG_SEC_TEXT));
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_CHG_TEXT), E_INTERACTION_TEXT);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EDIT_OUTLINE), E_INTERACTION_OUTLINE);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EDIT_SHADOW), E_INTERACTION_SHADOW);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_EN_PROP), E_INTERACTION_ENABLE_PROPOR);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_DIS_PROP), E_INTERACTION_DISABLE_PROPOR);
             DialogMod_Add(playerid, " ");
-            DialogMod_Add(playerid, "{"HEX_DEFAULT"}Management:");
-            DialogMod_Add(playerid, "- Destroy All", E_INTERACTION_DESTROY_ALL);
-            DialogMod_Add(playerid, "- Define textdraws as Player", E_INTERACTION_PLAYER);
-            DialogMod_Add(playerid, "- Define textdraws as Global", E_INTERACTION_GLOBAL);
+            DialogMod_Add(playerid, L(playerid, E_LANG_SEC_MANAGEMENT));
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_DESTROY_ALL), E_INTERACTION_DESTROY_ALL);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_AS_PLAYER), E_INTERACTION_PLAYER);
+            DialogMod_Add(playerid, L(playerid, E_LANG_OPT_AS_GLOBAL), E_INTERACTION_GLOBAL);
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Multiple Selection", "Select", "Previous", "D_TASKBAR_MULTIPLE", using inline OnTaskBarEventListMultiple);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_MULTIPLE_TITLE), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_TASKBAR_MULTIPLE", using inline OnTaskBarEventListMultiple);
 }
 
 
@@ -397,11 +397,11 @@ Dialog:D_TASKBAR_GOTOPAGE(playerid, response, listitem, inputtext[]) {
 
         new page;
         if(sscanf(inputtext, "d", page))
-            return Dialog_ReShow(playerid, "Only put numbers");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
 
         new pages = TaskBarEvent_GetPages(playerid);
         if(page < 0 || page > pages)
-            return Dialog_ReShow(playerid, "Invalid page");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_PAGE));
 
         TaskBarEvent_Page(playerid, page - 1);
         return true;
@@ -442,7 +442,7 @@ DialogMod:D_TASKBAR_LIST(playerid, response, inputtext[], index) {
             case E_INTERACTION_REORGANIZE: SessionTextDrawData_ReorganizeIndexs(Session_GetId());
             case E_INTERACTION_PREVIOUS: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) - 1);
             case E_INTERACTION_NEXT: TaskBarEvent_Page(playerid, TaskBarEvent_GetPage(playerid) + 1);
-            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_GOTOPAGE, DIALOG_STYLE_INPUT, "Goto Page", "Which page do you want to go to?", "Confirm", "Previous");
+            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_GOTOPAGE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_LIST_GOTO_TITLE), L(playerid, E_LANG_LIST_GOTO_BODY), L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_PREVIOUS));
             case E_INTERACTION_MULTIPLE_SELECTION: TaskBarEvent_MultipleOptions(playerid);
             case E_INTERACTION_SELECT_ARROWS: TaskBarKey_Set(playerid, E_TYPEKEY_SELECT_INDEX);
             default: TaskBarEvent_ShowOptions(playerid, index);
@@ -471,7 +471,7 @@ DialogMod:D_TASKBAR_LISTOPTIONS(playerid, response, inputtext[], listitem) {
 
         switch(listitem) {
             case E_INTERACTION_SELECT: TaskBarTextDraw_Select(playerid, index);
-            case E_INTERACTION_DELETE: Dialog_Show(playerid, D_TASKBAR_LISTDESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Do you really want to delete it?", "Yes", "Back");
+            case E_INTERACTION_DELETE: Dialog_Show(playerid, D_TASKBAR_LISTDESTROY, DIALOG_STYLE_MSGBOX, L(playerid, E_LANG_CONFIRMATION), L(playerid, E_LANG_LIST_DEL_CONFIRM), L(playerid, E_LANG_BTN_YES), L(playerid, E_LANG_BTN_BACK));
             case E_INTERACTION_SELECT_TO_ALL: {
                 SessionPlayer_AddDraw(playerid, index);
                 TaskBarEvent_SamePageOptions(playerid);
@@ -521,15 +521,15 @@ DialogMod:D_TASKBAR_MULTIPLE(playerid, response, inputtext[], listitem) {
             case E_INTERACTION_PLAYER: SessionPlayerData_SetMode(playerid, E_TYPEMODE_PLAYER);
             case E_INTERACTION_GLOBAL: SessionPlayerData_SetMode(playerid, E_TYPEMODE_GLOBAL);
             case E_INTERACTION_TEXT: {
-                Dialog_Show(playerid, D_TASKBAR_TEXT, DIALOG_STYLE_INPUT, "Change Text", "Enter the text for the group below", "Change", "Previous");
+                Dialog_Show(playerid, D_TASKBAR_TEXT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_TEXT_TITLE), L(playerid, E_LANG_LIST_TEXT_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
                 return true;
             }
             case E_INTERACTION_OUTLINE: {
-                Dialog_Show(playerid, D_TASKBAR_OUTLINE, DIALOG_STYLE_INPUT, "Outline", "{FFFFFF}Input the outline value below\n\nSet to {"#HEX_INFO"}0{FFFFFF} to disable", "Change", "Previous");
+                Dialog_Show(playerid, D_TASKBAR_OUTLINE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_OUTLINE), L(playerid, E_LANG_LIST_OUTLINE_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
                 return true;
             }
             case E_INTERACTION_SHADOW: {
-                Dialog_Show(playerid, D_TASKBAR_SHADOW, DIALOG_STYLE_INPUT, "Shadow", "{FFFFFF}Input the shadow value below\n\nSet to {"#HEX_INFO"}0{FFFFFF} to disable", "Change", "Previous");
+                Dialog_Show(playerid, D_TASKBAR_SHADOW, DIALOG_STYLE_INPUT, L(playerid, E_LANG_SHADOW), L(playerid, E_LANG_LIST_SHADOW_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
                 return true;
             }
         }
@@ -557,7 +557,7 @@ Dialog:D_TASKBAR_OUTLINE(playerid, response, listitem, inputtext[]) {
 
         new value;
         if(sscanf(inputtext, "d", value) || value < 0)
-            return Dialog_ReShow(playerid, "Invalid input");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_INPUT));
 
         SessionPlayerData_SetOutline(playerid, value);
     }
@@ -572,7 +572,7 @@ Dialog:D_TASKBAR_SHADOW(playerid, response, listitem, inputtext[]) {
 
         new value;
         if(sscanf(inputtext, "d", value) || value < 0)
-            return Dialog_ReShow(playerid, "Invalid input");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_INPUT));
 
         SessionPlayerData_SetShadow(playerid, value);
     }

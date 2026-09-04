@@ -46,7 +46,7 @@
         "vehicle_respawn_time": 10000,
         "weather": 10
     },
-    "language": "",
+    "language": "PT-BR / EN / ES / FR",
     "logging": {
         "enable": true,
         "file": "log.txt",

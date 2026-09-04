@@ -22,7 +22,7 @@ stock Import_Get(playerid, const name[]) {
     format(fileStream, sizeof fileStream, ""#STUDIO_FOLDER"/"#STUDIO_IMPORT"/%s.txt", name);
 
     if(!fexist(fileStream)) {
-        SendMessage(playerid, -1, ""#MESSAGE_RED"This project does not exist");
+        SendLang(playerid, -1, E_LANG_ERR_IMPORT_MISSING);
         return;
     }
 
