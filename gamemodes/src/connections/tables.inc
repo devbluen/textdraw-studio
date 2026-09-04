@@ -78,3 +78,10 @@
         color INTEGER NULL, \
         PRIMARY KEY (id) \
     )"
+
+#define eTableUserLanguage \
+    "CREATE TABLE IF NOT EXISTS user_language ( \
+        name TEXT NOT NULL, \
+        language INTEGER NOT NULL DEFAULT 1, \
+        PRIMARY KEY (name) \
+    )"

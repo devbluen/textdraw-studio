@@ -119,12 +119,12 @@ static stock Util_WebColorShow(playerid) {
     inline WebColorsInternal() {
 
         DialogMod_Add(playerid, " ");
-        DialogMod_Add(playerid, "Choose Color", E_INTERACTION_CHOOSE);
-        DialogMod_Add(playerid, "Saved Colors", E_INTERACTION_SAVED);
-        DialogMod_Add(playerid, "Copy Color", E_INTERACTION_COPY);
+        DialogMod_Add(playerid, L(playerid, E_LANG_COL_CHOOSE), E_INTERACTION_CHOOSE);
+        DialogMod_Add(playerid, L(playerid, E_LANG_COL_SAVED), E_INTERACTION_SAVED);
+        DialogMod_Add(playerid, L(playerid, E_LANG_COL_COPY), E_INTERACTION_COPY);
 
         if(e_WebColorsPlayer[playerid][E_WEBCOLORSPLAYER_WITHCOLOR])
-            DialogMod_Add(playerid, "Edit Manual Color", E_INTERACTION_MANUAL);
+            DialogMod_Add(playerid, L(playerid, E_LANG_COL_MANUAL), E_INTERACTION_MANUAL);
 
         DialogMod_Add(playerid, " ");
         DialogMod_Add(playerid, DIALOG_LINE);
@@ -134,7 +134,7 @@ static stock Util_WebColorShow(playerid) {
             DialogMod_Add(playerid, "{%06x}%d. %s", i, (e_WebColors[i][E_WEBCOLORS_BLOCK_PREVIEW] ? (0xFFFFFFFF) : (e_WebColors[i][E_WEBCOLORS_COLOR])) >>> 8, i + 1, e_WebColors[i][E_WEBCOLORS_NAME]);
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Colors", "Select", "Close", "D_WEBCOLORS", using inline WebColorsInternal);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_COLORS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_WEBCOLORS", using inline WebColorsInternal);
 }
 
 static stock Util_WebColorSetPage(playerid, page)
@@ -198,7 +198,7 @@ static stock Util_WebColorPage(playerid, page) {
 
             if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
             if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
-            DialogMod_Add(playerid, "Save Color", E_INTERACTION_SAVE);
+            DialogMod_Add(playerid, L(playerid, E_LANG_COL_SAVE), E_INTERACTION_SAVE);
 
             do
             {
@@ -211,7 +211,7 @@ static stock Util_WebColorPage(playerid, page) {
             DB_FreeResultSet(cache);
         }
 
-        DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Colors", "Select", "Cancel", "D_WEBCOLORS_FAV", using inline WebColorFavorites);
+        DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_COLORS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL), "D_WEBCOLORS_FAV", using inline WebColorFavorites);
     }
 }
 
@@ -226,23 +226,9 @@ static stock Util_WebDeleteColor(playerid)
 static stock Util_WebChoose(playerid, const callback[]) {
 
     new dialog[356 + 1];
-    format(dialog, sizeof dialog, "{FFFFFF}Define the colors of your project as desired.\n \
-                                    You can choose one of the formats below to select the color.\n\n \
-                                    \
-                                    Formats:\n \
-                                    {hex}\n \
-                                    - 0xFFFFFFFF\n \
-                                    - #FFFFFF\n \
-                                    - rgba(255, 255, 255, 255)\n \
-                                    - rgb(255, 255, 255)\n \
-                                    - 255, 255, 255, 255\n \
-                                    - 255, 255, 255\n \
-                                    - 255 255 255 255\n \
-                                    - 255 255 255\n \
-                                    - Numbers"
-                                );
+    format(dialog, sizeof dialog, "%s", L(playerid, E_LANG_COL_FORMATS));
 
-    Dialog_Open(playerid, callback, DIALOG_STYLE_INPUT, "Colors", dialog, "Confirm", "Previous");
+    Dialog_Open(playerid, callback, DIALOG_STYLE_INPUT, L(playerid, E_LANG_COLORS), dialog, L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_PREVIOUS));
 }
 
 
@@ -283,11 +269,11 @@ DialogMod:D_WEBCOLORS_FAV(playerid, response, inputtext[], params) {
                 
                 inline WebColorOption() {
 
-                    DialogMod_Add(playerid, "Add", E_INTERACTION_ADD);
-                    DialogMod_Add(playerid, "Remove Favorite", E_INTERACTION_REMOVE);
+                    DialogMod_Add(playerid, L(playerid, E_LANG_COL_ADD), E_INTERACTION_ADD);
+                    DialogMod_Add(playerid, L(playerid, E_LANG_COL_REMOVE_FAV), E_INTERACTION_REMOVE);
                 }
 
-                DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Options", "Select", "Back", "D_WEBCOLORS_FAVOPTION", using inline WebColorOption);
+                DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_OPTIONS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_BACK), "D_WEBCOLORS_FAVOPTION", using inline WebColorOption);
             }
         }
     }
@@ -303,7 +289,7 @@ DialogMod:D_WEBCOLORS_FAVOPTION(playerid, response, inputtext[], params) {
             {
                 Util_WebDeleteColor(playerid);
                 Util_WebColorPage(playerid, 0);
-                SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"%s deleted a color preset", Auth_GetName(playerid));
+                SendLang(INVALID_PLAYER_ID, -1, E_LANG_MSG_COL_DELETED, Auth_GetName(playerid));
             }
         }
         return true;
@@ -336,7 +322,7 @@ Dialog:D_WEBCOLORS_FAVSEL(playerid, response, listitem, inputtext[]) {
 
     if(response && !isnull(inputtext)) {
         Util_SetWebColor(playerid, Util_ParseColor(inputtext));
-        Dialog_Show(playerid, D_WEBCOLORS_FAVNAME, DIALOG_STYLE_INPUT, "Name Color", "Please enter the name of the color you want below.", "Create", "Cancel");
+        Dialog_Show(playerid, D_WEBCOLORS_FAVNAME, DIALOG_STYLE_INPUT, L(playerid, E_LANG_COL_NAME_TITLE), L(playerid, E_LANG_COL_NAME_BODY), L(playerid, E_LANG_BTN_CREATE), L(playerid, E_LANG_BTN_CANCEL));
         return true;
     }
 
@@ -349,13 +335,13 @@ Dialog:D_WEBCOLORS_FAVNAME(playerid, response, listitem, inputtext[]) {
     if(response) {
 
         if(isnull(inputtext))
-            return Dialog_ReShow(playerid, "You can't go on with nothing.");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_EMPTY));
 
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "INSERT INTO colors (name, color) VALUES ('%s', %i)", inputtext, Util_GetWebColor(playerid))
         );
 
-        SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"%s created a preset of a new color %s", Auth_GetName(playerid), inputtext);
+        SendLang(INVALID_PLAYER_ID, -1, E_LANG_MSG_COL_CREATED, Auth_GetName(playerid), inputtext);
     }
     return true;
 }

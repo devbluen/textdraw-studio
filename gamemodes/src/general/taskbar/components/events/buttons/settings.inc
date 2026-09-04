@@ -48,25 +48,29 @@ stock TaskBarEventSettings_Show(playerid) {
         dest[30 + 1]
     ;
 
-    strcat(dialog, "Option\tOptional\n");
+    strcatEx(dialog, "%s\t%s\n", L(playerid, E_LANG_OPTION), L(playerid, E_LANG_OPTIONAL));
 
     Camera_GetNameByPlayer(playerid, dest);
-    strcatEx(dialog, "Mouse (/mouse)\t%s\n", TaskBar_GetCursor(playerid) ? "{"#HEX_DEFAULT"}Enabled" : "{"#HEX_INFO"}Disabled");
-    strcatEx(dialog, "Camera Mode\t{"#HEX_DEFAULT"}%s\n", dest);
-    strcatEx(dialog, "Position\t{"#HEX_DEFAULT"}%d\n", TaskBarEventSettings_GetY(playerid));
-    strcatEx(dialog, "Hour\t{"#HEX_DEFAULT"}%02d:00\n", TaskBarEventSettings_GetHour(playerid));
+    strcatEx(dialog, "%s\t%s\n", L(playerid, E_LANG_SET_MOUSE), TaskBar_GetCursor(playerid) ? L(playerid, E_LANG_ENABLED) : L(playerid, E_LANG_DISABLED));
+    strcatEx(dialog, "%s\t{"#HEX_DEFAULT"}%s\n", L(playerid, E_LANG_SET_CAMERA), dest);
+    strcatEx(dialog, "%s\t{"#HEX_DEFAULT"}%d\n", L(playerid, E_LANG_SET_POSITION), TaskBarEventSettings_GetY(playerid));
+    strcatEx(dialog, "%s\t{"#HEX_DEFAULT"}%02d:00\n", L(playerid, E_LANG_SET_HOUR), TaskBarEventSettings_GetHour(playerid));
+
+    new langName[30 + 1];
+    Lang_GetName(playerid, langName);
+    strcatEx(dialog, "%s\t{"#HEX_DEFAULT"}%s\n", L(playerid, E_LANG_LANGUAGE), langName);
 
     if(Session_Has()) {
         stringclear(dest);
         Session_GetPlayerVariable(dest);
-        strcatEx(dialog, "Player Variable\t{"#HEX_DEFAULT"}%s\n", dest);
+        strcatEx(dialog, "%s\t{"#HEX_DEFAULT"}%s\n", L(playerid, E_LANG_SET_PLAYER_VAR), dest);
 
         stringclear(dest);
         Session_GetGlobalVariable(dest);
-        strcatEx(dialog, "Global Variable\t{"#HEX_DEFAULT"}%s\n", dest);
+        strcatEx(dialog, "%s\t{"#HEX_DEFAULT"}%s\n", L(playerid, E_LANG_SET_GLOBAL_VAR), dest);
     }
 
-    Dialog_Show(playerid, D_SETTINGS, DIALOG_STYLE_TABLIST_HEADERS, "Settings", dialog, "Select", "Close");
+    Dialog_Show(playerid, D_SETTINGS, DIALOG_STYLE_TABLIST_HEADERS, L(playerid, E_LANG_SETTINGS), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE));
 }
 
 stock TaskBarEventSettings_SetMax(playerid, max)
@@ -131,10 +135,11 @@ Dialog:D_SETTINGS(playerid, response, listitem) {
                 for(new i = 0; i < 24; i++)
                     strcatEx(dialog, "%s%02d:00\n", TaskBarEventSettings_GetHour(playerid) == i ? "{FFFF00}>> " : "", i);
                 
-                Dialog_Show(playerid, D_SETTINGS_HOUR, DIALOG_STYLE_TABLIST, "Hours", dialog, "Select", "Back");
+                Dialog_Show(playerid, D_SETTINGS_HOUR, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_HOURS), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_BACK));
             }
-            case 4: Dialog_Show(playerid, D_SETTINGS_VPLAYER, DIALOG_STYLE_INPUT, "Player Variable", "Please enter the name of the variable you want below.", "Change", "Previous");
-            case 5: Dialog_Show(playerid, D_SETTINGS_VGLOBAL, DIALOG_STYLE_INPUT, "Global Variable", "Please enter the name of the variable you want below.", "Change", "Previous");
+            case 4: Lang_ShowPicker(playerid, true);
+            case 5: Dialog_Show(playerid, D_SETTINGS_VPLAYER, DIALOG_STYLE_INPUT, L(playerid, E_LANG_SET_PLAYER_VAR), L(playerid, E_LANG_SET_PLAYER_VAR_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
+            case 6: Dialog_Show(playerid, D_SETTINGS_VGLOBAL, DIALOG_STYLE_INPUT, L(playerid, E_LANG_SET_GLOBAL_VAR), L(playerid, E_LANG_SET_GLOBAL_VAR_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
         }
     }
     return true;

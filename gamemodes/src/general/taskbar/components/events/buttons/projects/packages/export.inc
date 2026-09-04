@@ -30,7 +30,7 @@ stock TaskBarEventProjectExport_Show(playerid) {
     ;
 
     Session_GetName(name);
-    strcatEx(dialog, "{FFFFFF}Default: {"#HEX_DEFAULT"}%s.txt{FFFFFF}\n", name);
+    LangF(playerid, dialog, sizeof dialog, E_LANG_PRJ_EXPORT_DEFAULT, name);
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
                                                             COUNT(*) FILTER (WHERE mode = %i) AS player, \
@@ -48,13 +48,13 @@ stock TaskBarEventProjectExport_Show(playerid) {
         e_Data[playerid][E_DATA_MAX_PLAYER] = DB_GetFieldIntByName(cache, "player");
         e_Data[playerid][E_DATA_MAX_GLOBAL] = DB_GetFieldIntByName(cache, "global");
         
-        strcatEx(dialog, "Player Textdraws: {"#HEX_DEFAULT"}%d{FFFFFF}\n", e_Data[playerid][E_DATA_MAX_PLAYER]);
-        strcatEx(dialog, "Global Textdraws: {"#HEX_DEFAULT"}%d{FFFFFF}\n", e_Data[playerid][E_DATA_MAX_GLOBAL]);
+        LangF(playerid, dialog[strlen(dialog)], sizeof(dialog) - strlen(dialog), E_LANG_PRJ_EXPORT_PLAYER, e_Data[playerid][E_DATA_MAX_PLAYER]);
+        LangF(playerid, dialog[strlen(dialog)], sizeof(dialog) - strlen(dialog), E_LANG_PRJ_EXPORT_GLOBAL, e_Data[playerid][E_DATA_MAX_GLOBAL]);
         DB_FreeResultSet(cache);
     }
 
-    strcat(dialog, "\nPlease enter the desired export name below.");
-    Dialog_Show(playerid, D_TASKBAR_EXPORT, DIALOG_STYLE_INPUT, "Export", dialog, "Export", "Previous");
+    strcat(dialog, L(playerid, E_LANG_PRJ_EXPORT_ASK));
+    Dialog_Show(playerid, D_TASKBAR_EXPORT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_EXPORT), dialog, L(playerid, E_LANG_BTN_EXPORT), L(playerid, E_LANG_BTN_PREVIOUS));
 }
 
 
@@ -81,7 +81,7 @@ Dialog:D_TASKBAR_EXPORT(playerid, response, listitem, inputtext[]) {
         if(!isnull(inputtext)) {
             
             if(strlen(inputtext) > 30) 
-                return Dialog_ReShow(playerid, "The name size is too large (Max: 30)");
+                return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_NAME_TOO_LARGE));
 
             strcopy(name, inputtext);
         }
@@ -89,7 +89,7 @@ Dialog:D_TASKBAR_EXPORT(playerid, response, listitem, inputtext[]) {
         new uniqueId = Session_GetId();
 
         SessionTextDrawExport_Create(uniqueId, name, e_Data[playerid][E_DATA_MAX_PLAYER], e_Data[playerid][E_DATA_MAX_GLOBAL]);
-        SendMessage(INVALID_PLAYER_ID, -1, ""MESSAGE_GREEN"Project {CCCCCC}\"%s\"{FFFFFF} was successfully exported, please check the scriptfiles folder.", name);
+        SendLang(INVALID_PLAYER_ID, -1, E_LANG_MSG_PRJ_EXPORTED, name);
     }
 
     TaskBarEventProjectLoad_Show(playerid);

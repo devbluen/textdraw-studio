@@ -12,16 +12,9 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
         index = TaskBarTextDraw_GetSelected(playerid)
     ;
 
-    format(dialog, sizeof dialog, "{FFFFFF}Set the desired value for your outline below.\n\n \
-                                    \
-                                    Current: {"#HEX_DEFAULT"}%d{FFFFFF}\n\n \
-                                    \
-                                    Entering a value of {"#HEX_INFO"}0{FFFFFF} disables it.", 
+    LangF(playerid, dialog, sizeof dialog, E_LANG_OUTLINE_BODY, SessionTextDrawData_GetOutline(index));
 
-                                    SessionTextDrawData_GetOutline(index)
-                                );
-
-    Dialog_Show(playerid, D_ITEM_OUTLINE, DIALOG_STYLE_INPUT, "Outline", dialog, "Change", "Cancel");
+    Dialog_Show(playerid, D_ITEM_OUTLINE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_OUTLINE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
     return Y_HOOKS_BREAK_RETURN_1;
 }
 
@@ -45,7 +38,7 @@ Dialog:D_ITEM_OUTLINE(playerid, response, listitem, inputtext[]) {
 
         new outline;
         if(sscanf(inputtext, "d", outline))
-            return Dialog_ReShow(playerid, "Only put numbers");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
 
         new index = TaskBarTextDraw_GetSelected(playerid);
         SessionTextDrawData_SetOutline(index, outline);

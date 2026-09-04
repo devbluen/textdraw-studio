@@ -72,7 +72,7 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
                                                             page * MAX_TASKBAR_PROJECT_VIEW
                                                         );
 
-        DialogMod_Add(playerid, "ID\tName\tCreated At", -1);
+        DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_HDR_ID), -1);
 
         if(cache) 
         {
@@ -80,7 +80,7 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
             {
                 if(pages > 1 && page < (pages - 1)) DialogMod_Add(playerid, ">>", E_INTERACTION_NEXT);
                 if(page) DialogMod_Add(playerid, "<<", E_INTERACTION_PREVIOUS);
-                if(pages > 1) DialogMod_Add(playerid, "Goto Page", E_INTERACTION_GOTO_PAGE);
+                if(pages > 1) DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_GOTO_PAGE), E_INTERACTION_GOTO_PAGE);
 
                 new 
                     id,
@@ -106,7 +106,9 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
         }
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, va_return("Page (%d/%d)", page + 1, pages), "Select", "Close", "D_TASKBAR_PROJECTLIST", using inline TaskBarEventProjectListing);
+    new pageTitle[32];
+    LangF(playerid, pageTitle, sizeof pageTitle, E_LANG_PRJ_PAGE_FMT, page + 1, pages);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, pageTitle, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_TASKBAR_PROJECTLIST", using inline TaskBarEventProjectListing);
 }
 
 static stock TaskBarEventProjectList_Options(playerid, uniqueId) {
@@ -114,12 +116,12 @@ static stock TaskBarEventProjectList_Options(playerid, uniqueId) {
     TaskBarEventProjectList_SetUniqueId(playerid, uniqueId);
 
     inline TaskBarEventProjectOptions() {
-        DialogMod_Add(playerid, "Load Items", E_INTERACTION_LOAD_ITEMS);
-        DialogMod_Add(playerid, "Delete Project", E_INTERACTION_DESTROY);
-        DialogMod_Add(playerid, "Rename this Project", E_INTERACTION_RENAME);
+        DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_LOAD_ITEMS), E_INTERACTION_LOAD_ITEMS);
+        DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_DELETE), E_INTERACTION_DESTROY);
+        DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_RENAME), E_INTERACTION_RENAME);
     }
 
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Project", "Select", "Previous", "D_TASKBAR_OPTION", using inline TaskBarEventProjectOptions);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_PROJECT), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_TASKBAR_OPTION", using inline TaskBarEventProjectOptions);
 }
 
 static stock TaskBarEventProjectList_SamePage(playerid)
@@ -163,10 +165,10 @@ Dialog:D_TASKBAR_PROJECTPAGE(playerid, response, listitem, inputtext[]) {
 
         new page;
         if(sscanf(inputtext, "d", page))
-            return Dialog_ReShow(playerid, "Only put numbers");
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
 
-        if(page < 1 || page > TaskBarEventProjectList_GetPages(playerid)) return Dialog_ReShow(playerid, "This page does not exist");
-        if(page == TaskBarEventProjectList_GetPage(playerid)) return Dialog_ReShow(playerid, "You are already on this page.");
+        if(page < 1 || page > TaskBarEventProjectList_GetPages(playerid)) return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_PAGE_NOT_EXIST));
+        if(page == TaskBarEventProjectList_GetPage(playerid)) return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ALREADY_PAGE));
 
         TaskBarEventProjectList_Page(playerid, page - 1);
         return true;
@@ -182,9 +184,9 @@ Dialog:D_TASKBAR_RENAME(playerid, response, listitem, inputtext[]) {
 
     if(response && !isnull(inputtext)) {
         if(TaskBarEventProjectLoad_RenameProject(uniqueId, inputtext))
-            SendMessage(playerid, -1, ""#MESSAGE_GREEN"Project renamed to {CCCCCC}\"%s\"", inputtext);
+            SendLang(playerid, -1, E_LANG_MSG_PRJ_RENAMED, inputtext);
         else
-            SendMessage(playerid, -1, ""#MESSAGE_RED"There is another project with that name");
+            SendLang(playerid, -1, E_LANG_MSG_PRJ_NAME_TAKEN);
     }
 
     TaskBarEventProjectList_Options(playerid, uniqueId);
@@ -197,7 +199,7 @@ Dialog:D_TASKBAR_DESTROY(playerid, response) {
         new uniqueId = TaskBarEventProjectList_GetUniqueId(playerid);
 
         TaskBarEventProjectLoad_DeleteProject(uniqueId);
-        SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"Project ID (%d) was successfully destroyed.", uniqueId);
+        SendLang(INVALID_PLAYER_ID, -1, E_LANG_MSG_PRJ_DESTROYED, uniqueId);
     }
 
     TaskBarEventProjectList_SamePage(playerid);
@@ -233,7 +235,7 @@ DialogMod:D_TASKBAR_PROJECTLIST(playerid, response, inputtext[], params) {
         switch(params) {
             case E_INTERACTION_PREVIOUS: TaskBarEventProjectList_Page(playerid, TaskBarEventProjectList_GetPage(playerid) - 1);
             case E_INTERACTION_NEXT: TaskBarEventProjectList_Page(playerid, TaskBarEventProjectList_GetPage(playerid) + 1);
-            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_PROJECTPAGE, DIALOG_STYLE_INPUT, "Page", "Which page do you want to go to?", "Goto", "Cancel");
+            case E_INTERACTION_GOTO_PAGE: Dialog_Show(playerid, D_TASKBAR_PROJECTPAGE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_PRJ_PAGE_TITLE), L(playerid, E_LANG_PRJ_PAGE_BODY), L(playerid, E_LANG_BTN_GOTO), L(playerid, E_LANG_BTN_CANCEL));
             default: TaskBarEventProjectList_Options(playerid, params);
         }
     }
@@ -252,11 +254,11 @@ DialogMod:D_TASKBAR_OPTION(playerid, response, inputtext[], params) {
         {
             case E_INTERACTION_LOAD_ITEMS: {
                 TaskBarEventProjectLoad_OpenProject(uniqueId);
-                SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"Project ID (%d) was successfully loaded.", uniqueId);
+                SendLang(INVALID_PLAYER_ID, -1, E_LANG_MSG_PRJ_LOADED, uniqueId);
             }
 
-            case E_INTERACTION_DESTROY: Dialog_Show(playerid, D_TASKBAR_DESTROY, DIALOG_STYLE_MSGBOX, "Confirmation", "Are you sure you want to delete this project? There's no going back.", "Yes", "Cancel");
-            case E_INTERACTION_RENAME:  Dialog_Show(playerid, D_TASKBAR_RENAME, DIALOG_STYLE_INPUT, "Rename", "What name would you like to give this project?", "Confirm", "Previous");
+            case E_INTERACTION_DESTROY: Dialog_Show(playerid, D_TASKBAR_DESTROY, DIALOG_STYLE_MSGBOX, L(playerid, E_LANG_CONFIRMATION), L(playerid, E_LANG_PRJ_DEL_CONFIRM), L(playerid, E_LANG_BTN_YES), L(playerid, E_LANG_BTN_CANCEL));
+            case E_INTERACTION_RENAME:  Dialog_Show(playerid, D_TASKBAR_RENAME, DIALOG_STYLE_INPUT, L(playerid, E_LANG_PRJ_RENAME), L(playerid, E_LANG_PRJ_RENAME_BODY), L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_PREVIOUS));
         }
         return true;
     }

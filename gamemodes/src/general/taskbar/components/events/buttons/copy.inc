@@ -7,7 +7,7 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     if(type != E_TYPETASKBUTTON_COPY)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
-    Dialog_Show(playerid, D_TASKCOPY, DIALOG_STYLE_MSGBOX, "Copy", "Do you really want to copy this textdraw?", "Yes", "Cancel");
+    Dialog_Show(playerid, D_TASKCOPY, DIALOG_STYLE_MSGBOX, L(playerid, E_LANG_COPY), L(playerid, E_LANG_COPY_BODY), L(playerid, E_LANG_BTN_YES), L(playerid, E_LANG_BTN_CANCEL));
     return Y_HOOKS_BREAK_RETURN_1;
 }
 
@@ -34,7 +34,7 @@ Dialog:D_TASKCOPY(playerid, response, listitem) {
         ;
 
         TaskBarTextDraw_Select(playerid, index);
-        SendMessage(playerid, -1, ""#MESSAGE_GREEN"Textdraw copied successfully.");
+        SendLang(playerid, -1, E_LANG_MSG_TD_COPIED);
     }
     return true;
 }
