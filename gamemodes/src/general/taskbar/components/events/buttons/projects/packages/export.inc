@@ -33,8 +33,8 @@ stock TaskBarEventProjectExport_Show(playerid) {
     LangF(playerid, dialog, sizeof dialog, E_LANG_PRJ_EXPORT_DEFAULT, name);
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
-                                                            COUNT(*) FILTER (WHERE mode = %i) AS player, \
-                                                            COUNT(*) FILTER (WHERE mode = %i) AS global \
+                                                            COUNT(*) FILTER (WHERE mode = %i AND font NOT IN (6, 7, 8, 9, 10, 11, 12)) AS player, \
+                                                            COUNT(*) FILTER (WHERE mode = %i AND font NOT IN (6, 7, 8, 9, 10, 11, 12)) AS global \
                                                         FROM textdraws \
                                                         WHERE project_id = %i", 
                                                         

@@ -82,18 +82,30 @@ static stock TaskBarTextDraw_SetColorVisual(playerid, index) {
     if(e_Data[playerid][E_DATA_COLOR_TIMER])
         TaskBarTextDraw_RestoreColor(playerid, e_Data[playerid][E_DATA_COLOR_INDEX]);
 
-    TextDrawColour(SessionTextDrawData_GetDraw(index), TEXTDRAW_FEEDBACK);
-    TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(index));
+    if(SessionCircle_IsCircle(index)) {
+        SessionCircle_SetVisualColor(playerid, index);
+    }
+    else {
+        TextDrawColour(SessionTextDrawData_GetDraw(index), TEXTDRAW_FEEDBACK);
+        TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(index));
+    }
 
     e_Data[playerid][E_DATA_COLOR_INDEX] = index;
     e_Data[playerid][E_DATA_COLOR_TIMER] = SetTimerEx("OnTaskBar_RestoreColor", 1200, false, "ii", playerid, index);
+    return 1;
 }
 
 static stock TaskBarTextDraw_RestoreColor(playerid, index) {
     TaskBarTextDraw_RestoreColorKillTimer(playerid);
 
+    if(SessionCircle_IsCircle(index)) {
+        SessionCircle_RestoreVisualColor(playerid, index);
+        return 1;
+    }
+
     TextDrawColour(SessionTextDrawData_GetDraw(index), SessionTextDrawData_GetColor(index));
     TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(index));
+    return 1;
 }
 
 static stock TaskBarTextDraw_RestoreColorKillTimer(playerid) {
@@ -115,7 +127,8 @@ stock TaskBarTextDraw_SetSelected(playerid, index) {
     }
 
     if(index != -1) SessionTextDraw_SetSelect(playerid, index);
-    if(index == -1) TaskBarTextDraw_RestoreColorKillTimer(playerid);
+    if(index == -1 && e_Data[playerid][E_DATA_COLOR_TIMER])
+        TaskBarTextDraw_RestoreColor(playerid, e_Data[playerid][E_DATA_COLOR_INDEX]);
 
     e_Data[playerid][E_DATA_SELECT] = index != -1;
     e_Data[playerid][E_DATA_SELECTED_ID] = index;
@@ -129,7 +142,8 @@ stock TaskBarTextDraw_GetSelected(playerid)
 
 static stock TaskBarTextDraw_Reset(playerid) {
 
-    TaskBarTextDraw_RestoreColorKillTimer(playerid);
+    if(e_Data[playerid][E_DATA_COLOR_TIMER])
+        TaskBarTextDraw_RestoreColor(playerid, e_Data[playerid][E_DATA_COLOR_INDEX]);
 
     static const e_Clear[E_DATA];
     e_Data[playerid] = e_Clear;

@@ -248,4 +248,16 @@
     "Jueves",
     "Viernes",
     "Sabado",
-    "~y~[FLECHAS]~w~ - Mover textdraw   ~y~[N]~w~ - Editar datos   ~y~[H]~w~ - Velocidad   ~y~[Y]~w~ - Consejos   ~y~[ENTER]~w~ - Guardar"
+    "~y~[FLECHAS]~w~ - Mover textdraw   ~y~[N]~w~ - Editar datos   ~y~[H]~w~ - Velocidad   ~y~[Y]~w~ - Consejos   ~y~[ENTER]~w~ - Guardar",
+    "Circle Progress {CCCCCC}(Barra circular)",
+    "Circle Progress",
+    "Valor: {"#HEX_DEFAULT"}%d",
+    "Tamano: {"#HEX_DEFAULT"}%0.2f",
+    "Grosor: {"#HEX_DEFAULT"}%0.2f",
+    "Poligonos: {"#HEX_DEFAULT"}%0.1f",
+    "Valor maximo: {"#HEX_DEFAULT"}%d",
+    "{FFFFFF}Introduce el valor del progreso abajo.\n\nActual: {"#HEX_DEFAULT"}%d{FFFFFF}\nMaximo: {"#HEX_INFO"}%d{FFFFFF}",
+    "{FFFFFF}Introduce el tamano del circulo abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Introduce el grosor abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Introduce el paso de poligonos abajo.\n\nActual: {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\nValores mas bajos aumentan la calidad pero usan mas textdraws.",
+    "{FFFFFF}Introduce el valor maximo abajo.\n\nActual: {"#HEX_DEFAULT"}%d{FFFFFF}"

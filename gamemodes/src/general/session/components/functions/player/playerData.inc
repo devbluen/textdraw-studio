@@ -47,6 +47,7 @@ stock SessionPlayerData_SetLetterSize(playerid, Float:offsetX, Float:offsetY, bo
 
     new Float:position[2];
     foreach(new i: SessionPlayersGroups[playerid]) {
+        if(SessionCircle_IsCircle(i)) continue;
         SessionTextDrawData_GetLettSize(i, position[0], position[1]);
         if(!onlySave) {
             position[0] += offsetX;
