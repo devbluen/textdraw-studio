@@ -13,6 +13,12 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
         dialog[54 + sizeof string + 1]
     ;
 
+    if(SessionCircle_IsCircle(index)) {
+        LangF(playerid, dialog, sizeof dialog, E_LANG_CIRCLE_VALUE_BODY, SessionCircle_GetValue(index), SessionCircle_GetMax(index));
+        Dialog_Show(playerid, D_ITEM_TEXT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_CIRCLE_TITLE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
+        return Y_HOOKS_BREAK_RETURN_1;
+    }
+
     SessionTextDrawData_GetString(index, string);
     LangF(playerid, dialog, sizeof dialog, E_LANG_TEXT_BODY, string);
 
@@ -39,6 +45,16 @@ Dialog:D_ITEM_TEXT(playerid, response, listitem, inputtext[]) {
     if(response && !isnull(inputtext)) {
 
         new index = TaskBarTextDraw_GetSelected(playerid);
+        if(SessionCircle_IsCircle(index)) {
+            new value;
+            if(sscanf(inputtext, "d", value) || value < 0) return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_VALUE));
+            new maxv = SessionCircle_GetMax(index);
+            if(value > maxv) value = maxv;
+            new buff[16 + 1];
+            format(buff, sizeof buff, "%d", value);
+            SessionTextDrawData_SetString(index, buff);
+            return 1;
+        }
         SessionTextDrawData_SetString(index, inputtext);
     }
     return true;

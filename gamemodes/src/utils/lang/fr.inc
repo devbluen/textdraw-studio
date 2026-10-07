@@ -248,4 +248,16 @@
     "Jeudi",
     "Vendredi",
     "Samedi",
-    "~y~[FLECHES]~w~ - Deplacer textdraw   ~y~[N]~w~ - Modifier donnees   ~y~[H]~w~ - Vitesse   ~y~[Y]~w~ - Conseils   ~y~[ENTER]~w~ - Sauvegarder"
+    "~y~[FLECHES]~w~ - Deplacer textdraw   ~y~[N]~w~ - Modifier donnees   ~y~[H]~w~ - Vitesse   ~y~[Y]~w~ - Conseils   ~y~[ENTER]~w~ - Sauvegarder",
+    "Circle Progress {CCCCCC}(Barre circulaire)",
+    "Circle Progress",
+    "Valeur : {"#HEX_DEFAULT"}%d",
+    "Taille : {"#HEX_DEFAULT"}%0.2f",
+    "Epaisseur : {"#HEX_DEFAULT"}%0.2f",
+    "Polygones : {"#HEX_DEFAULT"}%0.1f",
+    "Valeur max : {"#HEX_DEFAULT"}%d",
+    "{FFFFFF}Saisis la valeur de progression ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%d{FFFFFF}\nMax : {"#HEX_INFO"}%d{FFFFFF}",
+    "{FFFFFF}Saisis la taille du cercle ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Saisis l'epaisseur ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Saisis le pas des polygones ci-dessous.\n\nActuel : {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\nDes valeurs plus basses augmentent la qualite mais utilisent plus de textdraws.",
+    "{FFFFFF}Saisis la valeur max ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%d{FFFFFF}"

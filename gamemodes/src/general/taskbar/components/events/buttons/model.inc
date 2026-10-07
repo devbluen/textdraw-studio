@@ -7,6 +7,10 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     if(type != E_TYPETASKBUTTON_MODELS)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
+    new index = TaskBarTextDraw_GetSelected(playerid);
+    if(SessionCircle_IsCircle(index))
+        return Y_HOOKS_CONTINUE_RETURN_1;
+
     TaskBarEventModels_Show(playerid);
     return Y_HOOKS_BREAK_RETURN_1;
 }

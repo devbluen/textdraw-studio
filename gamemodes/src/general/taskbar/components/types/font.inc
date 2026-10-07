@@ -6,7 +6,14 @@ enum E_TYPEFONT {
     E_TYPEFONT_2 = 2,
     E_TYPEFONT_3 = 3,
     E_TYPEFONT_SPRITE = 4,
-    E_TYPEFONT_MODEL = 5
+    E_TYPEFONT_MODEL = 5,
+    E_TYPEFONT_CIRCLE = 6,
+    E_TYPEFONT_HEXAGON = 7,
+    E_TYPEFONT_DIAMOND = 8,
+    E_TYPEFONT_SQUARE = 9,
+    E_TYPEFONT_TRIANGLE = 10,
+    E_TYPEFONT_PARENS = 11,
+    E_TYPEFONT_ARC = 12
 };
 
 static enum E_DATAINFO {
@@ -22,7 +29,14 @@ static const
         {E_TYPEFONT_2, "font3", "TEXT_DRAW_FONT_2"},
         {E_TYPEFONT_3, "font4", "TEXT_DRAW_FONT_3"},
         {E_TYPEFONT_SPRITE, "fontSprite", "TEXT_DRAW_FONT_SPRITE_DRAW"},
-        {E_TYPEFONT_MODEL, "fontModel", "TEXT_DRAW_FONT_MODEL_PREVIEW"}
+        {E_TYPEFONT_MODEL, "fontModel", "TEXT_DRAW_FONT_MODEL_PREVIEW"},
+        {E_TYPEFONT_CIRCLE, "font2", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_HEXAGON, "font2", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_DIAMOND, "font2", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_SQUARE, "font2", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_TRIANGLE, "font2", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_PARENS, "font2", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_ARC, "font2", "TEXT_DRAW_FONT_2"}
     }
 ;
 

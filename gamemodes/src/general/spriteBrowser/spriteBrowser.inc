@@ -137,26 +137,40 @@ PlayerTextDrawClick:SPRITEBROWSER(playerid, index) {
     DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_OPTIONS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_SPRITEBROWSEROPTIONS", using inline SpriteBrowserOptions);
 }
 
-PlayerTextDrawClick:SPRITEBROWSER_SIDEBAR(playerid, index)
+PlayerTextDrawClick:SPRITEBROWSER_SIDEBAR(playerid, index) {
+    if(Dialog_Opened(playerid)) return;
     SpriteBrowser_LoadFilter(playerid, e_SpriteArray[index][E_SPRITEARRAY_TYPE]);
+}
 
-PlayerTextDrawClick:SPRITEBROWSER_NEXT(playerid)
+PlayerTextDrawClick:SPRITEBROWSER_NEXT(playerid) {
+    if(Dialog_Opened(playerid)) return;
     SpriteBrowser_Page(playerid, SpriteBrowser_GetPage(playerid) + 1);
+}
 
-PlayerTextDrawClick:SPRITEBROWSER_PREVIOUS(playerid)
+PlayerTextDrawClick:SPRITEBROWSER_PREVIOUS(playerid) {
+    if(Dialog_Opened(playerid)) return;
     SpriteBrowser_Page(playerid, SpriteBrowser_GetPage(playerid) - 1);
+}
 
-PlayerTextDrawClick:SPRITEBROWSER_NEXTSIDE(playerid)
+PlayerTextDrawClick:SPRITEBROWSER_NEXTSIDE(playerid) {
+    if(Dialog_Opened(playerid)) return;
     SpriteBrowser_SideBarPage(playerid, SpriteBrowser_GetSideBarPage(playerid) + 1);
+}
 
-PlayerTextDrawClick:SPRITEBROWSER_PREVIOUSSIDE(playerid)
+PlayerTextDrawClick:SPRITEBROWSER_PREVIOUSSIDE(playerid) {
+    if(Dialog_Opened(playerid)) return;
     SpriteBrowser_SideBarPage(playerid, SpriteBrowser_GetSideBarPage(playerid) - 1);
+}
 
-PlayerTextDrawClick:SPRITEBROWSER_SEARCH(playerid)
+PlayerTextDrawClick:SPRITEBROWSER_SEARCH(playerid) {
+    if(Dialog_Opened(playerid)) return;
     Dialog_Show(playerid, D_SPRITEBROWSER_SEARCH, DIALOG_STYLE_INPUT, L(playerid, E_LANG_SEARCH), L(playerid, E_LANG_SPR_SEARCH_BODY), L(playerid, E_LANG_BTN_SEARCH), L(playerid, E_LANG_BTN_CLOSE));
+}
 
-PlayerTextDrawClick:SPRITEBROWSER_CLOSE(playerid)
+PlayerTextDrawClick:SPRITEBROWSER_CLOSE(playerid) {
+    if(Dialog_Opened(playerid)) return;
     SpriteBrowser_Close(playerid);
+}
 
 
 

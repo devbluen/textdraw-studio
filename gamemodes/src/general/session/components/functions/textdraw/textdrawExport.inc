@@ -82,6 +82,7 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
 
     new
         count,
+        circle,
         createBuff[1024 + 56 + 45 + 5 + 1],
         variableBuff[30 + 8 + 1],
         stringBuff[76 + 1],
@@ -95,6 +96,63 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
 
     do
     {
+        if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_CIRCLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_HEXAGON || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_DIAMOND || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_TRIANGLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_PARENS || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ARC) {
+            new Float:cpos[2], Float:csize[2], Float:clett[2], cvalue, cmax, ccolor, cbg;
+            DB_GetFieldStringByName(cache, "position", stringBuff);
+            sscanf(stringBuff, "p<,>a<f>[2]", cpos);
+            DB_GetFieldStringByName(cache, "size", stringBuff);
+            sscanf(stringBuff, "p<,>a<f>[2]", csize);
+            DB_GetFieldStringByName(cache, "letter_size", stringBuff);
+            sscanf(stringBuff, "p<,>a<f>[2]", clett);
+            DB_GetFieldStringByName(cache, "text", text);
+            cvalue = strval(text);
+            cmax = floatround(clett[1]);
+            if(cmax < 1) cmax = 100;
+            if(cvalue < 0) cvalue = 0;
+            if(cvalue > cmax) cvalue = cmax;
+            ccolor = DB_GetFieldIntByName(cache, "color");
+            cbg = DB_GetFieldIntByName(cache, "colorBackground");
+            Export_Add(index, E_TYPEEXPORT_TEXT, " ");
+            switch(E_TYPEFONT:DB_GetFieldIntByName(cache, "font")) {
+                case E_TYPEFONT_CIRCLE: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Circle Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerCircleProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerCircleProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_HEXAGON: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Hexagon Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerHexagonProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerHexagonProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_DIAMOND: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Diamond Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerDiamondProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerDiamondProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_SQUARE: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Square Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerSquareProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerSquareProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_TRIANGLE: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Triangle Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerTriangleProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f, false);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerTriangleProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_PARENS: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Pares Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerParensProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f, false);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerParensProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_ARC: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Arc Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerArcProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerArcProgress(playerid, %d, %d);", circle, cvalue));
+                }
+            }
+            circle++;
+            continue;
+        }
         Export_Add(index, E_TYPEEXPORT_TEXT, " ");
 
         DB_GetFieldStringByName(cache, "playerVariable", variable);
@@ -129,7 +187,6 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
                 Export_Add(index, E_TYPEEXPORT_USE_BOX, va_return("PlayerTextDrawUseBox(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "box")));
                 Export_Add(index, E_TYPEEXPORT_BOX_COLOR, va_return("PlayerTextDrawBoxColor(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "colorBox")));
             }
-
             case E_TYPEFONT_MODEL:
             {
                 Export_Add(index, E_TYPEEXPORT_MODEL_ID, va_return("PlayerTextDrawSetPreviewModel(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "model")));
@@ -156,6 +213,7 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
 
     new
         count,
+        circle,
         createBuff[1024 + 56 + 45 + 5 + 1],
         variableBuff[30 + 8 + 1],
         stringBuff[76 + 1],
@@ -168,6 +226,63 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
 
     do
     {
+        if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_CIRCLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_HEXAGON || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_DIAMOND || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_TRIANGLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_PARENS || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ARC) {
+            new Float:cpos[2], Float:csize[2], Float:clett[2], cvalue, cmax, ccolor, cbg;
+            DB_GetFieldStringByName(cache, "position", stringBuff);
+            sscanf(stringBuff, "p<,>a<f>[2]", cpos);
+            DB_GetFieldStringByName(cache, "size", stringBuff);
+            sscanf(stringBuff, "p<,>a<f>[2]", csize);
+            DB_GetFieldStringByName(cache, "letter_size", stringBuff);
+            sscanf(stringBuff, "p<,>a<f>[2]", clett);
+            DB_GetFieldStringByName(cache, "text", text);
+            cvalue = strval(text);
+            cmax = floatround(clett[1]);
+            if(cmax < 1) cmax = 100;
+            if(cvalue < 0) cvalue = 0;
+            if(cvalue > cmax) cvalue = cmax;
+            ccolor = DB_GetFieldIntByName(cache, "color");
+            cbg = DB_GetFieldIntByName(cache, "colorBackground");
+            Export_Add(index, E_TYPEEXPORT_TEXT, " ");
+            switch(E_TYPEFONT:DB_GetFieldIntByName(cache, "font")) {
+                case E_TYPEFONT_CIRCLE: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Circle Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerCircleProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerCircleProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_HEXAGON: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Hexagon Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerHexagonProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerHexagonProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_DIAMOND: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Diamond Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerDiamondProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerDiamondProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_SQUARE: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Square Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerSquareProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerSquareProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_TRIANGLE: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Triangle Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerTriangleProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f, false);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerTriangleProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_PARENS: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Pares Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerParensProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f, false);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerParensProgress(playerid, %d, %d);", circle, cvalue));
+                }
+                case E_TYPEFONT_ARC: {
+                    Export_Add(index, E_TYPEEXPORT_TEXT, "// Arc Progress");
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("CreatePlayerArcProgress(playerid, %f, %f, %d, %d, %d, %f, %f, %f);", cpos[0], cpos[1], cmax, ccolor, cbg, csize[0], csize[1], clett[0]));
+                    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("UpdatePlayerArcProgress(playerid, %d, %d);", circle, cvalue));
+                }
+            }
+            circle++;
+            continue;
+        }
         Export_Add(index, E_TYPEEXPORT_TEXT, " ");
 
         DB_GetFieldStringByName(cache, "globalVariable", variable);
@@ -202,7 +317,6 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
                 Export_Add(index, E_TYPEEXPORT_USE_BOX, va_return("TextDrawUseBox(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "box")));
                 Export_Add(index, E_TYPEEXPORT_BOX_COLOR, va_return("TextDrawBoxColor(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "colorBox")));
             }
-
             case E_TYPEFONT_MODEL:
             {
                 Export_Add(index, E_TYPEEXPORT_MODEL_ID, va_return("TextDrawSetPreviewModel(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "model")));

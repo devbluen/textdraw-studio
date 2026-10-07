@@ -15,6 +15,12 @@
 
 stock SessionTextDraw_Create(index) {
 
+    if(SessionCircle_IsCircle(index)) {
+        SessionCircle_Create(index);
+        SessionTextDrawData_Show(index);
+        return;
+    }
+
     // Creation
     new 
         string[1024 + 1],
@@ -72,7 +78,12 @@ stock SessionTextDraw_Create(index) {
 
 stock SessionTextDraw_Destroy(index, bool:resetHeader = true) {
 
-    TextDrawDestroy(e_SessionDraw[index][E_SESSIONDRAW_DRAW]);
+    if(SessionCircle_IsCircle(index)) {
+        SessionCircle_Destroy(index);
+    }
+    else {
+        TextDrawDestroy(e_SessionDraw[index][E_SESSIONDRAW_DRAW]);
+    }
     e_SessionDraw[index][E_SESSIONDRAW_DRAW] = INVALID_TEXT_DRAW;
 
     if(resetHeader) {
@@ -116,14 +127,18 @@ stock SessionTextDraw_UpdateButtonAll() {
 
 stock SessionTextDraw_ShowAllForPlayer(playerid) {
 
-    foreach(new i: SessionDraws)
-        TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(i));
+    foreach(new i: SessionDraws) {
+        if(SessionCircle_IsCircle(i)) SessionCircle_ShowForPlayer(playerid, i);
+        else TextDrawShowForPlayer(playerid, SessionTextDrawData_GetDraw(i));
+    }
 }
 
 stock SessionTextDraw_HideAllForPlayer(playerid) {
 
-    foreach(new i: SessionDraws)
-        TextDrawHideForPlayer(playerid, SessionTextDrawData_GetDraw(i));
+    foreach(new i: SessionDraws) {
+        if(SessionCircle_IsCircle(i)) SessionCircle_HideForPlayer(playerid, i);
+        else TextDrawHideForPlayer(playerid, SessionTextDrawData_GetDraw(i));
+    }
 }
 
 stock bool:SessionTextDraw_IsEmpty()
