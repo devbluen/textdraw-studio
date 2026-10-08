@@ -2,6 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
+<<<<<<< HEAD
             "label": "Build Normal",
             "type": "shell",
             "command": "${workspaceRoot}/pawno/pawncc",
@@ -28,6 +29,8 @@
             "problemMatcher": "$pawncc"
         },
         {
+=======
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             "label": "Build PowerShell",
             "type": "shell",
             "command": "powershell",
@@ -54,4 +57,8 @@
             "problemMatcher": []
         }
     ],
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb

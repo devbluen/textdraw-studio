@@ -7,6 +7,13 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     if(type != E_TYPETASKBUTTON_MODELS)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
+<<<<<<< HEAD
+=======
+    new index = TaskBarTextDraw_GetSelected(playerid);
+    if(SessionCircle_IsCircle(index))
+        return Y_HOOKS_CONTINUE_RETURN_1;
+
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     TaskBarEventModels_Show(playerid);
     return Y_HOOKS_BREAK_RETURN_1;
 }
@@ -40,6 +47,7 @@ static stock TaskBarEventModels_Show(playerid) {
 
     inline TaskBarEventModelOption() {
 
+<<<<<<< HEAD
         DialogMod_Add(playerid, "Model: {"#HEX_DEFAULT"}%d", 0, modelId);
 
         if(modelId >= 400 && modelId <= 611) {
@@ -51,6 +59,19 @@ static stock TaskBarEventModels_Show(playerid) {
     }
 
     DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Models", "Select", "Cancel", "D_ITEM_MODEL", using inline TaskBarEventModelOption);
+=======
+        DialogMod_Add(playerid, L(playerid, E_LANG_MODEL_ID), 0, modelId);
+
+        if(modelId >= 400 && modelId <= 611) {
+            DialogMod_Add(playerid, L(playerid, E_LANG_MODEL_C1), 1, colors[0]);
+            DialogMod_Add(playerid, L(playerid, E_LANG_MODEL_C2), 2, colors[1]);
+        }
+
+        DialogMod_Add(playerid, L(playerid, E_LANG_MODEL_ROT), 3, rotation[0], rotation[1], rotation[2], rotation[3]);
+    }
+
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_MODELS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL), "D_ITEM_MODEL", using inline TaskBarEventModelOption);
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 }
 
 
@@ -73,7 +94,11 @@ Dialog:D_ITEMMODEL_OBJ(playerid, response, listitem, inputtext[]) {
 
         new value;
         if(sscanf(inputtext, "d", value) || value < 0)
+<<<<<<< HEAD
             return Dialog_ReShow(playerid, "Invalid value");
+=======
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_VALUE));
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             
         new index = TaskBarTextDraw_GetSelected(playerid);
         SessionTextDrawData_SetModel(index, value);
@@ -89,7 +114,11 @@ Dialog:D_ITEMMODEL_COLOR1(playerid, response, listitem, inputtext[]) {
 
         new value;
         if(sscanf(inputtext, "d", value) || value < 0)
+<<<<<<< HEAD
             return Dialog_ReShow(playerid, "Invalid value");
+=======
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_VALUE));
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         
         new 
             index = TaskBarTextDraw_GetSelected(playerid), 
@@ -112,7 +141,11 @@ Dialog:D_ITEMMODEL_COLOR2(playerid, response, listitem, inputtext[]) {
 
         new value;
         if(sscanf(inputtext, "d", value) || value < 0)
+<<<<<<< HEAD
             return Dialog_ReShow(playerid, "Invalid value");
+=======
+            return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_VALUE));
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         
         new 
             index = TaskBarTextDraw_GetSelected(playerid), 
@@ -156,9 +189,15 @@ DialogMod:D_ITEM_MODEL(playerid, response, inputtext[], params) {
     if(response) {
 
         switch(params) {
+<<<<<<< HEAD
             case 0: Dialog_Show(playerid, D_ITEMMODEL_OBJ, DIALOG_STYLE_INPUT, "ModelId", "Which model do you want to change to?", "Change", "Previous");
             case 1: Dialog_Show(playerid, D_ITEMMODEL_COLOR1, DIALOG_STYLE_INPUT, "Color", "Enter the vehicle's primary color below to change it.", "Change", "Previous");
             case 2: Dialog_Show(playerid, D_ITEMMODEL_COLOR2, DIALOG_STYLE_INPUT, "Color", "Enter the vehicle's secondary color below to change it.", "Change", "Previous");
+=======
+            case 0: Dialog_Show(playerid, D_ITEMMODEL_OBJ, DIALOG_STYLE_INPUT, L(playerid, E_LANG_MODEL_ID_TITLE), L(playerid, E_LANG_MODEL_ID_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
+            case 1: Dialog_Show(playerid, D_ITEMMODEL_COLOR1, DIALOG_STYLE_INPUT, L(playerid, E_LANG_COLOR), L(playerid, E_LANG_MODEL_C1_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
+            case 2: Dialog_Show(playerid, D_ITEMMODEL_COLOR2, DIALOG_STYLE_INPUT, L(playerid, E_LANG_COLOR), L(playerid, E_LANG_MODEL_C2_BODY), L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_PREVIOUS));
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             case 3: TaskBarKey_Set(playerid, E_TYPEKEY_MODEL_ROTATION);
         }
     }

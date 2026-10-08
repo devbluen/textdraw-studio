@@ -126,6 +126,7 @@ PlayerTextDrawClick:SPRITEBROWSER(playerid, index) {
 
     inline SpriteBrowserOptions() {
 
+<<<<<<< HEAD
         DialogMod_Add(playerid, "Create Sprite", E_INTERACTION_CREATE);
 
         if(!e_Data[playerid][E_DATA_FAVORITE][index])
@@ -157,6 +158,53 @@ PlayerTextDrawClick:SPRITEBROWSER_SEARCH(playerid)
 
 PlayerTextDrawClick:SPRITEBROWSER_CLOSE(playerid)
     SpriteBrowser_Close(playerid);
+=======
+        DialogMod_Add(playerid, L(playerid, E_LANG_SPR_CREATE), E_INTERACTION_CREATE);
+
+        if(!e_Data[playerid][E_DATA_FAVORITE][index])
+            DialogMod_Add(playerid, L(playerid, E_LANG_SPR_ADD_FAV), E_INTERACTION_ADD_FAVORITE);
+        else
+            DialogMod_Add(playerid, L(playerid, E_LANG_SPR_REM_FAV), E_INTERACTION_REMOVE_FAVORITE);
+    }
+
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_OPTIONS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_SPRITEBROWSEROPTIONS", using inline SpriteBrowserOptions);
+}
+
+PlayerTextDrawClick:SPRITEBROWSER_SIDEBAR(playerid, index) {
+    if(Dialog_Opened(playerid)) return;
+    SpriteBrowser_LoadFilter(playerid, e_SpriteArray[index][E_SPRITEARRAY_TYPE]);
+}
+
+PlayerTextDrawClick:SPRITEBROWSER_NEXT(playerid) {
+    if(Dialog_Opened(playerid)) return;
+    SpriteBrowser_Page(playerid, SpriteBrowser_GetPage(playerid) + 1);
+}
+
+PlayerTextDrawClick:SPRITEBROWSER_PREVIOUS(playerid) {
+    if(Dialog_Opened(playerid)) return;
+    SpriteBrowser_Page(playerid, SpriteBrowser_GetPage(playerid) - 1);
+}
+
+PlayerTextDrawClick:SPRITEBROWSER_NEXTSIDE(playerid) {
+    if(Dialog_Opened(playerid)) return;
+    SpriteBrowser_SideBarPage(playerid, SpriteBrowser_GetSideBarPage(playerid) + 1);
+}
+
+PlayerTextDrawClick:SPRITEBROWSER_PREVIOUSSIDE(playerid) {
+    if(Dialog_Opened(playerid)) return;
+    SpriteBrowser_SideBarPage(playerid, SpriteBrowser_GetSideBarPage(playerid) - 1);
+}
+
+PlayerTextDrawClick:SPRITEBROWSER_SEARCH(playerid) {
+    if(Dialog_Opened(playerid)) return;
+    Dialog_Show(playerid, D_SPRITEBROWSER_SEARCH, DIALOG_STYLE_INPUT, L(playerid, E_LANG_SEARCH), L(playerid, E_LANG_SPR_SEARCH_BODY), L(playerid, E_LANG_BTN_SEARCH), L(playerid, E_LANG_BTN_CLOSE));
+}
+
+PlayerTextDrawClick:SPRITEBROWSER_CLOSE(playerid) {
+    if(Dialog_Opened(playerid)) return;
+    SpriteBrowser_Close(playerid);
+}
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
 
 
@@ -233,7 +281,11 @@ static stock SpriteBrowser_SetFilterItem(playerid, const search[]) {
 
 static stock SpriteBrwoser_RemoveFilterItem(playerid) {
     stringclear(e_Data[playerid][E_DATA_FILTER_ITEM]);
+<<<<<<< HEAD
     SpriteBrowserView_SetString(playerid, 123, "Search");
+=======
+    SpriteBrowserView_SetString(playerid, 123, L(playerid, E_LANG_SPR_SEARCH));
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 }
 
 static stock SpriteBrowser_Reset(playerid) {

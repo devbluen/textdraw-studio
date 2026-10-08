@@ -22,6 +22,12 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
+<<<<<<< HEAD
+=======
+    if(Dialog_Opened(playerid))
+        return Y_HOOKS_BREAK_RETURN_1;
+
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     if(clickedid == INVALID_TEXT_DRAW) {
         
         if(e_TextdrawData[playerid][E_TEXTDRAW_DATA_CANCEL]) {

@@ -14,7 +14,11 @@
 */
 
 stock TaskBarEventProjectCreate_Show(playerid) {
+<<<<<<< HEAD
     Dialog_Show(playerid, D_TASKBAR_CREATE, DIALOG_STYLE_INPUT, "Project Name", "Write your project name below", "Create", "Previous");
+=======
+    Dialog_Show(playerid, D_TASKBAR_CREATE, DIALOG_STYLE_INPUT, L(playerid, E_LANG_PRJ_NAME_TITLE), L(playerid, E_LANG_PRJ_NAME_BODY), L(playerid, E_LANG_BTN_CREATE), L(playerid, E_LANG_BTN_PREVIOUS));
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 }
 
 

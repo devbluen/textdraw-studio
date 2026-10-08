@@ -54,7 +54,17 @@ stock Util_ConvertUnixToFullDate(timestamp, &day = 0, &month = 0, &year = 0, &ho
     day = total_days + 1; // Adjust from 0-based to 1-based day
 }
 
+<<<<<<< HEAD
 stock Util_GetWeekdayWithNumber(weekday, dest[], maxlength = sizeof dest) {
+=======
+stock Util_GetWeekdayWithNumber(weekday, dest[], maxlength = sizeof dest, playerid = INVALID_PLAYER_ID) {
+    if(playerid != INVALID_PLAYER_ID && weekday >= 0 && weekday <= 6) {
+        new E_LANG:dayKey = E_LANG_DAY_SUN;
+        dayKey = E_LANG:(_:dayKey + weekday);
+        strcat(dest, L(playerid, dayKey), maxlength);
+        return;
+    }
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     static 
         const weekdayName[][] = {

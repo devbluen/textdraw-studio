@@ -1,6 +1,10 @@
 
     // Informations
+<<<<<<< HEAD
 #define     STUDIO_VERSION       "v1.6.0"
+=======
+#define     STUDIO_VERSION       "v1.7.0"
+>>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 #define     STUDIO_FOLDER        "textdrawStudio"
 #define     STUDIO_EXPORT        "exports"
 #define     STUDIO_IMPORT        "imports"

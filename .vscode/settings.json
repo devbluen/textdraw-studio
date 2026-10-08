@@ -1,0 +1,18 @@
+{
+    "files.associations": {
+        "*.pwn": "pawn",
+        "*.inc": "pawn"
+    },
+    "pawn.compiler.path": "${workspaceFolder}/qawno/pawncc.exe",
+    "pawn.compiler.args": [
+        "-i${workspaceFolder}/qawno/include",
+        "-;+",
+        "-(+",
+        "-d3"
+    ],
+    "[pawn]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+        "editor.detectIndentation": false
+    }
+}
