@@ -15,18 +15,12 @@ hook OnUserLogin(playerid) {
                 // Functions
 #include "src/general/session/components/functions/general.inc"
                     // Textdraws
-<<<<<<< HEAD
-=======
 #include "src/general/session/components/functions/textdraw/circleDraw.inc"
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 #include "src/general/session/components/functions/textdraw/textdraw.inc"
 #include "src/general/session/components/functions/textdraw/textdrawData.inc"
 #include "src/general/session/components/functions/textdraw/textdrawExport.inc"
 #include "src/general/session/components/functions/textdraw/textdrawColorPick.inc"
-<<<<<<< HEAD
-=======
 #include "src/general/session/components/functions/textdraw/circleConfig.inc"
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
                     // Groups
 #include "src/general/session/components/functions/groups/groups.inc"
 #include "src/general/session/components/functions/groups/groupsData.inc"

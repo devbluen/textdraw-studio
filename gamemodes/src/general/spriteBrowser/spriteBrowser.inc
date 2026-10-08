@@ -126,39 +126,6 @@ PlayerTextDrawClick:SPRITEBROWSER(playerid, index) {
 
     inline SpriteBrowserOptions() {
 
-<<<<<<< HEAD
-        DialogMod_Add(playerid, "Create Sprite", E_INTERACTION_CREATE);
-
-        if(!e_Data[playerid][E_DATA_FAVORITE][index])
-            DialogMod_Add(playerid, "{"#HEX_DEFAULT"}Add to Favorite", E_INTERACTION_ADD_FAVORITE);
-        else
-            DialogMod_Add(playerid, "{"#HEX_INFO"}Remove to Favorite", E_INTERACTION_REMOVE_FAVORITE);
-    }
-
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Options", "Select", "Close", "D_SPRITEBROWSEROPTIONS", using inline SpriteBrowserOptions);
-}
-
-PlayerTextDrawClick:SPRITEBROWSER_SIDEBAR(playerid, index)
-    SpriteBrowser_LoadFilter(playerid, e_SpriteArray[index][E_SPRITEARRAY_TYPE]);
-
-PlayerTextDrawClick:SPRITEBROWSER_NEXT(playerid)
-    SpriteBrowser_Page(playerid, SpriteBrowser_GetPage(playerid) + 1);
-
-PlayerTextDrawClick:SPRITEBROWSER_PREVIOUS(playerid)
-    SpriteBrowser_Page(playerid, SpriteBrowser_GetPage(playerid) - 1);
-
-PlayerTextDrawClick:SPRITEBROWSER_NEXTSIDE(playerid)
-    SpriteBrowser_SideBarPage(playerid, SpriteBrowser_GetSideBarPage(playerid) + 1);
-
-PlayerTextDrawClick:SPRITEBROWSER_PREVIOUSSIDE(playerid)
-    SpriteBrowser_SideBarPage(playerid, SpriteBrowser_GetSideBarPage(playerid) - 1);
-
-PlayerTextDrawClick:SPRITEBROWSER_SEARCH(playerid)
-    Dialog_Show(playerid, D_SPRITEBROWSER_SEARCH, DIALOG_STYLE_INPUT, "Search", "Please specify what you want to search for below. If you wish to remove the filter, leave no information.", "Search", "Close");
-
-PlayerTextDrawClick:SPRITEBROWSER_CLOSE(playerid)
-    SpriteBrowser_Close(playerid);
-=======
         DialogMod_Add(playerid, L(playerid, E_LANG_SPR_CREATE), E_INTERACTION_CREATE);
 
         if(!e_Data[playerid][E_DATA_FAVORITE][index])
@@ -204,7 +171,6 @@ PlayerTextDrawClick:SPRITEBROWSER_CLOSE(playerid) {
     if(Dialog_Opened(playerid)) return;
     SpriteBrowser_Close(playerid);
 }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
 
 
@@ -281,11 +247,7 @@ static stock SpriteBrowser_SetFilterItem(playerid, const search[]) {
 
 static stock SpriteBrwoser_RemoveFilterItem(playerid) {
     stringclear(e_Data[playerid][E_DATA_FILTER_ITEM]);
-<<<<<<< HEAD
-    SpriteBrowserView_SetString(playerid, 123, "Search");
-=======
     SpriteBrowserView_SetString(playerid, 123, L(playerid, E_LANG_SPR_SEARCH));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 }
 
 static stock SpriteBrowser_Reset(playerid) {

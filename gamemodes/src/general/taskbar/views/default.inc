@@ -325,21 +325,15 @@ stock TaskBarView_Create(playerid) {
     for(new i = 0; i < sizeof taskBarView[]; i++)
         PlayerTextDrawShow(playerid, taskBarView[playerid][i]);
 
-<<<<<<< HEAD
-=======
     TaskBarView_ApplyLang(playerid);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     TaskBarView_HideInfo(playerid);
     TaskBarView_HideTips(playerid);
 }
 
-<<<<<<< HEAD
-=======
 stock TaskBarView_ApplyLang(playerid) {
     PlayerTextDrawSetString(playerid, taskBarView[playerid][26], L(playerid, E_LANG_TIPS_MOVE));
 }
 
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 stock TaskBarView_Show(playerid)
     PlayerTextDrawShow(playerid, taskBarView[playerid][0]);
 

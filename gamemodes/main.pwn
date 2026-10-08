@@ -40,10 +40,7 @@
             // Utils
 #include "src/utils/variables.inc"
 #include "src/utils/functions.inc"
-<<<<<<< HEAD
-=======
 #include "src/utils/lang/lang.inc"
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 #include "src/utils/times.inc"
 
             // Libs

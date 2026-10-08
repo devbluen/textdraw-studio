@@ -14,11 +14,7 @@
 */
 
 stock TaskBarEventProjectImport_Show(playerid)
-<<<<<<< HEAD
-    Dialog_Show(playerid, D_TASKBAR_IMPORT, DIALOG_STYLE_INPUT, "Importe", "Enter the name of the file you want to import below. You don't need to add \".txt\" at the end.", "Confirm", "Cancel");
-=======
     Dialog_Show(playerid, D_TASKBAR_IMPORT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_PRJ_IMPORT_TITLE), L(playerid, E_LANG_PRJ_IMPORT_BODY), L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_CANCEL));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
 
 

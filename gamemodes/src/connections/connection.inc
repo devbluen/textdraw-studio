@@ -35,10 +35,7 @@ hook OnGameModeInit() {
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableSprites));
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableSpritesFavorites));
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTablesColors));
-<<<<<<< HEAD
-=======
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableUserLanguage));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 

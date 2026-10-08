@@ -40,16 +40,6 @@ stock TaskBarEventProjectLoad_Show(playerid) {
         switch(Session_Has())
         {
             case true: {
-<<<<<<< HEAD
-                DialogMod_Add(playerid, "Export Project", E_BUTTON_EXPORT);
-                DialogMod_Add(playerid, "Import Presets", E_BUTTON_IMPORT);
-                DialogMod_Add(playerid, "Exit Studio", E_BUTTON_EXIT);
-            }
-
-            case false: {
-                DialogMod_Add(playerid, "New Workspace", E_BUTTON_NEW);
-                DialogMod_Add(playerid, "Open Project", E_BUTTON_OPEN);
-=======
                 DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_EXPORT), E_BUTTON_EXPORT);
                 DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_IMPORT), E_BUTTON_IMPORT);
                 DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_EXIT), E_BUTTON_EXIT);
@@ -58,16 +48,11 @@ stock TaskBarEventProjectLoad_Show(playerid) {
             case false: {
                 DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_NEW), E_BUTTON_NEW);
                 DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_OPEN), E_BUTTON_OPEN);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             }
         }
     }
 
-<<<<<<< HEAD
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, "Project", "Select", "Close", "D_TASKBAR_PROJECTS", using inline TaskBarEventProjectShowed);
-=======
     DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_PROJECT), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_TASKBAR_PROJECTS", using inline TaskBarEventProjectShowed);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 }
 
 stock TaskBarEventProjectLoad_OpenProjectName(playerid, const name[]) {
@@ -97,19 +82,11 @@ static stock TaskBarEventProjectLoad_CreateProject(playerid, const name[]) {
     if(cache) {
         DB_FreeResultSet(cache);
         TaskBarEventProjectLoad_OpenProjectName(playerid, name);
-<<<<<<< HEAD
-        SendMessage(playerid, -1, ""#MESSAGE_GREEN"The {CCCCCC}\"%s\"{FFFFFF} project was successfully created.", name);
-        return;
-    }
-
-    SendMessage(playerid, -1, ""#MESSAGE_RED"It was not possible to create the {CCCCCC}\"%s\"{FFFFFF} project.", name);
-=======
         SendLang(playerid, -1, E_LANG_MSG_PRJ_CREATED, name);
         return;
     }
 
     SendLang(playerid, -1, E_LANG_MSG_PRJ_CREATE_FAIL, name);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 }
 
 stock bool:TaskBarEventProjectLoad_RenameProject(uniqueId, const name[]) {
@@ -171,42 +148,26 @@ DialogMod:D_TASKBAR_PROJECTS(playerid, response, inputtext[], listitem) {
 
             case E_BUTTON_NEW: {
                 if(Session_Has()) 
-<<<<<<< HEAD
-                    return SendMessage(playerid, -1, ""#MESSAGE_RED"There is an open project currently.");
-=======
                     return SendLang(playerid, -1, E_LANG_ERR_PROJECT_OPEN);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
                 TaskBarEventProjectCreate_Show(playerid);
             }
 
             case E_BUTTON_OPEN: {
                 if(Session_Has()) 
-<<<<<<< HEAD
-                    return SendMessage(playerid, -1, ""#MESSAGE_RED"There is an open project currently.");
-=======
                     return SendLang(playerid, -1, E_LANG_ERR_PROJECT_OPEN);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
                 TaskBarEventProjectList_Show(playerid);
             }
 
             case E_BUTTON_EXIT: {
                 if(!Session_Has()) 
-<<<<<<< HEAD
-                    return SendMessage(playerid, -1, ""#MESSAGE_RED"There are no open projects.");
-=======
                     return SendLang(playerid, -1, E_LANG_ERR_NO_PROJECT);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
                 
                 Session_Destroy();
                 TaskBarEventProjectLoad_Show(playerid);
 
-<<<<<<< HEAD
-                SendMessage(INVALID_PLAYER_ID, -1, ""#MESSAGE_GREEN"Project was successfully completed.");
-=======
                 SendLang(INVALID_PLAYER_ID, -1, E_LANG_MSG_PRJ_CLOSED);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             }
 
             case E_BUTTON_EXPORT: TaskBarEventProjectExport_Show(playerid);

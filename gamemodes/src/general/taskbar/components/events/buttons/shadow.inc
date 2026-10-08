@@ -12,22 +12,9 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
         index = TaskBarTextDraw_GetSelected(playerid)
     ;
 
-<<<<<<< HEAD
-    format(dialog, sizeof dialog, "{FFFFFF}Set the desired value for your shadow below.\n\n \
-                                    \
-                                    Current: {"#HEX_DEFAULT"}%d{FFFFFF}\n\n \
-                                    \
-                                    Entering a value of {"#HEX_INFO"}0{FFFFFF} disables it.", 
-
-                                    SessionTextDrawData_GetShadow(index)
-                                );
-
-    Dialog_Show(playerid, D_ITEM_SHADOW, DIALOG_STYLE_INPUT, "Shadow", dialog, "Change", "Cancel");
-=======
     LangF(playerid, dialog, sizeof dialog, E_LANG_SHADOW_BODY, SessionTextDrawData_GetShadow(index));
 
     Dialog_Show(playerid, D_ITEM_SHADOW, DIALOG_STYLE_INPUT, L(playerid, E_LANG_SHADOW), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     return Y_HOOKS_BREAK_RETURN_1;
 }
 
@@ -51,11 +38,7 @@ Dialog:D_ITEM_SHADOW(playerid, response, listitem, inputtext[]) {
 
         new shadow;
         if(sscanf(inputtext, "d", shadow))
-<<<<<<< HEAD
-            return Dialog_ReShow(playerid, "Only put numbers");
-=======
             return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_ONLY_NUMBERS));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
         new index = TaskBarTextDraw_GetSelected(playerid);
         SessionTextDrawData_SetShadow(index, shadow);

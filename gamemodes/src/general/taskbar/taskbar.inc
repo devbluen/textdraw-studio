@@ -41,10 +41,7 @@ hook OnUserLogout(playerid) {
 
 PlayerTextDrawClick:TaskBar_Buttons(playerid, E_TYPETASKBUTTON:type) {
 
-<<<<<<< HEAD
-=======
     if(Dialog_Opened(playerid)) return;
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     if(!TaskBarButton_Enabled(playerid, type)) return;
     if(!TaskBarButton_IsDisplayed(playerid, type)) return;
 

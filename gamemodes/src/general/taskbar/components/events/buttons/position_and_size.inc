@@ -6,15 +6,11 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
     switch(type) {
         case E_TYPETASKBUTTON_POSITION: {TaskBarKey_Set(playerid, E_TYPEKEY_POSITION); return Y_HOOKS_BREAK_RETURN_1;}
-<<<<<<< HEAD
-        case E_TYPETASKBUTTON_SIZE: {TaskBarKey_Set(playerid, E_TYPEKEY_SIZE); return Y_HOOKS_BREAK_RETURN_1;}
-=======
         case E_TYPETASKBUTTON_SIZE: {
             if(!SessionCircle_IsCircle(TaskBarTextDraw_GetSelected(playerid)))
                 TaskBarKey_Set(playerid, E_TYPEKEY_SIZE);
             return Y_HOOKS_BREAK_RETURN_1;
         }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         case E_TYPETASKBUTTON_LETTERSIZE: {TaskBarKey_Set(playerid, E_TYPEKEY_LETTER_SIZE); return Y_HOOKS_BREAK_RETURN_1;}
     }
     return Y_HOOKS_CONTINUE_RETURN_1;

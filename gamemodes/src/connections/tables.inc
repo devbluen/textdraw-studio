@@ -77,8 +77,6 @@
         name TEXT NULL, \
         color INTEGER NULL, \
         PRIMARY KEY (id) \
-<<<<<<< HEAD
-=======
     )"
 
 #define eTableUserLanguage \
@@ -86,5 +84,4 @@
         name TEXT NOT NULL, \
         language INTEGER NOT NULL DEFAULT 1, \
         PRIMARY KEY (name) \
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     )"

@@ -82,10 +82,7 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
 
     new
         count,
-<<<<<<< HEAD
-=======
         circle,
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         createBuff[1024 + 56 + 45 + 5 + 1],
         variableBuff[30 + 8 + 1],
         stringBuff[76 + 1],
@@ -99,8 +96,6 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
 
     do
     {
-<<<<<<< HEAD
-=======
         if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_CIRCLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_HEXAGON || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_DIAMOND || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_TRIANGLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_PARENS || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ARC) {
             new Float:cpos[2], Float:csize[2], Float:clett[2], cvalue, cmax, ccolor, cbg;
             DB_GetFieldStringByName(cache, "position", stringBuff);
@@ -158,7 +153,6 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
             circle++;
             continue;
         }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         Export_Add(index, E_TYPEEXPORT_TEXT, " ");
 
         DB_GetFieldStringByName(cache, "playerVariable", variable);
@@ -193,10 +187,6 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
                 Export_Add(index, E_TYPEEXPORT_USE_BOX, va_return("PlayerTextDrawUseBox(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "box")));
                 Export_Add(index, E_TYPEEXPORT_BOX_COLOR, va_return("PlayerTextDrawBoxColor(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "colorBox")));
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             case E_TYPEFONT_MODEL:
             {
                 Export_Add(index, E_TYPEEXPORT_MODEL_ID, va_return("PlayerTextDrawSetPreviewModel(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "model")));
@@ -223,10 +213,7 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
 
     new
         count,
-<<<<<<< HEAD
-=======
         circle,
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         createBuff[1024 + 56 + 45 + 5 + 1],
         variableBuff[30 + 8 + 1],
         stringBuff[76 + 1],
@@ -239,8 +226,6 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
 
     do
     {
-<<<<<<< HEAD
-=======
         if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_CIRCLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_HEXAGON || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_DIAMOND || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_TRIANGLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_PARENS || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ARC) {
             new Float:cpos[2], Float:csize[2], Float:clett[2], cvalue, cmax, ccolor, cbg;
             DB_GetFieldStringByName(cache, "position", stringBuff);
@@ -298,7 +283,6 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
             circle++;
             continue;
         }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         Export_Add(index, E_TYPEEXPORT_TEXT, " ");
 
         DB_GetFieldStringByName(cache, "globalVariable", variable);
@@ -333,10 +317,6 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
                 Export_Add(index, E_TYPEEXPORT_USE_BOX, va_return("TextDrawUseBox(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "box")));
                 Export_Add(index, E_TYPEEXPORT_BOX_COLOR, va_return("TextDrawBoxColor(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "colorBox")));
             }
-<<<<<<< HEAD
-
-=======
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             case E_TYPEFONT_MODEL:
             {
                 Export_Add(index, E_TYPEEXPORT_MODEL_ID, va_return("TextDrawSetPreviewModel(%s, %i)", variableBuff, DB_GetFieldIntByName(cache, "model")));

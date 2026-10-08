@@ -3,19 +3,6 @@
 
 /*
 
-<<<<<<< HEAD
-                    .oooooo..o ooooooooooooo   .oooooo.     .oooooo.   oooo    oooo  .oooooo..o 
-                    d8P'    `Y8 8'   888   `8  d8P'  `Y8b   d8P'  `Y8b  `888   .8P'  d8P'    `Y8 
-                    Y88bo.           888      888      888 888           888  d8'    Y88bo.      
-                    `"Y8888o.       888      888      888 888           88888[       `"Y8888o.  
-                        `"Y88b      888      888      888 888           888`88b.         `"Y88b 
-                    oo     .d8P      888      `88b    d88' `88b    ooo   888  `88b.  oo     .d8P 
-                    8""88888P'      o888o      `Y8bood8P'   `Y8bood8P'  o888o  o888o 8""88888P'  
-
-*/
-
-stock SessionTextDrawData_LoadAll() {
-=======
                     .oooooo..o ooooooooooooo   .oooooo.     .oooooo.   oooo    oooo  .oooooo..o
                     d8P'    `Y8 8'   888   `8  d8P'  `Y8b   d8P'  `Y8b  `888   .8P'  d8P'    `Y8
                     Y88bo.           888      888      888 888           888  d8'    Y88bo.
@@ -28,20 +15,13 @@ stock SessionTextDrawData_LoadAll() {
 
 stock SessionTextDrawData_LoadAll()
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     new uniqueId = Session_GetId();
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT indexDraw, id FROM textdraws WHERE project_id = %i ORDER BY `indexDraw` ASC", uniqueId);
 
-<<<<<<< HEAD
-    if(cache) 
-    {
-        if(DB_GetRowCount(cache))
-=======
     if (cache)
     {
         if (DB_GetRowCount(cache))
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         {
             new index, drawId;
             do
@@ -51,23 +31,15 @@ stock SessionTextDrawData_LoadAll()
 
                 SessionTextDrawData_Load(index, drawId);
             }
-<<<<<<< HEAD
-            while(DB_SelectNextRow(cache));
-=======
             while (DB_SelectNextRow(cache));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         }
 
         DB_FreeResultSet(cache);
     }
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_Load(index, id) {
-=======
 stock SessionTextDrawData_Load(index, id)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
                                                             position, \
@@ -93,21 +65,12 @@ stock SessionTextDrawData_Load(index, id)
                                                         FROM textdraws  \
                                                         WHERE id = %i",
 
-<<<<<<< HEAD
-                                                        id
-                                                    );
-
-    if(cache) 
-    {
-        if(DB_GetRowCount(cache))
-=======
                                            id
                                                           );
 
     if (cache)
     {
         if (DB_GetRowCount(cache))
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         {
             new buffGeneral[84 + 1];
 
@@ -156,31 +119,15 @@ stock SessionTextDrawData_Load(index, id)
     }
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_Destroy(index, bool:execute_query = true) {
-
-    if(execute_query) {
-=======
 stock SessionTextDrawData_Destroy(index, bool:execute_query = true)
 {
 
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "DELETE FROM textdraws WHERE id = %i", SessionTextDrawData_GetUniqueId(index))
         );
     }
-<<<<<<< HEAD
-    
-    SessionTextDraw_Destroy(index);
-}
-
-stock SessionTextDrawData_Create(E_TYPEITEM:type) {
-
-    new index = Iter_Free(SessionDraws);
-    if(index == ITER_NONE)
-=======
 
     SessionTextDraw_Destroy(index);
 }
@@ -190,91 +137,10 @@ stock SessionTextDrawData_Create(E_TYPEITEM:type)
 
     new index = Iter_Free(SessionDraws);
     if (index == ITER_NONE)
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         return -1;
 
     new project_id = Session_GetId();
 
-<<<<<<< HEAD
-    switch(type) {
-        case E_TYPEITEM_TEXT: {
-
-            SessionTextDrawData_Insert(
-                .project_id = project_id, 
-                .index = index, 
-                .text = "DEFAULT", 
-                .position = Float:{270.0, 170.0}, 
-                .size = Float:{640.0, 640.0},
-                .letterSize = Float:{0.3, 1.5}, 
-                .font = E_TYPEFONT_1, 
-                .align = E_TYPEALIGNMENT_LEFT, 
-                .proportion = true, 
-                .outline = 0, 
-                .shadow = 0, 
-                .color = RGB::RGBAToHex(255, 255, 255, 255), 
-                .colorBackground = RGB::RGBAToHex(0, 0, 0, 150), 
-                .colorBox = RGB::RGBAToHex(0, 0, 0, 150), 
-                .selectable = false, 
-                .mode = E_TYPEMODE_GLOBAL, 
-                .box = false, 
-                .model = 0, 
-                .modelRotation = Float:{0.0, 0.0, 0.0, 1.0}, 
-                .modelColors = {0, 0}
-            );
-        }
-        
-        case E_TYPEITEM_SPRITE:
-        {
-            SessionTextDrawData_Insert(
-                .project_id = project_id, 
-                .index = index, 
-                .text = "LD_SPAC:white", 
-                .position = Float:{250.0, 150.0}, 
-                .size = Float:{90.0, 90.0},
-                .letterSize = Float:{0.0, 0.0}, 
-                .font = E_TYPEFONT_SPRITE, 
-                .align = E_TYPEALIGNMENT_LEFT, 
-                .proportion = true, 
-                .outline = 0, 
-                .shadow = 0, 
-                .color = RGB::RGBAToHex(255, 255, 255, 255), 
-                .colorBackground = RGB::RGBAToHex(0, 0, 0, 0), 
-                .colorBox = RGB::RGBAToHex(0, 0, 0, 0), 
-                .selectable = false, 
-                .mode = E_TYPEMODE_GLOBAL, 
-                .box = false, 
-                .model = 0, 
-                .modelRotation = Float:{0.0, 0.0, 0.0, 1.0}, 
-                .modelColors = {0, 0}
-            );
-        }
-        
-        case E_TYPEITEM_MODEL:
-        {
-            SessionTextDrawData_Insert(
-                .project_id = project_id, 
-                .index = index, 
-                .text = "_", 
-                .position = Float:{250.0, 150.0}, 
-                .size = Float:{90.0, 90.0},
-                .letterSize = Float:{0.0, 0.0}, 
-                .font = E_TYPEFONT_MODEL, 
-                .align = E_TYPEALIGNMENT_LEFT, 
-                .proportion = true, 
-                .outline = 0, 
-                .shadow = 0, 
-                .color = RGB::RGBAToHex(255, 255, 255, 255), 
-                .colorBackground = RGB::RGBAToHex(0, 0, 0, 85), 
-                .colorBox = RGB::RGBAToHex(0, 0, 0, 0), 
-                .selectable = false, 
-                .mode = E_TYPEMODE_GLOBAL, 
-                .box = false, 
-                .model = 0, 
-                .modelRotation = Float:{0.0, 0.0, 0.0, 1.0}, 
-                .modelColors = {0, 0}
-            );
-        }
-=======
     switch (type)
     {
         case E_TYPEITEM_TEXT:
@@ -534,23 +400,15 @@ stock SessionTextDrawData_Create(E_TYPEITEM:type)
             );
             e_SessionDraw[index][E_SESSIONDRAW_INVERT] = false;
         }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     }
     return index;
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_Copy(index) {
-
-    new indexIter = Iter_Free(SessionDraws);
-    if(indexIter == ITER_NONE)
-=======
 stock SessionTextDrawData_Copy(index)
 {
 
     new indexIter = Iter_Free(SessionDraws);
     if (indexIter == ITER_NONE)
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         return -1;
 
     new uniqueId = SessionTextDrawData_GetUniqueId(index);
@@ -562,55 +420,13 @@ stock SessionTextDrawData_Copy(index)
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, "DROP TABLE t_copy;"));
 
     new lastInsert = SessionTextDrawData_GetGenId(Session_GetId());
-<<<<<<< HEAD
-    if(lastInsert)
-=======
     if (lastInsert)
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         SessionTextDrawData_Load(indexIter, lastInsert);
 
     // Iter_Add(SessionDraws, indexIter);
     return indexIter;
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_Insert(project_id, index, const text[], const Float:position[2], const Float:size[2], const Float:letterSize[2], E_TYPEFONT:font, E_TYPEALIGNMENT:align, bool:proportion, outline, shadow, color, colorBackground, colorBox, bool:selectable, E_TYPEMODE:mode, bool:box, model, const Float:modelRotation[4], const modelColors[2]) {
-
-    new 
-        DBResult:cache = DB_ExecuteQuery(IDConnection, "INSERT INTO textdraws (project_id, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, model, model_colors, model_rotation, box) VALUES (%i, '%f, %f', '%f, %f', '%f, %f', '%s', %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, '%i,%i', '%f,%f,%f,%f', %i)", 
-            project_id,
-            position[0], position[1],
-            size[0], size[1],
-            letterSize[0], letterSize[1],
-            text,
-            _:font,
-            _:align,
-            proportion,
-            outline,
-            shadow,
-            color,
-            colorBackground,
-            colorBox,
-            selectable,
-            _:mode,
-            index,
-            model,
-            modelColors[0], modelColors[1],
-            modelRotation[0], modelRotation[1], modelRotation[2], modelRotation[3],
-            box
-        )
-    ;
-
-    if(cache) 
-        DB_FreeResultSet(cache);
-
-    new lastInsert = SessionTextDrawData_GetGenId(project_id);
-    if(lastInsert)
-        SessionTextDrawData_Load(index, lastInsert);
-}
-
-static stock SessionTextDrawData_GetGenId(uniqueId) {
-=======
 stock SessionTextDrawData_Insert(project_id, index, const text[], const Float:position[2], const Float:size[2], const Float:letterSize[2], E_TYPEFONT:font, E_TYPEALIGNMENT:align, bool:proportion, outline, shadow, color, colorBackground, colorBox, bool:selectable, E_TYPEMODE:mode, bool:box, model, const Float:modelRotation[4], const modelColors[2])
 {
 
@@ -647,7 +463,6 @@ stock SessionTextDrawData_Insert(project_id, index, const text[], const Float:po
 
 static stock SessionTextDrawData_GetGenId(uniqueId)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT  \
                                                             id \
@@ -655,36 +470,17 @@ static stock SessionTextDrawData_GetGenId(uniqueId)
                                                         WHERE project_id = %i \
                                                         ORDER BY id DESC \
                                                         LIMIT 1",
-<<<<<<< HEAD
-                                                        
-                                                        uniqueId
-                                                    );
-
-    if(cache)
-=======
 
                                            uniqueId
                                                           );
 
     if (cache)
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         return DB_GetFieldIntByName(cache, "id");
 
     return -1;
 }
 
 stock bool:SessionTextDrawData_Has(index)
-<<<<<<< HEAD
-    return Iter_Contains(SessionDraws, index);
-
-stock SessionTextDrawData_GetUniqueId(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID];
-
-stock SessionTextDrawData_GetString(index, dest[], maxlength = sizeof dest)
-    strcat(dest, e_SessionDraw[index][E_SESSIONDRAW_TEXT], maxlength);
-
-stock SessionTextDrawData_GetPosition(index, &Float:x, &Float:y) {
-=======
 return Iter_Contains(SessionDraws, index);
 
 stock SessionTextDrawData_GetUniqueId(index)
@@ -695,105 +491,43 @@ strcat(dest, e_SessionDraw[index][E_SESSIONDRAW_TEXT], maxlength);
 
 stock SessionTextDrawData_GetPosition(index, &Float:x, &Float:y)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     x = e_SessionDraw[index][E_SESSIONDRAW_POSITION][0];
     y = e_SessionDraw[index][E_SESSIONDRAW_POSITION][1];
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_GetSize(index, &Float:x, &Float:y) {
-=======
 stock SessionTextDrawData_GetSize(index, &Float:x, &Float:y)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     x = e_SessionDraw[index][E_SESSIONDRAW_SIZE][0];
     y = e_SessionDraw[index][E_SESSIONDRAW_SIZE][1];
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_GetLettSize(index, &Float:x, &Float:y) {
-=======
 stock SessionTextDrawData_GetLettSize(index, &Float:x, &Float:y)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     x = e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][0];
     y = e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][1];
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_GetModelRot(index, &Float:x, &Float:y, &Float:z, &Float:zoom) {
-=======
 stock SessionTextDrawData_GetModelRot(index, &Float:x, &Float:y, &Float:z, &Float:zoom)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     x = e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][0];
     y = e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][1];
     z = e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][2];
     zoom = e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][3];
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_GetModelCol(index, &color1, &color2) {
-=======
 stock SessionTextDrawData_GetModelCol(index, &color1, &color2)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     color1 = e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][0];
     color2 = e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][1];
 }
 
 stock E_TYPEALIGNMENT:SessionTextDrawData_GetAlign(index)
-<<<<<<< HEAD
-    return e_SessionDraw[index][E_SESSIONDRAW_ALIGN];
-=======
 return e_SessionDraw[index][E_SESSIONDRAW_ALIGN];
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
 // stock E_TYPEITEM:SessionTextDrawData_GetType(index)
 //     return e_SessionDraw[index][E_SESSIONDRAW_TYPE];
 
 stock SessionTextDrawData_GetColor(index)
-<<<<<<< HEAD
-    return e_SessionDraw[index][E_SESSIONDRAW_COLOR];
-
-stock SessionTextDrawData_GetShadow(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_SHADOW];
-
-stock SessionTextDrawData_GetOutline(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_OUTLINE];
-
-stock SessionTextDrawData_GetColorBG(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_COLOR_BACKGROUND];
-
-stock SessionTextDrawData_GetColorBox(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_COLOR_BOX];
-
-stock E_TYPEFONT:SessionTextDrawData_GetFont(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_FONT];
-
-stock bool:SessionTextDrawData_GetPropor(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_PROPORTION];
-
-stock bool:SessionTextDrawData_GetBox(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_BOX];
-
-stock SessionTextDrawData_GetModel(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_MODEL];
-
-stock E_TYPEMODE:SessionTextDrawData_GetMode(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_MODE];
-
-stock Text:SessionTextDrawData_GetDraw(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_DRAW];
-
-stock bool:SessionTextDrawData_GetSelect(index)
-    return e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE];
-
-stock SessionTextDrawData_GetVariable(index, dest[], maxlength = sizeof dest) {
-    
-    if(isnull(e_SessionDraw[index][E_SESSIONDRAW_VARIABLE])) {
-        switch(SessionTextDrawData_GetMode(index)) {
-=======
 return e_SessionDraw[index][E_SESSIONDRAW_COLOR];
 
 stock SessionTextDrawData_GetShadow(index)
@@ -836,57 +570,18 @@ stock SessionTextDrawData_GetVariable(index, dest[], maxlength = sizeof dest)
     {
         switch (SessionTextDrawData_GetMode(index))
         {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
             case E_TYPEMODE_PLAYER: Session_GetPlayerVariable(dest, maxlength);
             case E_TYPEMODE_GLOBAL: Session_GetGlobalVariable(dest, maxlength);
         }
         return;
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     strcat(dest, e_SessionDraw[index][E_SESSIONDRAW_VARIABLE], maxlength);
 }
 
 //
 
 stock SessionTextDrawData_SetUniqueId(index, uniqueId)
-<<<<<<< HEAD
-    e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID] = uniqueId;
-
-stock SessionTextDrawData_SetModelCol(index, color1, color2, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][0] = color1;
-    e_SessionDraw[index][E_SESSIONDRAW_MODEL_COLORS][1] = color2;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model_colors = '%i,%i' WHERE id = %i", color1, color2, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    TextDrawSetPreviewVehicleColours(SessionTextDrawData_GetDraw(index), color1, color2);
-    SessionTextDrawData_Update(index);
-}
-
-stock SessionTextDrawData_SetAlign(index, E_TYPEALIGNMENT:type, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_ALIGN] = type;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET align = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    new typeBuff = _:type;
-    TextDrawAlignment(SessionTextDrawData_GetDraw(index), TEXT_DRAW_ALIGN:typeBuff);
-    SessionTextDrawData_Update(index);
-
-    SessionTextDraw_UpdateButton(index);
-=======
 e_SessionDraw[index][E_SESSIONDRAW_UNIQUE_ID] = uniqueId;
 
 stock SessionTextDrawData_SetModelCol(index, color1, color2, bool:execute_query = true)
@@ -929,7 +624,6 @@ stock SessionTextDrawData_SetAlign(index, E_TYPEALIGNMENT:type, bool:execute_que
 
         SessionTextDraw_UpdateButton(index);
     }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 }
 
 // stock SessionTextDrawData_SetType(index, E_TYPEITEM:type, bool:execute_query = true) {
@@ -943,13 +637,6 @@ stock SessionTextDrawData_SetAlign(index, E_TYPEALIGNMENT:type, bool:execute_que
 //     }
 // }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetColor(index, color, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_COLOR] = color;
-
-    if(execute_query) {
-=======
 stock SessionTextDrawData_SetColor(index, color, bool:execute_query = true)
 {
 
@@ -957,51 +644,11 @@ stock SessionTextDrawData_SetColor(index, color, bool:execute_query = true)
 
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET color = %i WHERE id = %i", color, SessionTextDrawData_GetUniqueId(index))
         );
     }
 
-<<<<<<< HEAD
-    TextDrawColour(SessionTextDrawData_GetDraw(index), color);
-    SessionTextDrawData_Update(index);
-}
-
-stock SessionTextDrawData_SetShadow(index, value, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_SHADOW] = value;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET shadow = %i WHERE id = %i", value, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    TextDrawSetShadow(SessionTextDrawData_GetDraw(index), value);
-    SessionTextDrawData_Update(index);
-}
-
-stock SessionTextDrawData_SetOutline(index, value, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_OUTLINE] = value;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET outline = %i WHERE id = %i", value, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    TextDrawSetOutline(SessionTextDrawData_GetDraw(index), value);
-    SessionTextDrawData_Update(index);
-}
-
-stock SessionTextDrawData_SetColorBG(index, color, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_COLOR_BACKGROUND] = color;
-
-    if(execute_query) {
-=======
     if (SessionCircle_IsCircle(index))
     {
         SessionCircle_Refresh(index);
@@ -1058,86 +705,11 @@ stock SessionTextDrawData_SetColorBG(index, color, bool:execute_query = true)
 
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET colorBackground = %i WHERE id = %i", color, SessionTextDrawData_GetUniqueId(index))
         );
     }
 
-<<<<<<< HEAD
-    TextDrawBackgroundColour(SessionTextDrawData_GetDraw(index), color);
-    SessionTextDrawData_Update(index);
-}
-
-stock SessionTextDrawData_SetColorBox(index, color, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_COLOR_BOX] = color;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET colorBox = %i WHERE id = %i", color, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    TextDrawBoxColour(SessionTextDrawData_GetDraw(index), color);
-    SessionTextDrawData_Update(index);
-}
-
-stock SessionTextDrawData_SetFont(index, E_TYPEFONT:type, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_FONT] = type;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET font = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    new typeBuff = _:type;
-    TextDrawFont(SessionTextDrawData_GetDraw(index), TEXT_DRAW_FONT:typeBuff);
-    SessionTextDrawData_Update(index);
-
-    SessionTextDraw_UpdateButton(index);
-}
-
-stock SessionTextDrawData_SetPropor(index, bool:status, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_PROPORTION] = status;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET proportion = %i WHERE id = %i", status, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    TextDrawSetProportional(SessionTextDrawData_GetDraw(index), status);
-    SessionTextDrawData_Update(index);
-
-    SessionTextDraw_UpdateButton(index);
-}
-
-stock SessionTextDrawData_SetBox(index, bool:status, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_BOX] = status;
-
-    if(execute_query) {
-        DB_FreeResultSet(
-            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET box = %i WHERE id = %i", status, SessionTextDrawData_GetUniqueId(index))
-        );
-    }
-
-    TextDrawUseBox(SessionTextDrawData_GetDraw(index), status);
-    SessionTextDrawData_Update(index);
-
-    SessionTextDraw_UpdateButton(index);
-}
-
-stock SessionTextDrawData_SetModel(index, model, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_MODEL] = model;
-
-    if(execute_query) {
-=======
     if (SessionCircle_IsCircle(index))
     {
         SessionCircle_Refresh(index);
@@ -1241,7 +813,6 @@ stock SessionTextDrawData_SetModel(index, model, bool:execute_query = true)
 
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model = %i WHERE id = %i", model, SessionTextDrawData_GetUniqueId(index))
         );
@@ -1251,26 +822,18 @@ stock SessionTextDrawData_SetModel(index, model, bool:execute_query = true)
     SessionTextDrawData_Update(index);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetModelRot(index, Float:x, Float:y, Float:z, Float:zoom, bool:execute_query = true) {
-=======
 stock SessionTextDrawData_SetModelRot(index, Float:x, Float:y, Float:z, Float:zoom, bool:execute_query = true)
 {
 
     if (SessionCircle_IsCircle(index)) return;
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][1] = y;
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][2] = z;
     e_SessionDraw[index][E_SESSIONDRAW_MODEL_ROTATION][3] = zoom;
 
-<<<<<<< HEAD
-    if(execute_query) {
-=======
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model_rotation = '%f,%f,%f,%f' WHERE id = %i", x, y, z, zoom, SessionTextDrawData_GetUniqueId(index))
         );
@@ -1280,115 +843,75 @@ stock SessionTextDrawData_SetModelRot(index, Float:x, Float:y, Float:z, Float:zo
     SessionTextDrawData_Update(index);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetLettSize(index, Float:x, Float:y, bool:execute_query = true) {
-=======
 stock SessionTextDrawData_SetLettSize(index, Float:x, Float:y, bool:execute_query = true)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][1] = y;
 
-<<<<<<< HEAD
-    if(execute_query) {
-=======
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET letter_size = '%f,%f' WHERE id = %i", x, y, SessionTextDrawData_GetUniqueId(index))
         );
     }
 
-<<<<<<< HEAD
-=======
     if (SessionCircle_IsCircle(index))
     {
         SessionCircle_Refresh(index);
         return;
     }
 
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     TextDrawLetterSize(SessionTextDrawData_GetDraw(index), x, y);
     SessionTextDrawData_Update(index);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetSize(index, Float:x, Float:y, bool:execute_query = true) {
-=======
 stock SessionTextDrawData_SetSize(index, Float:x, Float:y, bool:execute_query = true)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     e_SessionDraw[index][E_SESSIONDRAW_SIZE][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_SIZE][1] = y;
 
-<<<<<<< HEAD
-    if(execute_query) {
-=======
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET size = '%f,%f' WHERE id = %i", x, y, SessionTextDrawData_GetUniqueId(index))
         );
     }
 
-<<<<<<< HEAD
-=======
     if (SessionCircle_IsCircle(index))
     {
         SessionCircle_Refresh(index);
         return;
     }
 
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     TextDrawTextSize(SessionTextDrawData_GetDraw(index), x, y);
     SessionTextDrawData_Update(index);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetPosition(index, Float:x, Float:y, bool:execute_query = true) {
-=======
 stock SessionTextDrawData_SetPosition(index, Float:x, Float:y, bool:execute_query = true)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     e_SessionDraw[index][E_SESSIONDRAW_POSITION][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_POSITION][1] = y;
 
-<<<<<<< HEAD
-    if(execute_query) {
-=======
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET position = '%f,%f' WHERE id = %i", x, y, SessionTextDrawData_GetUniqueId(index))
         );
     }
 
-<<<<<<< HEAD
-=======
     if (SessionCircle_IsCircle(index))
     {
         SessionCircle_Refresh(index);
         return;
     }
 
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     TextDrawSetPos(SessionTextDrawData_GetDraw(index), x, y);
     SessionTextDrawData_Update(index);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetString(index, const string[], bool:execute_query = true) {
-
-    strcopy(e_SessionDraw[index][E_SESSIONDRAW_TEXT], string);
-
-    if(execute_query) {
-=======
 stock SessionTextDrawData_SetString(index, const string[], bool:execute_query = true)
 {
 
@@ -1396,21 +919,17 @@ stock SessionTextDrawData_SetString(index, const string[], bool:execute_query = 
 
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET text = '%s' WHERE id = %i", string, SessionTextDrawData_GetUniqueId(index))
         );
     }
 
-<<<<<<< HEAD
-=======
     if (SessionCircle_IsCircle(index))
     {
         SessionCircle_Refresh(index);
         return;
     }
 
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     new stringBuff[1024 + 1];
     strcat(stringBuff, string);
 
@@ -1418,13 +937,6 @@ stock SessionTextDrawData_SetString(index, const string[], bool:execute_query = 
     TextDrawSetString(SessionTextDrawData_GetDraw(index), stringBuff);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetMode(index, E_TYPEMODE:type, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_MODE] = type;
-
-    if(execute_query) {
-=======
 stock SessionTextDrawData_SetMode(index, E_TYPEMODE:type, bool:execute_query = true)
 {
 
@@ -1434,7 +946,6 @@ stock SessionTextDrawData_SetMode(index, E_TYPEMODE:type, bool:execute_query = t
 
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET mode = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
         );
@@ -1443,13 +954,6 @@ stock SessionTextDrawData_SetMode(index, E_TYPEMODE:type, bool:execute_query = t
     SessionTextDraw_UpdateButton(index);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetSelect(index, bool:status, bool:execute_query = true) {
-
-    e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE] = status;
-
-    if(execute_query) {
-=======
 stock SessionTextDrawData_SetSelect(index, bool:status, bool:execute_query = true)
 {
 
@@ -1469,7 +973,6 @@ stock SessionTextDrawData_SetSelect(index, bool:status, bool:execute_query = tru
 
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET selectable = %i WHERE id = %i", status, SessionTextDrawData_GetUniqueId(index))
         );
@@ -1481,52 +984,22 @@ stock SessionTextDrawData_SetSelect(index, bool:status, bool:execute_query = tru
     SessionTextDraw_UpdateButton(index);
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetVariable(index, const string[], bool:execute_query = true) {
-
-    if(isnull(string))
-=======
 stock SessionTextDrawData_SetVariable(index, const string[], bool:execute_query = true)
 {
 
     if (isnull(string))
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         stringclear(e_SessionDraw[index][E_SESSIONDRAW_VARIABLE]);
     else
         strcopy(e_SessionDraw[index][E_SESSIONDRAW_VARIABLE], string);
 
-<<<<<<< HEAD
-    if(execute_query) {
-=======
     if (execute_query)
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET variable = %s WHERE id = %i", isnull(string) ? "NULL" : va_return("'%s'", string), SessionTextDrawData_GetUniqueId(index))
         );
     }
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_Show(index) {
-    e_SessionDraw[index][E_SESSIONDRAW_SHOW] = true;
-    SessionTextDrawData_ShowInternal(index);
-}
-
-static stock SessionTextDrawData_Update(index) {
-    if(!e_SessionDraw[index][E_SESSIONDRAW_SHOW]) return;
-    SessionTextDrawData_ShowInternal(index);
-}
-
-static stock SessionTextDrawData_ShowInternal(index) {
-
-    foreach(new i: Users)
-        if(!SpriteBrowser_Created(i))
-            TextDrawShowForPlayer(i, SessionTextDrawData_GetDraw(index));
-}
-
-stock SessionTextDrawData_ReorganizeIndexs(project_id) {
-=======
 stock SessionTextDrawData_Show(index)
 {
     e_SessionDraw[index][E_SESSIONDRAW_SHOW] = true;
@@ -1566,7 +1039,6 @@ static stock SessionTextDrawData_ShowInternal(index)
 
 stock SessionTextDrawData_ReorganizeIndexs(project_id)
 {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET indexDraw = ( \
                                                             SELECT  \
@@ -1582,36 +1054,22 @@ stock SessionTextDrawData_ReorganizeIndexs(project_id)
                                                         ) \
                                                         WHERE project_id = %i",
 
-<<<<<<< HEAD
-                                                        project_id,
-                                                        project_id
-                                                    );
-
-    if(cache)
-=======
                                            project_id,
                                            project_id
                                                           );
 
     if (cache)
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     {
         DB_FreeResultSet(cache);
         SessionTextDrawData_Refresh();
     }
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_SetIndex(index, newIndex) {
-
-    if(SessionTextDrawData_Has(newIndex)) {
-=======
 stock SessionTextDrawData_SetIndex(index, newIndex)
 {
 
     if (SessionTextDrawData_Has(newIndex))
     {
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET indexDraw = %i WHERE id = %i", index, SessionTextDrawData_GetUniqueId(newIndex))
         );
@@ -1624,15 +1082,8 @@ stock SessionTextDrawData_SetIndex(index, newIndex)
     SessionTextDrawData_Refresh();
 }
 
-<<<<<<< HEAD
-stock SessionTextDrawData_Refresh() {
-    SessionTextDraw_DestroyAll();
-    SessionTextDrawData_LoadAll();
-}
-=======
 stock SessionTextDrawData_Refresh()
 {
     SessionTextDraw_DestroyAll();
     SessionTextDrawData_LoadAll();
 }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb

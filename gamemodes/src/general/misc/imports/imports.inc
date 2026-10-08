@@ -22,11 +22,7 @@ stock Import_Get(playerid, const name[]) {
     format(fileStream, sizeof fileStream, ""#STUDIO_FOLDER"/"#STUDIO_IMPORT"/%s.txt", name);
 
     if(!fexist(fileStream)) {
-<<<<<<< HEAD
-        SendMessage(playerid, -1, ""#MESSAGE_RED"This project does not exist");
-=======
         SendLang(playerid, -1, E_LANG_ERR_IMPORT_MISSING);
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         return;
     }
 
@@ -219,8 +215,4 @@ stock Import_Get(playerid, const name[]) {
     }
 
     fclose(handle);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb

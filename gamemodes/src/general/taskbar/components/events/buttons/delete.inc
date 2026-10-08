@@ -7,11 +7,7 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     if(type != E_TYPETASKBUTTON_DELETE)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
-<<<<<<< HEAD
-    Dialog_Show(playerid, D_ITEM_DELETE, DIALOG_STYLE_MSGBOX, "Confirmation of Destruction", "Do you really want to destroy this item? There's no going back.", "Delete", "Cancel");
-=======
     Dialog_Show(playerid, D_ITEM_DELETE, DIALOG_STYLE_MSGBOX, L(playerid, E_LANG_DEL_TITLE), L(playerid, E_LANG_DEL_BODY), L(playerid, E_LANG_BTN_DELETE), L(playerid, E_LANG_BTN_CANCEL));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     return Y_HOOKS_BREAK_RETURN_1;
 }
 

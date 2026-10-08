@@ -13,12 +13,6 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
         dialog[54 + sizeof string + 1]
     ;
 
-<<<<<<< HEAD
-    SessionTextDrawData_GetString(index, string);
-    format(dialog, sizeof dialog, "Which text do you want?\n\n{f52746}Current:\n{FFFFFF} %s", string);
-
-    Dialog_Show(playerid, D_ITEM_TEXT, DIALOG_STYLE_INPUT, "Change Text", dialog, "Change", "Cancel");
-=======
     if(SessionCircle_IsCircle(index)) {
         LangF(playerid, dialog, sizeof dialog, E_LANG_CIRCLE_VALUE_BODY, SessionCircle_GetValue(index), SessionCircle_GetMax(index));
         Dialog_Show(playerid, D_ITEM_TEXT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_CIRCLE_TITLE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
@@ -29,7 +23,6 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     LangF(playerid, dialog, sizeof dialog, E_LANG_TEXT_BODY, string);
 
     Dialog_Show(playerid, D_ITEM_TEXT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_TEXT_TITLE), dialog, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_CANCEL));
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
     return Y_HOOKS_BREAK_RETURN_1;
 }
 
@@ -52,8 +45,6 @@ Dialog:D_ITEM_TEXT(playerid, response, listitem, inputtext[]) {
     if(response && !isnull(inputtext)) {
 
         new index = TaskBarTextDraw_GetSelected(playerid);
-<<<<<<< HEAD
-=======
         if(SessionCircle_IsCircle(index)) {
             new value;
             if(sscanf(inputtext, "d", value) || value < 0) return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_VALUE));
@@ -64,7 +55,6 @@ Dialog:D_ITEM_TEXT(playerid, response, listitem, inputtext[]) {
             SessionTextDrawData_SetString(index, buff);
             return 1;
         }
->>>>>>> f8c702ac0dc8667aea488afa3ff526e6c208f9cb
         SessionTextDrawData_SetString(index, inputtext);
     }
     return true;
