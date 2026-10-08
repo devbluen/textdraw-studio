@@ -9,9 +9,37 @@ stock bool:SessionCircle_IsCircle(index)
     }
     return false;
 }
+stock E_LANG:SessionCircle_GetNameKey(index)
+{
+    switch(e_SessionDraw[index][E_SESSIONDRAW_FONT]) {
+        case E_TYPEFONT_HEXAGON: return E_LANG_PROGRESS_HEXAGON;
+        case E_TYPEFONT_DIAMOND: return E_LANG_PROGRESS_DIAMOND;
+        case E_TYPEFONT_SQUARE: return E_LANG_PROGRESS_SQUARE;
+        case E_TYPEFONT_TRIANGLE: return E_LANG_PROGRESS_TRIANGLE;
+        case E_TYPEFONT_PARENS: return E_LANG_PROGRESS_PARENS;
+        case E_TYPEFONT_ARC: return E_LANG_PROGRESS_ARC;
+    }
+    return E_LANG_PROGRESS_CIRCLE;
+}
 stock SessionCircle_GetValue(index)
 {
     return e_SessionDraw[index][E_SESSIONDRAW_MODEL];
+}
+stock SessionCircle_SetValue(index, value, bool:execute_query = true)
+{
+    if(!SessionCircle_IsCircle(index)) return 0;
+    new maxv = SessionCircle_GetMax(index);
+    if(value < 0) value = 0;
+    if(value > maxv) value = maxv;
+    e_SessionDraw[index][E_SESSIONDRAW_MODEL] = value;
+    if(execute_query)
+    {
+        DB_FreeResultSet(
+            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model = %i WHERE id = %i", value, SessionTextDrawData_GetUniqueId(index))
+        );
+    }
+    SessionCircle_Refresh(index);
+    return 1;
 }
 stock SessionCircle_GetMax(index)
 {

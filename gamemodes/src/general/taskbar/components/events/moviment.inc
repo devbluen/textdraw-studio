@@ -58,7 +58,7 @@ hook OnPlayerTaskBarDrawUnSelected(playerid) {
 
 public OnTaskBarMovimentUpdate(playerid) {
 
-    if(Dialog_Opened(playerid)) return;
+    if(Dialog_Created(playerid)) return;
 
     new 
         KEY:keys, 

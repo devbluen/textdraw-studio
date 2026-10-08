@@ -228,7 +228,7 @@ static stock Util_WebChoose(playerid, const callback[]) {
     new dialog[356 + 1];
     format(dialog, sizeof dialog, "%s", L(playerid, E_LANG_COL_FORMATS));
 
-    Dialog_Open(playerid, callback, DIALOG_STYLE_INPUT, L(playerid, E_LANG_COLORS), dialog, L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_PREVIOUS));
+    Dialog_Create(playerid, callback, DIALOG_STYLE_INPUT, L(playerid, E_LANG_COLORS), dialog, L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_PREVIOUS));
 }
 
 

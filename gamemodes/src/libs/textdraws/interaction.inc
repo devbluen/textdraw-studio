@@ -22,11 +22,8 @@ hook OnPlayerDisconnect(playerid, reason) {
 
 hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
-    if(Dialog_Opened(playerid))
-        return Y_HOOKS_BREAK_RETURN_1;
-
     if(clickedid == INVALID_TEXT_DRAW) {
-        
+
         if(e_TextdrawData[playerid][E_TEXTDRAW_DATA_CANCEL]) {
             e_TextdrawData[playerid][E_TEXTDRAW_DATA_CANCEL] = false;
             return Y_HOOKS_BREAK_RETURN_1;
@@ -35,7 +32,9 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
         if(!SelectedTextDraw(playerid))
             return Y_HOOKS_BREAK_RETURN_1;
 
-        if(e_TextdrawData[playerid][E_TEXTDRAW_DATA_WAIT] >= gettime()) {
+        // The client already left selection mode (ESC with a dialog open), restore it
+        // otherwise the taskbar stops receiving clicks after the dialog is closed
+        if(Dialog_Created(playerid) || e_TextdrawData[playerid][E_TEXTDRAW_DATA_WAIT] >= gettime()) {
             ReSelectTextDraw(playerid);
             return Y_HOOKS_BREAK_RETURN_1;
         }
@@ -44,12 +43,18 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid) {
 
         if(e_TextdrawData[playerid][E_TEXTDRAW_DATA_SELECTIONS])
             ReSelectTextDraw(playerid);
+
+        return Y_HOOKS_CONTINUE_RETURN_1;
     }
+
+    if(Dialog_Created(playerid))
+        return Y_HOOKS_BREAK_RETURN_1;
+
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 
 hook OnPlayerClickPlayerTD(playerid, PlayerText:playertextid) {
-    if(Dialog_Opened(playerid)) 
+    if(Dialog_Created(playerid)) 
         return Y_HOOKS_BREAK_RETURN_1;
 
     if(!SelectedTextDraw(playerid))

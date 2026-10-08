@@ -72,7 +72,7 @@ stock TaskBarTextDraw_Select(playerid, index, bool:effect = true) {
 
 stock TaskBarTextDraw_UnSelect(playerid) {
 
-    Dialog_Hide(playerid);
+    Dialog_Close(playerid);
     TaskBarTextDraw_SetSelected(playerid, -1);
     CallLocalFunction("OnPlayerTaskBarDrawUnSelected", "i", playerid);
 }

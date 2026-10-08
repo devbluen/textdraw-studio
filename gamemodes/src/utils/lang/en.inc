@@ -259,5 +259,15 @@
     "{FFFFFF}Enter the desired progress value below.\n\nCurrent: {"#HEX_DEFAULT"}%d{FFFFFF}\nMax: {"#HEX_INFO"}%d{FFFFFF}",
     "{FFFFFF}Enter the desired circle size below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
     "{FFFFFF}Enter the desired thickness below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
-    "{FFFFFF}Enter the desired polygons step below.\n\nCurrent: {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\nLower values increase quality but use more textdraws.",
-    "{FFFFFF}Enter the desired max value below.\n\nCurrent: {"#HEX_DEFAULT"}%d{FFFFFF}"
+    "{FFFFFF}Enter the desired polygons step below.\n\nCurrent: {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\n{"#HEX_INFO"}Warning: {FFFFFF}lower values increase quality, but may reach the textdraw limit.",
+    "{FFFFFF}Enter the desired max value below.\n\nCurrent: {"#HEX_DEFAULT"}%d{FFFFFF}",
+    "Invert: %s",
+    "Progress {CCCCCC}(Progress bars)",
+    "Progress",
+    "Circle progress",
+    "Hexagon progress",
+    "Diamond progress",
+    "Square progress",
+    "Triangle progress",
+    "Parenthesis progress",
+    "Arc progress"

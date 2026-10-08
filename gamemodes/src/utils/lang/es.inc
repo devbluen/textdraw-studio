@@ -259,5 +259,15 @@
     "{FFFFFF}Introduce el valor del progreso abajo.\n\nActual: {"#HEX_DEFAULT"}%d{FFFFFF}\nMaximo: {"#HEX_INFO"}%d{FFFFFF}",
     "{FFFFFF}Introduce el tamano del circulo abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
     "{FFFFFF}Introduce el grosor abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
-    "{FFFFFF}Introduce el paso de poligonos abajo.\n\nActual: {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\nValores mas bajos aumentan la calidad pero usan mas textdraws.",
-    "{FFFFFF}Introduce el valor maximo abajo.\n\nActual: {"#HEX_DEFAULT"}%d{FFFFFF}"
+    "{FFFFFF}Introduce el paso de poligonos abajo.\n\nActual: {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\n{"#HEX_INFO"}Atencion: {FFFFFF}valores mas bajos aumentan la calidad, pero pueden alcanzar el limite de textdraws.",
+    "{FFFFFF}Introduce el valor maximo abajo.\n\nActual: {"#HEX_DEFAULT"}%d{FFFFFF}",
+    "Invertir: %s",
+    "Progress {CCCCCC}(Barras de progreso)",
+    "Progress",
+    "Progreso circular",
+    "Progreso hexagonal",
+    "Progreso diamante",
+    "Progreso cuadrado",
+    "Progreso triangular",
+    "Progreso parentesis",
+    "Progreso arco"

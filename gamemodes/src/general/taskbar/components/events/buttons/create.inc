@@ -12,7 +12,7 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type)
     strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_SPRITE_BROWSER));
     strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_MODELS));
     strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_SPRITE_WHITE));
-    strcat(dialog, "Progress {CCCCCC}(shapesProgress.inc)");
+    strcat(dialog, L(playerid, E_LANG_CREATE_PROGRESS));
 
     Dialog_Show(playerid, D_CREATION, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_CREATION), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL));
     return Y_HOOKS_BREAK_RETURN_1;
@@ -77,14 +77,14 @@ Dialog:D_CREATION(playerid, response, listitem, inputtext[])
             case 4:
             {
                 new dialog[64 * 7];
-                strcat(dialog, "Circle Progress\n");
-                strcat(dialog, "Hexagon Progress\n");
-                strcat(dialog, "Diamond Progress\n");
-                strcat(dialog, "Square Progress\n");
-                strcat(dialog, "Triangle Progress\n");
-                strcat(dialog, "Parens Progress\n");
-                strcat(dialog, "Arc Progress");
-                Dialog_Show(playerid, D_PROGRESS_CREATE, DIALOG_STYLE_TABLIST, "Progress", dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL));
+                strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_CIRCLE));
+                strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_HEXAGON));
+                strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_DIAMOND));
+                strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_SQUARE));
+                strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_TRIANGLE));
+                strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_PARENS));
+                strcat(dialog, L(playerid, E_LANG_PROGRESS_ARC));
+                Dialog_Show(playerid, D_PROGRESS_CREATE, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_PROGRESS_TITLE), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL));
                 return true;
             }
         }

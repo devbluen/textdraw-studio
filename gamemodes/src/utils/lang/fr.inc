@@ -259,5 +259,15 @@
     "{FFFFFF}Saisis la valeur de progression ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%d{FFFFFF}\nMax : {"#HEX_INFO"}%d{FFFFFF}",
     "{FFFFFF}Saisis la taille du cercle ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
     "{FFFFFF}Saisis l'epaisseur ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
-    "{FFFFFF}Saisis le pas des polygones ci-dessous.\n\nActuel : {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\nDes valeurs plus basses augmentent la qualite mais utilisent plus de textdraws.",
-    "{FFFFFF}Saisis la valeur max ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%d{FFFFFF}"
+    "{FFFFFF}Saisis le pas des polygones ci-dessous.\n\nActuel : {"#HEX_DEFAULT"}%0.1f{FFFFFF}\n\n{"#HEX_INFO"}Attention : {FFFFFF}des valeurs plus basses augmentent la qualite, mais peuvent atteindre la limite de textdraws.",
+    "{FFFFFF}Saisis la valeur max ci-dessous.\n\nActuelle : {"#HEX_DEFAULT"}%d{FFFFFF}",
+    "Inverser : %s",
+    "Progress {CCCCCC}(Barres de progression)",
+    "Progress",
+    "Progression cercle",
+    "Progression hexagone",
+    "Progression losange",
+    "Progression carre",
+    "Progression triangle",
+    "Progression parentheses",
+    "Progression arc"

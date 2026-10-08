@@ -36,12 +36,10 @@ stock SessionCircle_ShowConfig(playerid)
 
         new E_TYPEFONT:f = e_SessionDraw[index][E_SESSIONDRAW_FONT];
         if(f == E_TYPEFONT_TRIANGLE || f == E_TYPEFONT_PARENS) {
-            new string[20 + 1];
-            format(string, sizeof string, "Inverter: %s", e_SessionDraw[index][E_SESSIONDRAW_INVERT] ? "ON" : "OFF");
-            DialogMod_Add(playerid, string, 5, e_SessionDraw[index][E_SESSIONDRAW_INVERT]);
+            DialogMod_Add(playerid, L(playerid, E_LANG_CIRCLE_INVERT), 5, e_SessionDraw[index][E_SESSIONDRAW_INVERT] ? L(playerid, E_LANG_ENABLED) : L(playerid, E_LANG_DISABLED));
         }
     }
-    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, e_SessionDraw[index][E_SESSIONDRAW_TEXT], L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL), "D_CIRCLE_CFG", using inline CircleOpt);
+    DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, SessionCircle_GetNameKey(index)), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL), "D_CIRCLE_CFG", using inline CircleOpt);
     return 1;
 }
 DialogMod:D_CIRCLE_CFG(playerid, response, inputtext[], params)
@@ -52,37 +50,33 @@ DialogMod:D_CIRCLE_CFG(playerid, response, inputtext[], params)
         if(!SessionCircle_IsCircle(index)) return 1;
         if(params == 0)
         {
-            new d[160 + 1];
+            new d[LANG_STRING_SIZE];
             LangF(playerid, d, sizeof d, E_LANG_CIRCLE_VALUE_BODY, SessionCircle_GetValue(index), SessionCircle_GetMax(index));
-            Dialog_Show(playerid, D_CIRCLE_VALUE, DIALOG_STYLE_INPUT, e_SessionDraw[index][E_SESSIONDRAW_TEXT], d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
+            Dialog_Show(playerid, D_CIRCLE_VALUE, DIALOG_STYLE_INPUT, L(playerid, SessionCircle_GetNameKey(index)), d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
         }
         else if(params == 1)
         {
-            new d[220 + 1];
-            new Float:curSize = e_SessionDraw[index][E_SESSIONDRAW_SIZE][0];
-            new Float:curThick = e_SessionDraw[index][E_SESSIONDRAW_SIZE][1];
-            new Float:curPoly = e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][0];
-            format(d, sizeof d, "{FFFFFF}Tamanho: %0.2f{FFFFFF}\nEspessura: %0.2f{FFFFFF}\nPoligonos: %0.1f{FFFFFF}", curSize, curThick, curPoly);
-            Dialog_Show(playerid, D_CIRCLE_SIZE, DIALOG_STYLE_INPUT, e_SessionDraw[index][E_SESSIONDRAW_TEXT], d, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_BACK));
+            new d[LANG_STRING_SIZE];
+            LangF(playerid, d, sizeof d, E_LANG_CIRCLE_SIZE_BODY, e_SessionDraw[index][E_SESSIONDRAW_SIZE][0]);
+            Dialog_Show(playerid, D_CIRCLE_SIZE, DIALOG_STYLE_INPUT, L(playerid, SessionCircle_GetNameKey(index)), d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
         }
         else if(params == 2)
         {
-            new d[160 + 1];
+            new d[LANG_STRING_SIZE];
             LangF(playerid, d, sizeof d, E_LANG_CIRCLE_THICK_BODY, e_SessionDraw[index][E_SESSIONDRAW_SIZE][1]);
-            Dialog_Show(playerid, D_CIRCLE_THICK, DIALOG_STYLE_INPUT, e_SessionDraw[index][E_SESSIONDRAW_TEXT], d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
+            Dialog_Show(playerid, D_CIRCLE_THICK, DIALOG_STYLE_INPUT, L(playerid, SessionCircle_GetNameKey(index)), d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
         }
         else if(params == 3)
         {
-            new d[220 + 1];
+            new d[LANG_STRING_SIZE];
             LangF(playerid, d, sizeof d, E_LANG_CIRCLE_POLY_BODY, e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][0]);
-            strcat(d, "\n\n{BADC58}Atenção: quanto menor o valor, maior a qualidade, mas pode bater o limite de textdraws!");
-            Dialog_Show(playerid, D_CIRCLE_POLY, DIALOG_STYLE_INPUT, e_SessionDraw[index][E_SESSIONDRAW_TEXT], d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
+            Dialog_Show(playerid, D_CIRCLE_POLY, DIALOG_STYLE_INPUT, L(playerid, SessionCircle_GetNameKey(index)), d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
         }
         else if(params == 4)
         {
-            new d[160 + 1];
+            new d[LANG_STRING_SIZE];
             LangF(playerid, d, sizeof d, E_LANG_CIRCLE_MAX_BODY, SessionCircle_GetMax(index));
-            Dialog_Show(playerid, D_CIRCLE_MAX, DIALOG_STYLE_INPUT, e_SessionDraw[index][E_SESSIONDRAW_TEXT], d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
+            Dialog_Show(playerid, D_CIRCLE_MAX, DIALOG_STYLE_INPUT, L(playerid, SessionCircle_GetNameKey(index)), d, L(playerid, E_LANG_BTN_CHANGE), L(playerid, E_LANG_BTN_BACK));
         }
         else if(params == 5)
         {
@@ -101,10 +95,7 @@ Dialog:D_CIRCLE_VALUE(playerid, response, listitem, inputtext[])
     {
         new value;
         if(sscanf(inputtext, "d", value) || value < 0) return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_INVALID_VALUE));
-        new index = TaskBarTextDraw_GetSelected(playerid);
-        new maxv = SessionCircle_GetMax(index);
-        if(value > maxv) value = maxv;
-        e_SessionDraw[index][E_SESSIONDRAW_MODEL] = value;
+        SessionCircle_SetValue(TaskBarTextDraw_GetSelected(playerid), value);
     }
     SessionCircle_ShowConfig(playerid);
     return 1;
@@ -161,10 +152,9 @@ Dialog:D_CIRCLE_MAX(playerid, response, listitem, inputtext[])
         new index = TaskBarTextDraw_GetSelected(playerid);
         new Float:poly = e_SessionDraw[index][E_SESSIONDRAW_LETTER_SIZE][0];
         SessionTextDrawData_SetLettSize(index, poly, float(maxv));
-        new value = SessionCircle_GetValue(index);
-        if(value > maxv)
+        if(SessionCircle_GetValue(index) > maxv)
         {
-            e_SessionDraw[index][E_SESSIONDRAW_MODEL] = maxv;
+            SessionCircle_SetValue(index, maxv);
         }
     }
     SessionCircle_ShowConfig(playerid);
