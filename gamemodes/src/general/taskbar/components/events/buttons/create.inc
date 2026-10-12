@@ -1,18 +1,19 @@
 
-// Includes
+            // Includes
 #include <YSI_Coding\y_hooks>
-hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type)
-{
+
+hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
     if (type != E_TYPETASKBUTTON_CREATE)
         return Y_HOOKS_CONTINUE_RETURN_1;
 
-    new dialog[64 * 5];
+    new dialog[64 * 6];
     strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_NORMAL));
     strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_SPRITE_BROWSER));
     strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_MODELS));
     strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_SPRITE_WHITE));
-    strcat(dialog, L(playerid, E_LANG_CREATE_PROGRESS));
+    strcatEx(dialog, "%s\n", L(playerid, E_LANG_CREATE_PROGRESS));
+    strcatEx(dialog, "%s", L(playerid, E_LANG_CREATE_ROUNDED));
 
     Dialog_Show(playerid, D_CREATION, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_CREATION), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL));
     return Y_HOOKS_BREAK_RETURN_1;
@@ -85,6 +86,16 @@ Dialog:D_CREATION(playerid, response, listitem, inputtext[])
                 strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_PARENS));
                 strcat(dialog, L(playerid, E_LANG_PROGRESS_ARC));
                 Dialog_Show(playerid, D_PROGRESS_CREATE, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_PROGRESS_TITLE), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL));
+                return true;
+            }
+            case 5:
+            {
+                index = SessionTextDrawData_Create(E_TYPEITEM_ROUNDED);
+                if (index == -1)
+                    return true;
+
+                TaskBarTextDraw_Select(playerid, index, false);
+                SessionRounded_ShowConfig(playerid);
                 return true;
             }
         }

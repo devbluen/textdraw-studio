@@ -20,6 +20,7 @@ hook OnPlayerClickTextDraw(playerid, Text:clickedid)
 stock SessionCircle_ShowConfig(playerid)
 {
     new index = TaskBarTextDraw_GetSelected(playerid);
+    if(SessionRounded_IsRounded(index)) return SessionRounded_ShowConfig(playerid);
     if(!SessionCircle_IsCircle(index)) return 0;
     new value = SessionCircle_GetValue(index);
     new maxv = SessionCircle_GetMax(index);

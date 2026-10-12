@@ -270,4 +270,13 @@
     "Progresso quadrado",
     "Progresso triangular",
     "Progresso parenteses",
-    "Progresso arco"
+    "Progresso arco",
+    "Background arredondado {CCCCCC}(Border radius)",
+    "Background arredondado",
+    "Largura: {"#HEX_DEFAULT"}%0.2f",
+    "Altura: {"#HEX_DEFAULT"}%0.2f",
+    "Border radius: {"#HEX_DEFAULT"}%0.2f {CCCCCC}(aplicado: %0.2f)",
+    "Redimensionar pelas setas",
+    "{FFFFFF}Digite a largura do background abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Digite a altura do background abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Digite o border radius abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para o tamanho atual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Dica: {FFFFFF}assim como no CSS, valores acima do maximo viram uma pilula."

@@ -7,7 +7,8 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
     switch(type) {
         case E_TYPETASKBUTTON_POSITION: {TaskBarKey_Set(playerid, E_TYPEKEY_POSITION); return Y_HOOKS_BREAK_RETURN_1;}
         case E_TYPETASKBUTTON_SIZE: {
-            if(!SessionCircle_IsCircle(TaskBarTextDraw_GetSelected(playerid)))
+            new index = TaskBarTextDraw_GetSelected(playerid);
+            if(!SessionCircle_IsCircle(index) || SessionRounded_IsRounded(index))
                 TaskBarKey_Set(playerid, E_TYPEKEY_SIZE);
             return Y_HOOKS_BREAK_RETURN_1;
         }

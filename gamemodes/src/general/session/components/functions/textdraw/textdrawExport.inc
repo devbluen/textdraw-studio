@@ -96,6 +96,11 @@ static stock SessionTextDrawExport_Player(index, DBResult:cache) {
 
     do
     {
+        if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ROUNDED) {
+            DB_GetFieldStringByName(cache, "playerVariable", variable);
+            SessionTextDrawExport_Rounded(index, cache, variable, count, true);
+            continue;
+        }
         if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_CIRCLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_HEXAGON || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_DIAMOND || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_TRIANGLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_PARENS || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ARC) {
             new Float:cpos[2], Float:csize[2], Float:clett[2], cvalue, cmax, ccolor, cbg;
             DB_GetFieldStringByName(cache, "position", stringBuff);
@@ -226,6 +231,11 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
 
     do
     {
+        if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ROUNDED) {
+            DB_GetFieldStringByName(cache, "globalVariable", variable);
+            SessionTextDrawExport_Rounded(index, cache, variable, count, false);
+            continue;
+        }
         if(E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_CIRCLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_HEXAGON || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_DIAMOND || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_TRIANGLE || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_PARENS || E_TYPEFONT:DB_GetFieldIntByName(cache, "font") == E_TYPEFONT_ARC) {
             new Float:cpos[2], Float:csize[2], Float:clett[2], cvalue, cmax, ccolor, cbg;
             DB_GetFieldStringByName(cache, "position", stringBuff);
@@ -242,7 +252,9 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
             if(cvalue > cmax) cvalue = cmax;
             ccolor = DB_GetFieldIntByName(cache, "color");
             cbg = DB_GetFieldIntByName(cache, "colorBackground");
+
             Export_Add(index, E_TYPEEXPORT_TEXT, " ");
+            
             switch(E_TYPEFONT:DB_GetFieldIntByName(cache, "font")) {
                 case E_TYPEFONT_CIRCLE: {
                     Export_Add(index, E_TYPEEXPORT_TEXT, "// Circle Progress");
@@ -335,4 +347,60 @@ static stock SessionTextDrawExport_Global(index, DBResult:cache) {
         count++;
     }
     while(DB_SelectNextRow(cache));
+}
+
+static stock SessionTextDrawExport_Rounded(index, DBResult:cache, const variable[], &count, bool:player) {
+
+    new
+        stringBuff[76 + 1],
+        variableBuff[30 + 8 + 1],
+        prefix[15 + 1],
+        createFunc[20 + 1],
+        sprite[32],
+        color = DB_GetFieldIntByName(cache, "color"),
+        Float:position[2],
+        Float:size[2],
+        Float:letterSize[2],
+        Float:piece[4]
+    ;
+
+    DB_GetFieldStringByName(cache, "position", stringBuff);
+    sscanf(stringBuff, "p<,>a<f>[2]", position);
+    DB_GetFieldStringByName(cache, "size", stringBuff);
+    sscanf(stringBuff, "p<,>a<f>[2]", size);
+    DB_GetFieldStringByName(cache, "letter_size", stringBuff);
+    sscanf(stringBuff, "p<,>a<f>[2]", letterSize);
+
+    if(player) {
+        strcat(prefix, "PlayerTextDraw");
+        strcat(createFunc, "CreatePlayerTextDraw");
+    }
+    else {
+        strcat(prefix, "TextDraw");
+        strcat(createFunc, "TextDrawCreate");
+    }
+
+    Export_Add(index, E_TYPEEXPORT_TEXT, " ");
+    Export_Add(index, E_TYPEEXPORT_TEXT, va_return("// Rounded Box (%0.2f x %0.2f | border radius: %0.2f)", size[0], size[1], SessionRounded_ClampRadius(size[0], size[1], letterSize[0])));
+
+    for(new p = 0; p < ROUNDED_MAX_PIECES; p++) {
+
+        if(!SessionRounded_GetPiece(p, position[0], position[1], size[0], size[1], letterSize[0], piece[0], piece[1], piece[2], piece[3], sprite))
+            continue;
+
+        if(player) format(variableBuff, sizeof variableBuff, "%s[playerid][%d]", variable, count);
+        else format(variableBuff, sizeof variableBuff, "%s[%d]", variable, count);
+
+        Export_Add(index, E_TYPEEXPORT_CREATE, va_return("%s(%s, %f, %f, %s)", createFunc, variableBuff, piece[0], piece[1], sprite));
+        Export_Add(index, E_TYPEEXPORT_TEXT_SIZE, va_return("%sTextSize(%s, %f, %f)", prefix, variableBuff, piece[2], piece[3]));
+        Export_Add(index, E_TYPEEXPORT_ALIGNMENT, va_return("%sAlignment(%s, %i)", prefix, variableBuff, _:E_TYPEALIGNMENT_LEFT));
+        Export_Add(index, E_TYPEEXPORT_COLOR, va_return("%sColor(%s, %i)", prefix, variableBuff, color));
+        Export_Add(index, E_TYPEEXPORT_BACKGROUND_COLOR, va_return("%sBackgroundColor(%s, %i)", prefix, variableBuff, 255));
+        Export_Add(index, E_TYPEEXPORT_FONT, va_return("%sFont(%s, %i)", prefix, variableBuff, _:E_TYPEFONT_SPRITE));
+        Export_Add(index, E_TYPEEXPORT_SHADOW, va_return("%sSetShadow(%s, %i)", prefix, variableBuff, 0));
+        Export_Add(index, E_TYPEEXPORT_OUTLINE, va_return("%sSetOutline(%s, %i)", prefix, variableBuff, 0));
+        Export_Add(index, E_TYPEEXPORT_PROPORTIONAL, va_return("%sSetProportional(%s, %i)", prefix, variableBuff, 1));
+        Export_Add(index, E_TYPEEXPORT_TEXT, " ");
+        count++;
+    }
 }

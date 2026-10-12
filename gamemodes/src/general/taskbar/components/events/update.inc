@@ -72,6 +72,11 @@ stock TaskBarEventUpdate_Buttons(playerid) {
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR_BG);
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_MODELS);
                         }
+                        case E_TYPEFONT_ROUNDED:
+                        {
+                            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_MODELS);
+                            TaskBarButton_Disable(playerid, E_TYPETASKBUTTON_SELECTABLE);
+                        }
                         case E_TYPEFONT_CIRCLE, E_TYPEFONT_HEXAGON, E_TYPEFONT_DIAMOND, E_TYPEFONT_SQUARE, E_TYPEFONT_TRIANGLE, E_TYPEFONT_PARENS, E_TYPEFONT_ARC:
                         {
                             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR_BG);

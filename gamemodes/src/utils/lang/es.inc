@@ -270,4 +270,13 @@
     "Progreso cuadrado",
     "Progreso triangular",
     "Progreso parentesis",
-    "Progreso arco"
+    "Progreso arco",
+    "Fondo redondeado {CCCCCC}(Border radius)",
+    "Fondo redondeado",
+    "Ancho: {"#HEX_DEFAULT"}%0.2f",
+    "Alto: {"#HEX_DEFAULT"}%0.2f",
+    "Border radius: {"#HEX_DEFAULT"}%0.2f {CCCCCC}(aplicado: %0.2f)",
+    "Redimensionar con las flechas",
+    "{FFFFFF}Ingrese el ancho del fondo abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Ingrese el alto del fondo abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Ingrese el border radius abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para el tamano actual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Consejo: {FFFFFF}igual que en CSS, valores mayores al maximo forman una pildora."

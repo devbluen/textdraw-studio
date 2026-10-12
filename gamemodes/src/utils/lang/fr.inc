@@ -270,4 +270,13 @@
     "Progression carre",
     "Progression triangle",
     "Progression parentheses",
-    "Progression arc"
+    "Progression arc",
+    "Fond arrondi {CCCCCC}(Border radius)",
+    "Fond arrondi",
+    "Largeur: {"#HEX_DEFAULT"}%0.2f",
+    "Hauteur: {"#HEX_DEFAULT"}%0.2f",
+    "Border radius: {"#HEX_DEFAULT"}%0.2f {CCCCCC}(applique: %0.2f)",
+    "Redimensionner avec les fleches",
+    "{FFFFFF}Entrez la largeur du fond ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Entrez la hauteur du fond ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Entrez le border radius ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximum pour la taille actuelle: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Astuce: {FFFFFF}comme en CSS, une valeur au-dessus du maximum forme une pilule."

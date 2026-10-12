@@ -13,7 +13,8 @@ enum E_TYPEFONT {
     E_TYPEFONT_SQUARE = 9,
     E_TYPEFONT_TRIANGLE = 10,
     E_TYPEFONT_PARENS = 11,
-    E_TYPEFONT_ARC = 12
+    E_TYPEFONT_ARC = 12,
+    E_TYPEFONT_ROUNDED = 13
 };
 
 static enum E_DATAINFO {
@@ -36,7 +37,8 @@ static const
         {E_TYPEFONT_SQUARE, "font2", "TEXT_DRAW_FONT_2"},
         {E_TYPEFONT_TRIANGLE, "font2", "TEXT_DRAW_FONT_2"},
         {E_TYPEFONT_PARENS, "font2", "TEXT_DRAW_FONT_2"},
-        {E_TYPEFONT_ARC, "font2", "TEXT_DRAW_FONT_2"}
+        {E_TYPEFONT_ARC, "font2", "TEXT_DRAW_FONT_2"},
+        {E_TYPEFONT_ROUNDED, "fontSprite", "TEXT_DRAW_FONT_SPRITE_DRAW"}
     }
 ;
 

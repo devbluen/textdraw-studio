@@ -270,4 +270,13 @@
     "Square progress",
     "Triangle progress",
     "Parenthesis progress",
-    "Arc progress"
+    "Arc progress",
+    "Rounded Background {CCCCCC}(Border radius)",
+    "Rounded Background",
+    "Width: {"#HEX_DEFAULT"}%0.2f",
+    "Height: {"#HEX_DEFAULT"}%0.2f",
+    "Border radius: {"#HEX_DEFAULT"}%0.2f {CCCCCC}(applied: %0.2f)",
+    "Resize with arrow keys",
+    "{FFFFFF}Enter the background width below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Enter the background height below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
+    "{FFFFFF}Enter the border radius below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMax for current size: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Tip: {FFFFFF}just like CSS, values above the max turn it into a pill."

@@ -400,6 +400,32 @@ stock SessionTextDrawData_Create(E_TYPEITEM:type)
             );
             e_SessionDraw[index][E_SESSIONDRAW_INVERT] = false;
         }
+        case E_TYPEITEM_ROUNDED:
+        {
+            // size = largura/altura, letterSize[0] = border radius
+            SessionTextDrawData_Insert(
+                .project_id = project_id,
+                .index = index,
+                .text = "Rounded Box",
+                .position = Float:{250.0, 150.0},
+                .size = Float:{150.0, 100.0},
+                .letterSize = Float:{10.0, 0.0},
+                .font = E_TYPEFONT_ROUNDED,
+                .align = E_TYPEALIGNMENT_LEFT,
+                .proportion = true,
+                .outline = 0,
+                .shadow = 0,
+                .color = RGB::RGBAToHex(25, 25, 25, 255),
+                .colorBackground = RGB::RGBAToHex(0, 0, 0, 0),
+                .colorBox = RGB::RGBAToHex(0, 0, 0, 0),
+                .selectable = false,
+                .mode = E_TYPEMODE_PLAYER,
+                .box = false,
+                .model = 0,
+                .modelRotation = Float:{0.0, 0.0, 0.0, 1.0},
+                .modelColors = {0, 0}
+            );
+        }
     }
     return index;
 }
@@ -869,6 +895,12 @@ stock SessionTextDrawData_SetLettSize(index, Float:x, Float:y, bool:execute_quer
 stock SessionTextDrawData_SetSize(index, Float:x, Float:y, bool:execute_query = true)
 {
 
+    if (SessionRounded_IsRounded(index))
+    {
+        if (x < ROUNDED_MIN_SIZE) x = ROUNDED_MIN_SIZE;
+        if (y < ROUNDED_MIN_SIZE) y = ROUNDED_MIN_SIZE;
+    }
+
     e_SessionDraw[index][E_SESSIONDRAW_SIZE][0] = x;
     e_SessionDraw[index][E_SESSIONDRAW_SIZE][1] = y;
 
@@ -940,7 +972,7 @@ stock SessionTextDrawData_SetString(index, const string[], bool:execute_query = 
 stock SessionTextDrawData_SetMode(index, E_TYPEMODE:type, bool:execute_query = true)
 {
 
-    if (SessionCircle_IsCircle(index)) return;
+    if (SessionCircle_IsCircle(index) && !SessionRounded_IsRounded(index)) return;
 
     e_SessionDraw[index][E_SESSIONDRAW_MODE] = type;
 

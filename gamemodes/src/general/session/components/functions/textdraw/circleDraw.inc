@@ -5,7 +5,7 @@ stock bool:SessionCircle_IsCircle(index)
 {
     if(index < 0 || index >= MAX_TEXTDRAWS_STUDIO) return false;
     switch(e_SessionDraw[index][E_SESSIONDRAW_FONT]) {
-        case E_TYPEFONT_CIRCLE, E_TYPEFONT_HEXAGON, E_TYPEFONT_DIAMOND, E_TYPEFONT_SQUARE, E_TYPEFONT_TRIANGLE, E_TYPEFONT_PARENS, E_TYPEFONT_ARC: return true;
+        case E_TYPEFONT_CIRCLE, E_TYPEFONT_HEXAGON, E_TYPEFONT_DIAMOND, E_TYPEFONT_SQUARE, E_TYPEFONT_TRIANGLE, E_TYPEFONT_PARENS, E_TYPEFONT_ARC, E_TYPEFONT_ROUNDED: return true;
     }
     return false;
 }
@@ -18,6 +18,7 @@ stock E_LANG:SessionCircle_GetNameKey(index)
         case E_TYPEFONT_TRIANGLE: return E_LANG_PROGRESS_TRIANGLE;
         case E_TYPEFONT_PARENS: return E_LANG_PROGRESS_PARENS;
         case E_TYPEFONT_ARC: return E_LANG_PROGRESS_ARC;
+        case E_TYPEFONT_ROUNDED: return E_LANG_ROUNDED_TITLE;
     }
     return E_LANG_PROGRESS_CIRCLE;
 }
@@ -71,6 +72,8 @@ stock SessionCircle_Destroy(index)
 }
 stock SessionCircle_Create(index)
 {
+    if(SessionRounded_IsRounded(index)) return SessionRounded_Create(index);
+
     new Float:px = e_SessionDraw[index][E_SESSIONDRAW_POSITION][0];
     new Float:py = e_SessionDraw[index][E_SESSIONDRAW_POSITION][1];
     new Float:size = e_SessionDraw[index][E_SESSIONDRAW_SIZE][0];
@@ -344,7 +347,7 @@ stock SessionCircle_FindByDraw(Text:draw)
 {
     foreach(new i: SessionDraws)
     {
-        if(e_SessionDraw[i][E_SESSIONDRAW_FONT] != E_TYPEFONT_CIRCLE && e_SessionDraw[i][E_SESSIONDRAW_FONT] != E_TYPEFONT_HEXAGON && e_SessionDraw[i][E_SESSIONDRAW_FONT] != E_TYPEFONT_DIAMOND && e_SessionDraw[i][E_SESSIONDRAW_FONT] != E_TYPEFONT_SQUARE && e_SessionDraw[i][E_SESSIONDRAW_FONT] != E_TYPEFONT_TRIANGLE && e_SessionDraw[i][E_SESSIONDRAW_FONT] != E_TYPEFONT_PARENS && e_SessionDraw[i][E_SESSIONDRAW_FONT] != E_TYPEFONT_ARC) continue;
+        if(!SessionCircle_IsCircle(i)) continue;
         for(new c = 0; c < CircleDrawCount[i]; c++)
         {
             if(CircleDraw[i][c] == draw) return i;
@@ -363,6 +366,8 @@ stock SessionCircle_SetVisualColor(playerid, index)
 }
 stock SessionCircle_RestoreVisualColor(playerid, index)
 {
+    if(SessionRounded_IsRounded(index)) return SessionRounded_RestoreVisualColor(playerid, index);
+
     new value = e_SessionDraw[index][E_SESSIONDRAW_MODEL];
     new maxv = SessionCircle_GetMax(index);
     new color = e_SessionDraw[index][E_SESSIONDRAW_COLOR];

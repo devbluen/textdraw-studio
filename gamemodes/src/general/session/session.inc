@@ -16,6 +16,7 @@ hook OnUserLogin(playerid) {
 #include "src/general/session/components/functions/general.inc"
                     // Textdraws
 #include "src/general/session/components/functions/textdraw/circleDraw.inc"
+#include "src/general/session/components/functions/textdraw/roundedBox.inc"
 #include "src/general/session/components/functions/textdraw/textdraw.inc"
 #include "src/general/session/components/functions/textdraw/textdrawData.inc"
 #include "src/general/session/components/functions/textdraw/textdrawExport.inc"
