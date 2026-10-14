@@ -21,7 +21,7 @@ hook OnGameModeInit() {
     }
 
     // Check Version
-    HTTP(0, HTTP_GET, "raw.githubusercontent.com/devbluen/textdraws-studio/main/version.txt", "", "OnConnectionGithub");
+    HTTP(0, HTTP_GET, "raw.githubusercontent.com/devbluen/textdraw-studio/main/version.txt", "", "OnConnectionGithub");
 
     // Visuals
     SendRconCommand("name %s", "Textdraw Studio - "#STUDIO_VERSION"");
