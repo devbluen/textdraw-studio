@@ -1,4 +1,4 @@
-"Selecionar",
+    "Selecionar",
     "Fechar",
     "Cancelar",
     "Alterar",

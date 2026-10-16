@@ -121,8 +121,7 @@ stock SessionTextDrawData_Load(index, id)
 
 stock SessionTextDrawData_Destroy(index, bool:execute_query = true)
 {
-
-    if (execute_query)
+    if(execute_query)
     {
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "DELETE FROM textdraws WHERE id = %i", SessionTextDrawData_GetUniqueId(index))

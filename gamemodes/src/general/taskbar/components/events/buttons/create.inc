@@ -35,13 +35,10 @@ hook OnPlayerTaskBarButton(playerid, E_TYPETASKBUTTON:type) {
 
 Dialog:D_PROGRESS_CREATE(playerid, response, listitem, inputtext[])
 {
-
-    if (response)
+    if(response)
     {
-
         new index;
-
-        switch (listitem)
+        switch(listitem)
         {
             case 0: index = SessionTextDrawData_Create(E_TYPEITEM_CIRCLE);
             case 1: index = SessionTextDrawData_Create(E_TYPEITEM_HEXAGON);
@@ -59,13 +56,10 @@ Dialog:D_PROGRESS_CREATE(playerid, response, listitem, inputtext[])
 
 Dialog:D_CREATION(playerid, response, listitem, inputtext[])
 {
-
-    if (response)
+    if(response)
     {
-
         new index;
-
-        switch (listitem)
+        switch(listitem)
         {
             case 0: index = SessionTextDrawData_Create(E_TYPEITEM_TEXT);
             case 1:
@@ -84,7 +78,7 @@ Dialog:D_CREATION(playerid, response, listitem, inputtext[])
                 strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_SQUARE));
                 strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_TRIANGLE));
                 strcatEx(dialog, "%s\n", L(playerid, E_LANG_PROGRESS_PARENS));
-                strcat(dialog, L(playerid, E_LANG_PROGRESS_ARC));
+                strcatEx(dialog, "%s", L(playerid, E_LANG_PROGRESS_ARC));
                 Dialog_Show(playerid, D_PROGRESS_CREATE, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_PROGRESS_TITLE), dialog, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CANCEL));
                 return true;
             }
