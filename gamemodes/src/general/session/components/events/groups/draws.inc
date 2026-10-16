@@ -99,7 +99,7 @@ static stock SessionEventGroupDraws_Page(playerid, page) {
                     DB_GetFieldStringByName(cache, "text", string);
                     Util_CutString(string, 24);
 
-                    DialogMod_Add(playerid, "%d\t%s\t%s", indexDraw, indexDraw, string, SessionGroup_HasDrawId(indexGroup, indexDraw) ? "{"#HEX_INFO"}[ADDED]" : "");
+                    DialogMod_Add(playerid, "%d\t%s%s", indexDraw, indexDraw, SessionGroup_HasDrawId(indexGroup, indexDraw) ? "{"#HEX_DEFAULT"}" : "{CCCCCC}", string);
                 }
                 while(DB_SelectNextRow(cache));
             }

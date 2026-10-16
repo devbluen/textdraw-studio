@@ -279,4 +279,7 @@
     "Redimensionner avec les fleches",
     "{FFFFFF}Entrez la largeur du fond ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
     "{FFFFFF}Entrez la hauteur du fond ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
-    "{FFFFFF}Entrez le border radius ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximum pour la taille actuelle: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Astuce: {FFFFFF}comme en CSS, une valeur au-dessus du maximum forme une pilule."
+    "{FFFFFF}Entrez le border radius ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximum pour la taille actuelle: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Astuce: {FFFFFF}comme en CSS, une valeur au-dessus du maximum forme une pilule.",
+    "Copier le projet",
+    "{FFFFFF}Ecris ci-dessous le nom de la copie de ce projet.\n\nActuel : {"#HEX_DEFAULT"}%s{FFFFFF}",
+    ""#MESSAGE_GREEN"Le projet {CCCCCC}\"%s\"{FFFFFF} a ete copie avec succes."

@@ -279,4 +279,7 @@
     "Redimensionar pelas setas",
     "{FFFFFF}Digite a largura do background abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
     "{FFFFFF}Digite a altura do background abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
-    "{FFFFFF}Digite o border radius abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para o tamanho atual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Dica: {FFFFFF}assim como no CSS, valores acima do maximo viram uma pilula."
+    "{FFFFFF}Digite o border radius abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para o tamanho atual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Dica: {FFFFFF}assim como no CSS, valores acima do maximo viram uma pilula.",
+    "Copiar projeto",
+    "{FFFFFF}Digite abaixo o nome da copia deste projeto.\n\nAtual: {"#HEX_DEFAULT"}%s{FFFFFF}",
+    ""#MESSAGE_GREEN"O projeto {CCCCCC}\"%s\"{FFFFFF} foi copiado com sucesso."
