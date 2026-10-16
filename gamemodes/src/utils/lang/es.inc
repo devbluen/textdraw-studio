@@ -279,4 +279,7 @@
     "Redimensionar con las flechas",
     "{FFFFFF}Ingrese el ancho del fondo abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
     "{FFFFFF}Ingrese el alto del fondo abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
-    "{FFFFFF}Ingrese el border radius abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para el tamano actual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Consejo: {FFFFFF}igual que en CSS, valores mayores al maximo forman una pildora."
+    "{FFFFFF}Ingrese el border radius abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para el tamano actual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Consejo: {FFFFFF}igual que en CSS, valores mayores al maximo forman una pildora.",
+    "Copiar proyecto",
+    "{FFFFFF}Escribe abajo el nombre de la copia de este proyecto.\n\nActual: {"#HEX_DEFAULT"}%s{FFFFFF}",
+    ""#MESSAGE_GREEN"El proyecto {CCCCCC}\"%s\"{FFFFFF} se copio correctamente."

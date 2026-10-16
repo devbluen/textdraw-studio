@@ -9,7 +9,8 @@ static enum {
     E_INTERACTION_GOTO_PAGE,
     E_INTERACTION_LOAD_ITEMS,
     E_INTERACTION_DESTROY,
-    E_INTERACTION_RENAME
+    E_INTERACTION_RENAME,
+    E_INTERACTION_COPY
 };
 
 static enum E_DATA {
@@ -111,7 +112,7 @@ static stock TaskBarEventProjectList_Page(playerid, page) {
     DialogMod_Create(playerid, DIALOG_STYLE_TABLIST_HEADERS, pageTitle, L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_CLOSE), "D_TASKBAR_PROJECTLIST", using inline TaskBarEventProjectListing);
 }
 
-static stock TaskBarEventProjectList_Options(playerid, uniqueId) {
+stock TaskBarEventProjectList_Options(playerid, uniqueId) {
 
     TaskBarEventProjectList_SetUniqueId(playerid, uniqueId);
 
@@ -119,12 +120,13 @@ static stock TaskBarEventProjectList_Options(playerid, uniqueId) {
         DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_LOAD_ITEMS), E_INTERACTION_LOAD_ITEMS);
         DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_DELETE), E_INTERACTION_DESTROY);
         DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_RENAME), E_INTERACTION_RENAME);
+        DialogMod_Add(playerid, L(playerid, E_LANG_PRJ_COPY), E_INTERACTION_COPY);
     }
 
     DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_PROJECT), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_TASKBAR_OPTION", using inline TaskBarEventProjectOptions);
 }
 
-static stock TaskBarEventProjectList_SamePage(playerid)
+stock TaskBarEventProjectList_SamePage(playerid)
     TaskBarEventProjectList_Page(playerid, TaskBarEventProjectList_GetPage(playerid));
 
 static stock TaskBarEventProjectList_SetPage(playerid, value)
@@ -259,6 +261,7 @@ DialogMod:D_TASKBAR_OPTION(playerid, response, inputtext[], params) {
 
             case E_INTERACTION_DESTROY: Dialog_Show(playerid, D_TASKBAR_DESTROY, DIALOG_STYLE_MSGBOX, L(playerid, E_LANG_CONFIRMATION), L(playerid, E_LANG_PRJ_DEL_CONFIRM), L(playerid, E_LANG_BTN_YES), L(playerid, E_LANG_BTN_CANCEL));
             case E_INTERACTION_RENAME:  Dialog_Show(playerid, D_TASKBAR_RENAME, DIALOG_STYLE_INPUT, L(playerid, E_LANG_PRJ_RENAME), L(playerid, E_LANG_PRJ_RENAME_BODY), L(playerid, E_LANG_BTN_CONFIRM), L(playerid, E_LANG_BTN_PREVIOUS));
+            case E_INTERACTION_COPY:    TaskBarEventProjectCopy_Show(playerid, uniqueId);
         }
         return true;
     }

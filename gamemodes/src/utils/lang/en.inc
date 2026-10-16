@@ -279,4 +279,7 @@
     "Resize with arrow keys",
     "{FFFFFF}Enter the background width below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
     "{FFFFFF}Enter the background height below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}",
-    "{FFFFFF}Enter the border radius below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMax for current size: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Tip: {FFFFFF}just like CSS, values above the max turn it into a pill."
+    "{FFFFFF}Enter the border radius below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMax for current size: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Tip: {FFFFFF}just like CSS, values above the max turn it into a pill.",
+    "Copy Project",
+    "{FFFFFF}Enter the name for the copy of this project below.\n\nCurrent: {"#HEX_DEFAULT"}%s{FFFFFF}",
+    ""#MESSAGE_GREEN"The {CCCCCC}\"%s\"{FFFFFF} project was successfully copied."
