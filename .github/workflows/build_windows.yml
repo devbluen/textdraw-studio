@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'Criar release com o pacote (tag = version.txt)'
+        description: 'Create a release with the package (tag = version.txt)'
         type: boolean
         default: false
       prerelease:
-        description: 'Marcar como pre-release'
+        description: 'Mark as pre-release'
         type: boolean
         default: false
   pull_request:
@@ -49,7 +49,7 @@ jobs:
           $include = Join-Path $PWD "qawno\include"
           $output  = Join-Path $PWD "gamemodes\main.amx"
 
-          # -D muda o diretório ativo, então o fonte é relativo a gamemodes/
+          # -D changes the working directory, so the source path is relative to gamemodes/
           & .\qawno\pawncc.exe main.pwn "-i$include" "-Dgamemodes" "-o$output" "-;+" "-(+" "-d3" 2>&1 | Tee-Object -Variable buildOutput
           $code = $LASTEXITCODE
 
@@ -60,7 +60,7 @@ jobs:
           }
 
           if ($code -ne 0 -or -not (Test-Path $output)) {
-            Write-Host "::error::Falha na compilação (exit code $code)"
+            Write-Host "::error::Compilation failed (exit code $code)"
             exit 1
           }
 
@@ -69,15 +69,15 @@ jobs:
           $dist = "dist\textdraw-studio"
           New-Item -ItemType Directory -Force $dist | Out-Null
 
-          # Servidor
+          # Server
           Copy-Item omp-server.exe, config.json, bans.json, amxsscanf.dll, version.txt, README.md, CHANGELOG.md $dist
           Copy-Item components, plugins, scriptfiles -Destination $dist -Recurse
 
-          # Gamemode compilada
+          # Compiled gamemode
           New-Item -ItemType Directory -Force "$dist\gamemodes", "$dist\models" | Out-Null
           Copy-Item gamemodes\main.amx "$dist\gamemodes\"
 
-          # TXD para o cliente (GTA:SA/models/txd)
+          # Client TXD (GTA:SA/models/txd)
           New-Item -ItemType Directory -Force "$dist\client" | Out-Null
           Copy-Item assets\textdrawStudio.txd "$dist\client\"
 
@@ -114,7 +114,7 @@ jobs:
       - name: Check tag
         run: |
           if gh release view "$TAG" > /dev/null 2>&1; then
-            echo "::error::Já existe uma release '$TAG'. Atualize o version.txt antes de gerar outra."
+            echo "::error::Release '$TAG' already exists. Bump version.txt before creating another one."
             exit 1
           fi
 
