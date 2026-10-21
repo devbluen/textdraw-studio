@@ -1,40 +1,132 @@
-name: Build Gamemode (Windows Runner)
+name: Build Gamemode
 
 on:
   workflow_dispatch:
+    inputs:
+      release:
+        description: 'Criar release com o pacote (tag = version.txt)'
+        type: boolean
+        default: false
+      prerelease:
+        description: 'Marcar como pre-release'
+        type: boolean
+        default: false
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: windows-latest
-    
-    permissions:
-      contents: write
+
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      name: ${{ steps.meta.outputs.name }}
+
+    defaults:
+      run:
+        shell: pwsh
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build Gamemode using Custom Action
-        uses: devbluen/openmp-build-action@v2
-        with:
-          gamemode_name: 'main'
-          core_libs: 'amxsscanf libmariadb log-core'
-          extra_data_folders: 'scriptfiles/database'
+      - name: Read version
+        id: meta
+        run: |
+          $version = (Get-Content version.txt -Raw).Trim()
+          $sha = "${{ github.event.pull_request.head.sha || github.sha }}".Substring(0, 7)
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "name=textdraw-studio-$version-$sha" >> $env:GITHUB_OUTPUT
 
-      - name: Upload Windows Artifact
+      - name: Compile gamemode
+        run: |
+          $include = Join-Path $PWD "qawno\include"
+          $output  = Join-Path $PWD "gamemodes\main.amx"
+
+          # -D muda o diretório ativo, então o fonte é relativo a gamemodes/
+          & .\qawno\pawncc.exe main.pwn "-i$include" "-Dgamemodes" "-o$output" "-;+" "-(+" "-d3" 2>&1 | Tee-Object -Variable buildOutput
+          $code = $LASTEXITCODE
+
+          foreach ($line in $buildOutput) {
+            $text = $line.ToString()
+            if ($text -match "\berror\b") { Write-Host "::error::$text" }
+            elseif ($text -match "\bwarning\b") { Write-Host "::warning::$text" }
+          }
+
+          if ($code -ne 0 -or -not (Test-Path $output)) {
+            Write-Host "::error::Falha na compilação (exit code $code)"
+            exit 1
+          }
+
+      - name: Prepare package
+        run: |
+          $dist = "dist\textdraw-studio"
+          New-Item -ItemType Directory -Force $dist | Out-Null
+
+          # Servidor
+          Copy-Item omp-server.exe, config.json, bans.json, amxsscanf.dll, version.txt, README.md, CHANGELOG.md $dist
+          Copy-Item components, plugins, scriptfiles -Destination $dist -Recurse
+
+          # Gamemode compilada
+          New-Item -ItemType Directory -Force "$dist\gamemodes", "$dist\models" | Out-Null
+          Copy-Item gamemodes\main.amx "$dist\gamemodes\"
+
+          # TXD para o cliente (GTA:SA/models/txd)
+          New-Item -ItemType Directory -Force "$dist\client" | Out-Null
+          Copy-Item assets\textdrawStudio.txd "$dist\client\"
+
+          Get-ChildItem $dist -Recurse -File | Select-Object -ExpandProperty FullName
+
+      - name: Upload package
         uses: actions/upload-artifact@v4
         with:
-          name: build-windows
-          path: deploy_win/
+          name: ${{ steps.meta.outputs.name }}
+          path: dist/textdraw-studio/
+          retention-days: 30
+          if-no-files-found: error
 
-      - name: Upload Linux Standard Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-linux-standard
-          path: deploy_linux/
+  release:
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && inputs.release
+    runs-on: ubuntu-latest
 
-      - name: Upload Linux Dynamic Artifact
-        uses: actions/upload-artifact@v4
+    permissions:
+      contents: write
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TAG: ${{ needs.build.outputs.version }}
+
+    steps:
+      - name: Download package
+        uses: actions/download-artifact@v4
         with:
-          name: build-linux-dynamic
-          path: deploy_linux_dyn/
+          name: ${{ needs.build.outputs.name }}
+          path: textdraw-studio
+
+      - name: Check tag
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            echo "::error::Já existe uma release '$TAG'. Atualize o version.txt antes de gerar outra."
+            exit 1
+          fi
+
+      - name: Create release
+        run: |
+          zip -r "textdraw-studio-$TAG.zip" textdraw-studio
+
+          flags=()
+          if [ "${{ inputs.prerelease }}" = "true" ]; then flags+=(--prerelease); fi
+
+          gh release create "$TAG" "textdraw-studio-$TAG.zip" \
+            --target "${{ github.sha }}" \
+            --title "Textdraw Studio $TAG" \
+            --generate-notes \
+            "${flags[@]}"
