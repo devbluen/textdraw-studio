@@ -105,7 +105,7 @@ public OnConnectionGithub(index, response_code, data[]) {
             else
             {
                 Logger("New version found -> %s", data);
-                Logger("Download: https://github.com/devbluen/textdraws-studio/releases");
+                Logger("Download: https://github.com/devbluen/textdraw-studio/releases");
             }
         }
         default: Logger("There was a failure communicating with GitHub.");
