@@ -33,7 +33,7 @@
                                         "#QUERY_EXPORT_DEFAULT" \
                                         JOIN projects p ON p.id = t.project_id \
                                         JOIN groups_textdraws gt ON gt.draw_id = t.id \
-                                        WHERE gt.group_id = %i \
+                                        WHERE gt.group_id = %i AND t.mode = %i \
                                         ORDER BY t.indexDraw ASC \
                                     "
 
@@ -76,6 +76,32 @@ stock SessionTextDrawExport_Create(project_id, const name[], maxPlayer, maxGloba
     }
 
     Export_CreateFile(name, ""#STUDIO_EXPORT"//", using inline ProcessExportTaskBar, maxPlayer, maxGlobal);
+}
+
+stock SessionTextDrawExport_Group(groupId, const name[], maxPlayer, maxGlobal) {
+
+    inline ProcessExportGroup(index) {
+
+        new DBResult:cache;
+
+        cache = DB_ExecuteQuery(IDConnection, QUERY_EXPORT_GROUP, groupId, _:E_TYPEMODE_PLAYER);
+        if(cache) {
+            if(DB_GetRowCount(cache))
+                SessionTextDrawExport_Player(index, cache);
+
+            DB_FreeResultSet(cache);
+        }
+
+        cache = DB_ExecuteQuery(IDConnection, QUERY_EXPORT_GROUP, groupId, _:E_TYPEMODE_GLOBAL);
+        if(cache) {
+            if(DB_GetRowCount(cache))
+                SessionTextDrawExport_Global(index, cache);
+
+            DB_FreeResultSet(cache);
+        }
+    }
+
+    Export_CreateFile(name, ""#STUDIO_EXPORT"//", using inline ProcessExportGroup, maxPlayer, maxGlobal);
 }
 
 static stock SessionTextDrawExport_Player(index, DBResult:cache) {

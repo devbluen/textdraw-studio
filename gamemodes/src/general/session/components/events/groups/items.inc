@@ -7,7 +7,9 @@ static enum E_DATA {
     E_DATA_PAGES,
     E_DATA_INDEX_DRAW,
     E_DATA_INDEX_GROUP,
-    E_DATA_ENUM_ID
+    E_DATA_ENUM_ID,
+    E_DATA_EXPORT_MAX_PLAYER,
+    E_DATA_EXPORT_MAX_GLOBAL
 };
 
 static enum {
@@ -239,6 +241,43 @@ stock SessionEventGroupItem_Options(playerid) {
     DialogMod_Create(playerid, DIALOG_STYLE_TABLIST, L(playerid, E_LANG_OPTIONS), L(playerid, E_LANG_BTN_SELECT), L(playerid, E_LANG_BTN_PREVIOUS), "D_GROUP_OPTIONS", using inline OnSessionGroupItemsOptions);
 }
 
+stock SessionEventGroupItem_Export(playerid) {
+
+    new
+        indexGroup = SessionEventGroupItem_GetGroupIndex(playerid),
+        groupId = SessionGroup_GetUniqueId(indexGroup),
+        dialog[1024],
+        groupName[30 + 1]
+    ;
+
+    new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
+                                                            COALESCE(SUM(CASE WHEN font = 13 THEN 6 ELSE 1 END) FILTER (WHERE mode = %i AND font NOT IN (6, 7, 8, 9, 10, 11, 12)), 0) AS player, \
+                                                            COALESCE(SUM(CASE WHEN font = 13 THEN 6 ELSE 1 END) FILTER (WHERE mode = %i AND font NOT IN (6, 7, 8, 9, 10, 11, 12)), 0) AS global \
+                                                        FROM textdraws t \
+                                                        JOIN groups_textdraws gt ON gt.draw_id = t.id \
+                                                        WHERE gt.group_id = %i",
+
+                                                        _:E_TYPEMODE_PLAYER,
+                                                        _:E_TYPEMODE_GLOBAL,
+                                                        groupId
+                                                    );
+
+    if(cache)
+    {
+        e_Data[playerid][E_DATA_EXPORT_MAX_PLAYER] = DB_GetFieldIntByName(cache, "player");
+        e_Data[playerid][E_DATA_EXPORT_MAX_GLOBAL] = DB_GetFieldIntByName(cache, "global");
+        DB_FreeResultSet(cache);
+    }
+
+    SessionGroup_GetString(indexGroup, groupName);
+    LangF(playerid, dialog, sizeof dialog, E_LANG_PRJ_EXPORT_DEFAULT, groupName);
+    LangF(playerid, dialog[strlen(dialog)], sizeof(dialog) - strlen(dialog), E_LANG_PRJ_EXPORT_PLAYER, e_Data[playerid][E_DATA_EXPORT_MAX_PLAYER]);
+    LangF(playerid, dialog[strlen(dialog)], sizeof(dialog) - strlen(dialog), E_LANG_PRJ_EXPORT_GLOBAL, e_Data[playerid][E_DATA_EXPORT_MAX_GLOBAL]);
+    strcat(dialog, L(playerid, E_LANG_PRJ_EXPORT_ASK));
+
+    Dialog_Show(playerid, D_GROUP_EXPORT, DIALOG_STYLE_INPUT, L(playerid, E_LANG_EXPORT), dialog, L(playerid, E_LANG_BTN_EXPORT), L(playerid, E_LANG_BTN_PREVIOUS));
+}
+
 static stock SessionEventGroupItem_Color(playerid)
     Util_WebColorCreate(playerid, "GROUPCOLOR", false);
 
@@ -441,7 +480,7 @@ DialogMod:D_GROUP_OPTIONS(playerid, response, inputtext[], enumId) {
 
         switch(enumId) {
             case -1: SessionEventGroupItem_Options(playerid);
-            // case E_INTERACTION_EXPORT_ALL:   // IMPORTANT Back Here
+            case E_INTERACTION_EXPORT_ALL: SessionEventGroupItem_Export(playerid);
             case E_INTERACTION_DESTROY_ALL: {SessionGroup_DestroyDraws(indexGroup); SessionEventGroupItem_Show(playerid, indexGroup);}
             case E_INTERACTION_REMOVE_ALL: {SessionGroup_RemoveAll(indexGroup); SessionEventGroupItem_Show(playerid, indexGroup);}
             case E_INTERACTION_POSITION: TaskBarKey_Set(playerid, E_TYPEKEY_GROUP_POSITION);
@@ -477,4 +516,31 @@ DialogMod:D_GROUP_OPTIONS(playerid, response, inputtext[], enumId) {
 
     SessionEventGroupItem_SamePage(playerid);
     return true;    
+}
+
+Dialog:D_GROUP_EXPORT(playerid, response, listitem, inputtext[]) {
+
+    if(response) {
+
+        new
+            indexGroup = SessionEventGroupItem_GetGroupIndex(playerid),
+            name[30 + 1]
+        ;
+
+        SessionGroup_GetString(indexGroup, name);
+
+        if(!isnull(inputtext)) {
+
+            if(strlen(inputtext) > 30)
+                return Dialog_ReShow(playerid, L(playerid, E_LANG_ERR_NAME_TOO_LARGE));
+
+            strcopy(name, inputtext);
+        }
+
+        SessionTextDrawExport_Group(SessionGroup_GetUniqueId(indexGroup), name, e_Data[playerid][E_DATA_EXPORT_MAX_PLAYER], e_Data[playerid][E_DATA_EXPORT_MAX_GLOBAL]);
+        SendLang(INVALID_PLAYER_ID, -1, E_LANG_MSG_GRP_EXPORTED, name);
+    }
+
+    SessionEventGroupItem_Options(playerid);
+    return true;
 }

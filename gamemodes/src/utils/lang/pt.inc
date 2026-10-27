@@ -282,4 +282,11 @@
     "{FFFFFF}Digite o border radius abaixo.\n\nAtual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para o tamanho atual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Dica: {FFFFFF}assim como no CSS, valores acima do maximo viram uma pilula.",
     "Copiar projeto",
     "{FFFFFF}Digite abaixo o nome da copia deste projeto.\n\nAtual: {"#HEX_DEFAULT"}%s{FFFFFF}",
-    ""#MESSAGE_GREEN"O projeto {CCCCCC}\"%s\"{FFFFFF} foi copiado com sucesso."
+    ""#MESSAGE_GREEN"O projeto {CCCCCC}\"%s\"{FFFFFF} foi copiado com sucesso.",
+    ""#MESSAGE_GREEN"Os textdraws do grupo {CCCCCC}\"%s\"{FFFFFF} foram exportados. Veja a pasta scriptfiles.",
+    "Lixeira (%d/%d)",
+    ""#MESSAGE_RED"Sua lixeira esta vazia.",
+    ""#MESSAGE_GREEN"Textdraw restaurado da lixeira com sucesso.",
+    ""#MESSAGE_RED"Nao ha espaco livre para restaurar este textdraw.",
+    ""#MESSAGE_GREEN"A ultima alteracao foi desfeita com sucesso.",
+    ""#MESSAGE_RED"Nao ha nada para desfazer."

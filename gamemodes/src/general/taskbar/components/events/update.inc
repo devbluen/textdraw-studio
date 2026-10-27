@@ -46,7 +46,11 @@ stock TaskBarEventUpdate_Buttons(playerid) {
             
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_GROUP);
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ITENS);
+            TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_TRASH);
             TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_CREATE);
+
+            if(Undo_Has())
+                TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ROLLBACK);
 
             switch(TaskBarTextDraw_Selected(playerid))
             {
@@ -58,7 +62,6 @@ stock TaskBarEventUpdate_Buttons(playerid) {
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_SIZE);
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_COLOR);
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_SELECTABLE);
-                    // TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_ROLLBACK);
                     TaskBarButton_Enable(playerid, E_TYPETASKBUTTON_POSITION);
 
                     switch(SessionTextDrawData_GetFont(index)) 

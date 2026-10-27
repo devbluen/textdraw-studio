@@ -50,8 +50,12 @@ stock SessionPlayer_SelectAll(playerid) {
 
 stock SessionPlayer_DestroyAll(playerid) {
 
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid])
         SessionTextDrawData_Destroy(i);
+
+    Undo_End();
 }
 
 stock SessionPlayer_CloneAll(playerid, bool:choose = false) {
@@ -61,6 +65,8 @@ stock SessionPlayer_CloneAll(playerid, bool:choose = false) {
         Iterator:tempGroups<MAX_TEXTDRAWS_STUDIO> 
     ;
 
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) {
         index = SessionTextDrawData_Copy(i);
 
@@ -69,6 +75,8 @@ stock SessionPlayer_CloneAll(playerid, bool:choose = false) {
             Iter_Add(tempGroups, index);
         }
     }
+
+    Undo_End();
 
     if(choose) {
         foreach(new i: tempGroups)

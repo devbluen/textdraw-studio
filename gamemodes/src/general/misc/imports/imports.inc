@@ -40,6 +40,8 @@ stock Import_Get(playerid, const name[]) {
 
     SessionPlayer_ResetLocalGroup(playerid);
 
+    Undo_Begin();
+
     while(fread(handle, buff)) {
 
         if(isnull(buff)) continue;
@@ -215,4 +217,6 @@ stock Import_Get(playerid, const name[]) {
     }
 
     fclose(handle);
+
+    Undo_End();
 }

@@ -61,7 +61,8 @@ stock SessionTextDrawData_Load(index, id)
                                                             model_rotation, \
                                                             model_colors, \
                                                             itemType, \
-                                                            variable \
+                                                            variable, \
+                                                            invert \
                                                         FROM textdraws  \
                                                         WHERE id = %i",
 
@@ -89,6 +90,7 @@ stock SessionTextDrawData_Load(index, id)
             // e_SessionDraw[index][E_SESSIONDRAW_TYPE] = _:DB_GetFieldIntByName(cache, "itemType");
             e_SessionDraw[index][E_SESSIONDRAW_MODEL] = DB_GetFieldIntByName(cache, "model");
             e_SessionDraw[index][E_SESSIONDRAW_BOX] = bool:DB_GetFieldIntByName(cache, "box");
+            e_SessionDraw[index][E_SESSIONDRAW_INVERT] = bool:DB_GetFieldIntByName(cache, "invert");
 
             // Strings
             DB_GetFieldStringByName(cache, "text", e_SessionDraw[index][E_SESSIONDRAW_TEXT]);
@@ -123,6 +125,20 @@ stock SessionTextDrawData_Destroy(index, bool:execute_query = true)
 {
     if(execute_query)
     {
+        Undo_Touch();
+
+        DB_FreeResultSet(
+            DB_ExecuteQuery(
+                IDConnection,
+                "INSERT INTO trash ("#UNDO_TRASH_COLUMNS") \
+                 SELECT "#UNDO_TRASH_COLUMNS" \
+                 FROM textdraws \
+                 WHERE id = %i",
+
+                    SessionTextDrawData_GetUniqueId(index)
+            )
+        );
+
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "DELETE FROM textdraws WHERE id = %i", SessionTextDrawData_GetUniqueId(index))
         );
@@ -436,6 +452,8 @@ stock SessionTextDrawData_Copy(index)
     if (indexIter == ITER_NONE)
         return -1;
 
+    Undo_Touch();
+
     new uniqueId = SessionTextDrawData_GetUniqueId(index);
 
     // Copy Table
@@ -454,6 +472,8 @@ stock SessionTextDrawData_Copy(index)
 
 stock SessionTextDrawData_Insert(project_id, index, const text[], const Float:position[2], const Float:size[2], const Float:letterSize[2], E_TYPEFONT:font, E_TYPEALIGNMENT:align, bool:proportion, outline, shadow, color, colorBackground, colorBox, bool:selectable, E_TYPEMODE:mode, bool:box, model, const Float:modelRotation[4], const modelColors[2])
 {
+
+    Undo_Touch();
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "INSERT INTO textdraws (project_id, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, model, model_colors, model_rotation, box) VALUES (%i, '%f, %f', '%f, %f', '%f, %f', '%s', %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, '%i,%i', '%f,%f,%f,%f', %i)",
                                            project_id,
@@ -486,7 +506,7 @@ stock SessionTextDrawData_Insert(project_id, index, const text[], const Float:po
         SessionTextDrawData_Load(index, lastInsert);
 }
 
-static stock SessionTextDrawData_GetGenId(uniqueId)
+stock SessionTextDrawData_GetGenId(uniqueId)
 {
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT  \
@@ -500,7 +520,15 @@ static stock SessionTextDrawData_GetGenId(uniqueId)
                                                           );
 
     if (cache)
-        return DB_GetFieldIntByName(cache, "id");
+    {
+        new id = -1;
+
+        if (DB_GetRowCount(cache))
+            id = DB_GetFieldIntByName(cache, "id");
+
+        DB_FreeResultSet(cache);
+        return id;
+    }
 
     return -1;
 }
@@ -588,6 +616,9 @@ return e_SessionDraw[index][E_SESSIONDRAW_DRAW];
 stock bool:SessionTextDrawData_GetSelect(index)
 return e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE];
 
+stock bool:SessionTextDrawData_GetInvert(index)
+return e_SessionDraw[index][E_SESSIONDRAW_INVERT];
+
 stock SessionTextDrawData_GetVariable(index, dest[], maxlength = sizeof dest)
 {
 
@@ -619,6 +650,7 @@ stock SessionTextDrawData_SetModelCol(index, color1, color2, bool:execute_query 
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model_colors = '%i,%i' WHERE id = %i", color1, color2, SessionTextDrawData_GetUniqueId(index))
             );
@@ -638,6 +670,7 @@ stock SessionTextDrawData_SetAlign(index, E_TYPEALIGNMENT:type, bool:execute_que
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET align = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
             );
@@ -669,6 +702,7 @@ stock SessionTextDrawData_SetColor(index, color, bool:execute_query = true)
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET color = %i WHERE id = %i", color, SessionTextDrawData_GetUniqueId(index))
         );
@@ -694,6 +728,7 @@ stock SessionTextDrawData_SetShadow(index, value, bool:execute_query = true)
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET shadow = %i WHERE id = %i", value, SessionTextDrawData_GetUniqueId(index))
             );
@@ -713,6 +748,7 @@ stock SessionTextDrawData_SetOutline(index, value, bool:execute_query = true)
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET outline = %i WHERE id = %i", value, SessionTextDrawData_GetUniqueId(index))
             );
@@ -730,6 +766,7 @@ stock SessionTextDrawData_SetColorBG(index, color, bool:execute_query = true)
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET colorBackground = %i WHERE id = %i", color, SessionTextDrawData_GetUniqueId(index))
         );
@@ -755,6 +792,7 @@ stock SessionTextDrawData_SetColorBox(index, color, bool:execute_query = true)
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET colorBox = %i WHERE id = %i", color, SessionTextDrawData_GetUniqueId(index))
             );
@@ -774,6 +812,7 @@ stock SessionTextDrawData_SetFont(index, E_TYPEFONT:type, bool:execute_query = t
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET font = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
             );
@@ -796,6 +835,7 @@ stock SessionTextDrawData_SetPropor(index, bool:status, bool:execute_query = tru
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET proportion = %i WHERE id = %i", status, SessionTextDrawData_GetUniqueId(index))
             );
@@ -817,6 +857,7 @@ stock SessionTextDrawData_SetBox(index, bool:status, bool:execute_query = true)
 
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET box = %i WHERE id = %i", status, SessionTextDrawData_GetUniqueId(index))
             );
@@ -838,6 +879,7 @@ stock SessionTextDrawData_SetModel(index, model, bool:execute_query = true)
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model = %i WHERE id = %i", model, SessionTextDrawData_GetUniqueId(index))
         );
@@ -859,6 +901,7 @@ stock SessionTextDrawData_SetModelRot(index, Float:x, Float:y, Float:z, Float:zo
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model_rotation = '%f,%f,%f,%f' WHERE id = %i", x, y, z, zoom, SessionTextDrawData_GetUniqueId(index))
         );
@@ -876,6 +919,7 @@ stock SessionTextDrawData_SetLettSize(index, Float:x, Float:y, bool:execute_quer
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET letter_size = '%f,%f' WHERE id = %i", x, y, SessionTextDrawData_GetUniqueId(index))
         );
@@ -905,6 +949,7 @@ stock SessionTextDrawData_SetSize(index, Float:x, Float:y, bool:execute_query = 
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET size = '%f,%f' WHERE id = %i", x, y, SessionTextDrawData_GetUniqueId(index))
         );
@@ -928,6 +973,7 @@ stock SessionTextDrawData_SetPosition(index, Float:x, Float:y, bool:execute_quer
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET position = '%f,%f' WHERE id = %i", x, y, SessionTextDrawData_GetUniqueId(index))
         );
@@ -950,6 +996,7 @@ stock SessionTextDrawData_SetString(index, const string[], bool:execute_query = 
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET text = '%s' WHERE id = %i", string, SessionTextDrawData_GetUniqueId(index))
         );
@@ -977,6 +1024,7 @@ stock SessionTextDrawData_SetMode(index, E_TYPEMODE:type, bool:execute_query = t
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET mode = %i WHERE id = %i", _:type, SessionTextDrawData_GetUniqueId(index))
         );
@@ -993,6 +1041,7 @@ stock SessionTextDrawData_SetSelect(index, bool:status, bool:execute_query = tru
         e_SessionDraw[index][E_SESSIONDRAW_SELECTABLE] = status;
         if (execute_query)
         {
+            Undo_Touch();
             DB_FreeResultSet(
                 DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET selectable = %i WHERE id = %i", status, SessionTextDrawData_GetUniqueId(index))
             );
@@ -1025,10 +1074,30 @@ stock SessionTextDrawData_SetVariable(index, const string[], bool:execute_query 
 
     if (execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET variable = %s WHERE id = %i", isnull(string) ? "NULL" : va_return("'%s'", string), SessionTextDrawData_GetUniqueId(index))
         );
     }
+}
+
+stock SessionTextDrawData_SetInvert(index, bool:status, bool:execute_query = true)
+{
+
+    if (e_SessionDraw[index][E_SESSIONDRAW_INVERT] == status)
+        return;
+
+    e_SessionDraw[index][E_SESSIONDRAW_INVERT] = status;
+
+    if (execute_query)
+    {
+        Undo_Touch();
+        DB_FreeResultSet(
+            DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET invert = %i WHERE id = %i", status, SessionTextDrawData_GetUniqueId(index))
+        );
+    }
+
+    SessionCircle_Refresh(index);
 }
 
 stock SessionTextDrawData_Show(index)
@@ -1071,6 +1140,11 @@ static stock SessionTextDrawData_ShowInternal(index)
 stock SessionTextDrawData_ReorganizeIndexs(project_id)
 {
 
+    if (SessionTextDraw_IsEmpty())
+        return;
+
+    Undo_Touch();
+
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET indexDraw = ( \
                                                             SELECT  \
                                                                 (newIndex - 1) \
@@ -1099,6 +1173,11 @@ stock SessionTextDrawData_ReorganizeIndexs(project_id)
 stock SessionTextDrawData_SetIndex(index, newIndex)
 {
 
+    if (index == newIndex)
+        return;
+
+    Undo_Touch();
+
     if (SessionTextDrawData_Has(newIndex))
     {
         DB_FreeResultSet(
@@ -1115,6 +1194,5 @@ stock SessionTextDrawData_SetIndex(index, newIndex)
 
 stock SessionTextDrawData_Refresh()
 {
-    SessionTextDraw_DestroyAll();
-    SessionTextDrawData_LoadAll();
+    Session_ReloadAll();
 }

@@ -14,6 +14,9 @@
 */
 
 stock Session_Create(uniqueId) {
+    if(Session_Has())
+        Session_Destroy();
+
     Session_SetId(uniqueId);
 
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "SELECT \
@@ -36,6 +39,8 @@ stock Session_Create(uniqueId) {
         SessionTextDrawData_LoadAll();
         SessionTextDraw_UpdateButtonAll();
         SessionGroup_LoadAll();
+
+        Undo_Init();
     }
 }
 
@@ -44,6 +49,46 @@ stock Session_Destroy() {
 
     SessionTextDraw_DestroyAll();
     SessionGroup_DestroyAll();
+
+    Undo_Reset();
+}
+
+stock Session_ReloadAll() {
+
+    if(!Session_Has())
+        return;
+
+    new selected[MAX_PLAYERS];
+    foreach(new i: Users)
+        selected[i] = TaskBarTextDraw_GetSelected(i);
+
+    SessionTextDraw_DestroyAll();
+    SessionGroup_DestroyAll();
+    Iter_Clear(SessionGroups);
+
+    SessionTextDrawData_LoadAll();
+    SessionGroup_LoadAll();
+
+    foreach(new i: Users) {
+
+        // Drop any local selection that points to a textdraw that no longer exists
+        new stale[MAX_TEXTDRAWS_STUDIO], staleCount;
+
+        foreach(new j: SessionPlayersGroups[i]) {
+            if(!SessionTextDrawData_Has(j))
+                stale[staleCount++] = j;
+        }
+
+        for(new j; j < staleCount; j++)
+            SessionPlayer_RemoveDraw(i, stale[j]);
+
+        if(selected[i] != -1 && SessionTextDrawData_Has(selected[i]))
+            TaskBarTextDraw_Select(i, selected[i], false);
+        else
+            TaskBarTextDraw_UnSelect(i);
+    }
+
+    SessionTextDraw_UpdateButtonAll();
 }
 
 stock Session_SetId(uniqueId)

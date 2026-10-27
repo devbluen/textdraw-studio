@@ -15,55 +15,90 @@
 
 stock SessionGroupDataDraw_SetText(index, const string[], bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetString(i, string, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetVariable(index, const string[], bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetVariable(i, string, execute_query);   
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetMode(index, E_TYPEMODE:type, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetMode(i, type, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetBox(index, bool:status, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetBox(i, status, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetSelect(index, bool:status, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetSelect(i, status, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetColor(index, color, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetColor(i, color, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetColorBG(index, color, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetColorBG(i, color, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetColorBox(index, color, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetColorBox(i, color, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetPosition(playerid, index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
+
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index]) {
         SessionTextDrawData_GetPosition(i, position[0], position[1]);
         if(!onlySave) {
@@ -74,11 +109,16 @@ stock SessionGroupDataDraw_SetPosition(playerid, index, Float:offsetX, Float:off
 
         SessionTextDrawData_SetPosition(i, position[0], position[1], execute_query);
     }
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetSize(playerid, index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
+
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index]) {
         SessionTextDrawData_GetSize(i, position[0], position[1]);
         if(!onlySave) {
@@ -89,11 +129,16 @@ stock SessionGroupDataDraw_SetSize(playerid, index, Float:offsetX, Float:offsetY
 
         SessionTextDrawData_SetSize(i, position[0], position[1], execute_query);
     }
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetLettSize(playerid, index, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
+
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index]) {
         SessionTextDrawData_GetLettSize(i, position[0], position[1]);
         if(!onlySave) {
@@ -104,34 +149,56 @@ stock SessionGroupDataDraw_SetLettSize(playerid, index, Float:offsetX, Float:off
         
         SessionTextDrawData_SetLettSize(i, position[0], position[1], execute_query);
     }
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetFont(index, E_TYPEFONT:font, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetFont(i, font, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetAlign(index, E_TYPEALIGNMENT:align, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetAlign(i, align, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetPropor(index, bool:status, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetPropor(i, status, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetOuline(index, value, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetOutline(i, value, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroupDataDraw_SetShadow(index, value, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[index])
         SessionTextDrawData_SetShadow(i, value, execute_query);
+
+    Undo_End();
 }
