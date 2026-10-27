@@ -282,4 +282,11 @@
     "{FFFFFF}Enter the border radius below.\n\nCurrent: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMax for current size: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Tip: {FFFFFF}just like CSS, values above the max turn it into a pill.",
     "Copy Project",
     "{FFFFFF}Enter the name for the copy of this project below.\n\nCurrent: {"#HEX_DEFAULT"}%s{FFFFFF}",
-    ""#MESSAGE_GREEN"The {CCCCCC}\"%s\"{FFFFFF} project was successfully copied."
+    ""#MESSAGE_GREEN"The {CCCCCC}\"%s\"{FFFFFF} project was successfully copied.",
+    ""#MESSAGE_GREEN"The textdraws from group {CCCCCC}\"%s\"{FFFFFF} were exported. Please check the scriptfiles folder.",
+    "Trash (%d/%d)",
+    ""#MESSAGE_RED"Your trash is empty.",
+    ""#MESSAGE_GREEN"The textdraw was successfully restored from the trash.",
+    ""#MESSAGE_RED"There is no space left to restore this textdraw.",
+    ""#MESSAGE_GREEN"The last change was successfully undone.",
+    ""#MESSAGE_RED"There is nothing to undo."

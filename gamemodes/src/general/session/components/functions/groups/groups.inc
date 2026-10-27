@@ -48,6 +48,8 @@ stock SessionGroup_Create(uniqueId, const name[]) {
     if(index == ITER_NONE)
         return -1;
 
+    Undo_Touch();
+
     new DBResult:cache = DB_ExecuteQuery(IDConnection, "INSERT INTO groups (project_id, name, indexGroup) VALUES (%i, '%s', %i)", uniqueId, name, index);
     if(cache)
         DB_FreeResultSet(cache);
@@ -62,6 +64,7 @@ stock SessionGroup_Create(uniqueId, const name[]) {
 stock SessionGroup_Destroy(index, bool:execute_query = true) {
     
     if(execute_query) {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "DELETE FROM groups WHERE id = %i", SessionGroup_GetUniqueId(index))
         );
@@ -140,6 +143,8 @@ stock SessionGroup_AddDraw(indexGroup, indexDraw, bool:execute_query = true) {
 
     if(execute_query) {
         
+        Undo_Touch();
+
         DB_FreeResultSet(
             DB_ExecuteQuery(
                 IDConnection, 
@@ -157,6 +162,8 @@ stock SessionGroup_RemoveDraw(indexGroup, indexDraw, bool:execute_query = true) 
 
     if(execute_query) {
 
+        Undo_Touch();
+
         DB_FreeResultSet(
             DB_ExecuteQuery(
                 IDConnection, 
@@ -172,23 +179,35 @@ stock SessionGroup_RemoveDraw(indexGroup, indexDraw, bool:execute_query = true) 
 
 stock SessionGroup_RemoveAll(indexGroup, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[indexGroup])
         SessionGroup_RemoveDraw(indexGroup, i, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroup_DestroyDraws(indexGroup) {
+
+    Undo_Begin();
 
     foreach(new i: SessionGroupsDraws[indexGroup]) {
         SessionTextDrawData_Destroy(i);
         SessionGroup_RemoveDraw(indexGroup, i, false);
     }
+
+    Undo_End();
 }
 
 stock SessionGroup_RemoveAllByDrawIndex(indexDraw, bool:execute_query = true) {
 
+    Undo_Begin();
+
     foreach(new i: SessionGroups)
         if(SessionGroup_HasDrawId(i, indexDraw))
             SessionGroup_RemoveDraw(i, indexDraw, execute_query);
+
+    Undo_End();
 }
 
 stock SessionGroup_CloneAll(playerid, indexGroup, bool:choose = false) {
@@ -201,6 +220,8 @@ stock SessionGroup_CloneAll(playerid, indexGroup, bool:choose = false) {
     if(choose)
         SessionPlayer_ResetLocalGroup(playerid);
 
+    Undo_Begin();
+
     foreach(new i: SessionGroupsDraws[indexGroup]) {
         index = SessionTextDrawData_Copy(i);
 
@@ -208,6 +229,8 @@ stock SessionGroup_CloneAll(playerid, indexGroup, bool:choose = false) {
             Iter_Add(tempGroups, index);
 
     }
+
+    Undo_End();
 
     if(choose) {
         foreach(new i: tempGroups)

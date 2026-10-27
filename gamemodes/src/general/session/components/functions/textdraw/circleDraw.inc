@@ -32,9 +32,11 @@ stock SessionCircle_SetValue(index, value, bool:execute_query = true)
     new maxv = SessionCircle_GetMax(index);
     if(value < 0) value = 0;
     if(value > maxv) value = maxv;
+    if(e_SessionDraw[index][E_SESSIONDRAW_MODEL] == value) return 1;
     e_SessionDraw[index][E_SESSIONDRAW_MODEL] = value;
     if(execute_query)
     {
+        Undo_Touch();
         DB_FreeResultSet(
             DB_ExecuteQuery(IDConnection, "UPDATE textdraws SET model = %i WHERE id = %i", value, SessionTextDrawData_GetUniqueId(index))
         );

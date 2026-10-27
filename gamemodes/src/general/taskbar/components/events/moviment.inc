@@ -12,7 +12,8 @@ static enum E_DATA {
     E_DATA_COLUMN_MAX,
     Float:E_DATA_OFFSET[2],
     bool:E_DATA_SHOW_TIPS,
-    Float:E_DATA_SPEED
+    Float:E_DATA_SPEED,
+    bool:E_DATA_CHANGED
 };
 
 static
@@ -157,12 +158,20 @@ public OnTaskBarMovimentUpdate(playerid) {
 
             TaskBarTextDrawUpdate_GetPos(typeButton, index, position[0], position[1]);
 
+            new Float:oldPosition[2];
+            oldPosition[0] = position[0];
+            oldPosition[1] = position[1];
+
             if(leftright == KEY_LEFT) position[0] -= defSpeed;
             if(leftright == KEY_RIGHT) position[0] += defSpeed;
             if(updown == KEY_UP) position[1] -= defSpeed;
             if(updown == KEY_DOWN) position[1] += defSpeed;
 
-            TaskBarTextDrawUpdate_SetPos(typeButton, index, position[0], position[1], false);
+            if(position[0] != oldPosition[0] || position[1] != oldPosition[1]) {
+                TaskBarTextDrawUpdate_SetPos(typeButton, index, position[0], position[1], false);
+                TaskBarEventMoviment_SetChanged(playerid, true);
+            }
+
             TaskBarMessage_Create(playerid, va_return("~y~X:~w~ %0.2f     ~y~Y:~w~ %0.2f     ~r~Speed:~w~ %0.1f", position[0], position[1], defSpeed), 4);
         }
 
@@ -180,13 +189,19 @@ public OnTaskBarMovimentUpdate(playerid) {
             RGB::HexToRGBA(color, colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
 
             if(updown != 0.0 || leftright != 0.0 || leftright == KEY_LEFT || leftright == KEY_RIGHT) {
+                new bool:colorChanged;
+
                 if(leftright == KEY_LEFT && !TaskBarEventMoviment_HasDelay(playerid)) column = (column - 1) < 0 ? (maxColumn - 1) : (column - 1);
                 else if(leftright == KEY_RIGHT && !TaskBarEventMoviment_HasDelay(playerid)) column = (column + 1) >= maxColumn ? 0 : (column + 1);
-                else if(updown == KEY_UP) colorRGBA[column] = (colorRGBA[column] + 1) > 255 ? 0 : (colorRGBA[column] + 1);
-                else if(updown == KEY_DOWN) colorRGBA[column] = (colorRGBA[column] - 1) < 0 ? 255 : (colorRGBA[column] - 1);
+                else if(updown == KEY_UP) { colorRGBA[column] = (colorRGBA[column] + 1) > 255 ? 0 : (colorRGBA[column] + 1); colorChanged = true; }
+                else if(updown == KEY_DOWN) { colorRGBA[column] = (colorRGBA[column] - 1) < 0 ? 255 : (colorRGBA[column] - 1); colorChanged = true; }
                 
                 color = RGB::RGBAToHex(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
-                TaskBarTextDrawUpdate_SetColor(typeButton, index, color, false);
+
+                if(colorChanged) {
+                    TaskBarTextDrawUpdate_SetColor(typeButton, index, color, false);
+                    TaskBarEventMoviment_SetChanged(playerid, true);
+                }
 
                 if(TaskBarEventMoviment_GetColumn(playerid) != column) {
                     TaskBarEventMoviment_SetDelay(playerid, 500);
@@ -225,6 +240,7 @@ public OnTaskBarMovimentUpdate(playerid) {
             if(updown == KEY_DOWN) offset[1] = defSpeed;
 
             SessionEventGroupItem_SetOffset(playerid, offset[0], offset[1], false);
+            TaskBarEventMoviment_SetChanged(playerid, true);
 
             TaskBarEventMoviment_GetOffset(playerid, offsetSet[0], offsetSet[1]);
             offsetSet[0] += offset[0];
@@ -251,6 +267,7 @@ public OnTaskBarMovimentUpdate(playerid) {
                     if(updown == KEY_DOWN) rotation[column] += (keys == KEY_SPRINT) ? (MAX_SPEED_HIGH) : (speed);
 
                     SessionTextDrawData_SetModelRot(index, rotation[0], rotation[1], rotation[2], rotation[3], false);
+                    TaskBarEventMoviment_SetChanged(playerid, true);
                 }
 
                 if(leftright == KEY_LEFT && !TaskBarEventMoviment_HasDelay(playerid)) column = (column - 1) < 0 ? (maxColumn - 1) : (column - 1);
@@ -310,6 +327,8 @@ public OnTaskBarMovimentUpdate(playerid) {
                 SessionPlayerData_SetSize(playerid, offset[0], offset[1], false);
             else if(typeKey == E_TYPEKEY_GROUP_LOCAL_LETTER_SIZE)
                 SessionPlayerData_SetLetterSize(playerid, offset[0], offset[1], false);
+
+            TaskBarEventMoviment_SetChanged(playerid, true);
 
             TaskBarEventMoviment_GetOffset(playerid, offsetSet[0], offsetSet[1]);
             offsetSet[0] += offset[0];
@@ -388,6 +407,7 @@ stock TaskBarEventMoviment_Init(playerid) {
     TaskBarEventMoviment_SetColumn(playerid, 0);                                        // Default
     TaskBarEventMoviment_SetColumnMax(playerid, 0);                                     // Default
     TaskBarEventMoviment_SetOffset(playerid, 0.0, 0.0);                                 // Default
+    TaskBarEventMoviment_SetChanged(playerid, false);                                   // Default
 
     if(typeKey != E_TYPEKEY_TASKBAR) {
         TaskBarButton_HideAll(playerid);
@@ -412,6 +432,11 @@ stock TaskBarEventMoviment_Unload(playerid) {
 
 stock TaskBarEventMoviment_Close(playerid) {
     
+    if(!TaskBarEventMoviment_Changed(playerid))
+        return;
+
+    TaskBarEventMoviment_SetChanged(playerid, false);
+
     new 
         index = TaskBarTextDraw_GetSelected(playerid),
         E_TYPEKEY:typeKey = TaskBarKey_GetType(playerid),
@@ -486,6 +511,12 @@ static stock TaskBarEventMoviment_SetTips(playerid, bool:status, bool:showNow = 
 
     e_Data[playerid][E_DATA_SHOW_TIPS] = status;
 }
+
+static stock bool:TaskBarEventMoviment_Changed(playerid)
+    return e_Data[playerid][E_DATA_CHANGED];
+
+static stock TaskBarEventMoviment_SetChanged(playerid, bool:status)
+    e_Data[playerid][E_DATA_CHANGED] = status;
 
 static stock TaskBarEventMoviment_SetOffset(playerid, Float:x, Float:y) {
     e_Data[playerid][E_DATA_OFFSET][0] = x;
@@ -571,6 +602,7 @@ Dialog:D_MOVIMENT_EDIT(playerid, response, listitem, inputtext[]) {
         }
 
         TaskBarTextDrawUpdate_SetPos(typeButton, index, position[0], position[1]);
+        TaskBarEventMoviment_SetChanged(playerid, false);
     }
     return true;
 }
@@ -617,6 +649,7 @@ Dialog:D_MOVIMENT_COLOR(playerid, response, listitem, inputtext[]) {
         color = RGB::RGBAToHex(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
 
         TaskBarTextDrawUpdate_SetColor(typeButton, index, color);
+        TaskBarEventMoviment_SetChanged(playerid, false);
     }
     return true;
 }
@@ -639,6 +672,7 @@ Dialog:D_MOVIMENT_MODEL_ROT(playerid, response, listitem, inputtext[]) {
         currentRotation[currentColumn] = rotation;
 
         SessionTextDrawData_SetModelRot(index, currentRotation[0], currentRotation[1], currentRotation[2], currentRotation[3], false);
+        TaskBarEventMoviment_SetChanged(playerid, true);
     }
     return true;
 }

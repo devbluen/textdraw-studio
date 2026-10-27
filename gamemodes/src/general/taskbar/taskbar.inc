@@ -106,6 +106,8 @@ static stock TaskBar_Reset(playerid) {
 #include "src/general/taskbar/components/events/buttons/position_and_size.inc"
 #include "src/general/taskbar/components/events/buttons/create.inc"
 #include "src/general/taskbar/components/events/buttons/delete.inc"
+#include "src/general/taskbar/components/events/buttons/trash.inc"
+#include "src/general/taskbar/components/events/buttons/rollback.inc"
 #include "src/general/taskbar/components/events/buttons/mode.inc"
 #include "src/general/taskbar/components/events/buttons/font.inc"
 #include "src/general/taskbar/components/events/buttons/text.inc"

@@ -16,6 +16,9 @@
 stock SessionPlayerData_SetPosition(playerid, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
+
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) {
         SessionTextDrawData_GetPosition(i, position[0], position[1]);
         if(!onlySave) {
@@ -26,11 +29,16 @@ stock SessionPlayerData_SetPosition(playerid, Float:offsetX, Float:offsetY, bool
 
         SessionTextDrawData_SetPosition(i, position[0], position[1], execute_query);
     }
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetSize(playerid, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
+
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) {
         SessionTextDrawData_GetSize(i, position[0], position[1]);
         if(!onlySave) {
@@ -41,11 +49,16 @@ stock SessionPlayerData_SetSize(playerid, Float:offsetX, Float:offsetY, bool:exe
 
         SessionTextDrawData_SetSize(i, position[0], position[1], execute_query);
     }
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetLetterSize(playerid, Float:offsetX, Float:offsetY, bool:execute_query = true, bool:onlySave = false) {
 
     new Float:position[2];
+
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) {
         if(SessionCircle_IsCircle(i)) continue;
         SessionTextDrawData_GetLettSize(i, position[0], position[1]);
@@ -57,59 +70,105 @@ stock SessionPlayerData_SetLetterSize(playerid, Float:offsetX, Float:offsetY, bo
         
         SessionTextDrawData_SetLettSize(i, position[0], position[1], execute_query);
     }
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetColor(playerid, color, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetColor(i, color, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetColorBG(playerid, color, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetColorBG(i, color, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetColorBox(playerid, color, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetColorBox(i, color, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetBox(playerid, bool:status, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetBox(i, status, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetFont(playerid, E_TYPEFONT:font, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetFont(i, font, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetAlign(playerid, E_TYPEALIGNMENT:type, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetAlign(i, type, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetPropor(playerid, bool:status, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetPropor(i, status, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetMode(playerid, E_TYPEMODE:type, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetMode(i, type, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetString(playerid, const string[], bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetString(i, string, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetOutline(playerid, value, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetOutline(i, value, execute_query);
+
+    Undo_End();
 }
 
 stock SessionPlayerData_SetShadow(playerid, value, bool:execute_query = true) {
+    Undo_Begin();
+
     foreach(new i: SessionPlayersGroups[playerid]) 
         SessionTextDrawData_SetShadow(i, value, execute_query);
+
+    Undo_End();
 }

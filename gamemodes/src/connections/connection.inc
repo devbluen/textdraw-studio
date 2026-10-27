@@ -36,6 +36,49 @@ hook OnGameModeInit() {
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableSpritesFavorites));
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTablesColors));
     DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableUserLanguage));
+
+    // Migrations
+    new DBResult:migration = DB_ExecuteQuery(IDConnection, "PRAGMA table_info(textdraws)");
+    new bool:hasInvert;
+
+    if(migration)
+    {
+        if(DB_GetRowCount(migration))
+        {
+            new column[32 + 1];
+
+            do
+            {
+                DB_GetFieldStringByName(migration, "name", column);
+
+                if(!strcmp(column, "invert", true))
+                {
+                    hasInvert = true;
+                    break;
+                }
+            }
+            while(DB_SelectNextRow(migration));
+        }
+
+        DB_FreeResultSet(migration);
+    }
+
+    if(!hasInvert)
+        DB_FreeResultSet(DB_ExecuteQuery(IDConnection, "ALTER TABLE textdraws ADD COLUMN invert INTEGER DEFAULT 0"));
+
+    // Trash / Undo
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableTrash));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableUndoSteps));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableUndoTextdraws));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableUndoGroups));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableUndoGroupsTextDraws));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eTableUndoTrash));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eIndexTrashProject));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eIndexUndoStepsProject));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eIndexUndoTextdrawsStep));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eIndexUndoGroupsStep));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eIndexUndoGroupsTextStep));
+    DB_FreeResultSet(DB_ExecuteQuery(IDConnection, eIndexUndoTrashStep));
     return Y_HOOKS_CONTINUE_RETURN_1;
 }
 

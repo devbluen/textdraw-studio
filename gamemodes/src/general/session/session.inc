@@ -14,11 +14,13 @@ hook OnUserLogin(playerid) {
             // Components
                 // Functions
 #include "src/general/session/components/functions/general.inc"
+#include "src/general/session/components/functions/history.inc"
                     // Textdraws
 #include "src/general/session/components/functions/textdraw/circleDraw.inc"
 #include "src/general/session/components/functions/textdraw/roundedBox.inc"
 #include "src/general/session/components/functions/textdraw/textdraw.inc"
 #include "src/general/session/components/functions/textdraw/textdrawData.inc"
+#include "src/general/session/components/functions/textdraw/textdrawTrash.inc"
 #include "src/general/session/components/functions/textdraw/textdrawExport.inc"
 #include "src/general/session/components/functions/textdraw/textdrawColorPick.inc"
 #include "src/general/session/components/functions/textdraw/circleConfig.inc"

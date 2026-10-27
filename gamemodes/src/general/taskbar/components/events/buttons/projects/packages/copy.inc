@@ -79,7 +79,7 @@ static stock TaskBarEventProjectCopy_Create(uniqueId, const name[]) {
     DB_FreeResultSet(
         DB_ExecuteQuery(
             IDConnection,
-            "INSERT INTO textdraws (project_id, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, itemType, model, model_rotation, model_colors, box, variable) SELECT %i, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, itemType, model, model_rotation, model_colors, box, variable FROM textdraws WHERE project_id = %i ORDER BY indexDraw ASC",
+            "INSERT INTO textdraws (project_id, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, itemType, model, model_rotation, model_colors, box, variable, invert) SELECT %i, position, size, letter_size, `text`, font, align, proportion, outline, shadow, color, colorBackground, colorBox, selectable, mode, indexDraw, itemType, model, model_rotation, model_colors, box, variable, invert FROM textdraws WHERE project_id = %i ORDER BY indexDraw ASC",
 
                 copyId,
                 uniqueId

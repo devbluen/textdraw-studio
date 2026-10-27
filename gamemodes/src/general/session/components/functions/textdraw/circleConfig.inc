@@ -82,8 +82,7 @@ DialogMod:D_CIRCLE_CFG(playerid, response, inputtext[], params)
         else if(params == 5)
         {
             if(!SessionCircle_IsCircle(index)) return 1;
-            e_SessionDraw[index][E_SESSIONDRAW_INVERT] = !e_SessionDraw[index][E_SESSIONDRAW_INVERT];
-            SessionCircle_Refresh(index);
+            SessionTextDrawData_SetInvert(index, !SessionTextDrawData_GetInvert(index));
             SessionCircle_ShowConfig(playerid);
             return 1;
         }

@@ -282,4 +282,11 @@
     "{FFFFFF}Entrez le border radius ci-dessous.\n\nActuel: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximum pour la taille actuelle: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Astuce: {FFFFFF}comme en CSS, une valeur au-dessus du maximum forme une pilule.",
     "Copier le projet",
     "{FFFFFF}Ecris ci-dessous le nom de la copie de ce projet.\n\nActuel : {"#HEX_DEFAULT"}%s{FFFFFF}",
-    ""#MESSAGE_GREEN"Le projet {CCCCCC}\"%s\"{FFFFFF} a ete copie avec succes."
+    ""#MESSAGE_GREEN"Le projet {CCCCCC}\"%s\"{FFFFFF} a ete copie avec succes.",
+    ""#MESSAGE_GREEN"Les textdraws du groupe {CCCCCC}\"%s\"{FFFFFF} ont ete exportes. Voir le dossier scriptfiles.",
+    "Corbeille (%d/%d)",
+    ""#MESSAGE_RED"Ta corbeille est vide.",
+    ""#MESSAGE_GREEN"Le textdraw a ete restaure depuis la corbeille avec succes.",
+    ""#MESSAGE_RED"Il n'y a plus de place pour restaurer ce textdraw.",
+    ""#MESSAGE_GREEN"La derniere modification a ete annulee avec succes.",
+    ""#MESSAGE_RED"Il n'y a rien a annuler."

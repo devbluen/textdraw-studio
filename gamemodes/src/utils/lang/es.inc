@@ -282,4 +282,11 @@
     "{FFFFFF}Ingrese el border radius abajo.\n\nActual: {"#HEX_DEFAULT"}%0.2f{FFFFFF}\nMaximo para el tamano actual: {"#HEX_INFO"}%0.2f{FFFFFF}\n\n{"#HEX_INFO"}Consejo: {FFFFFF}igual que en CSS, valores mayores al maximo forman una pildora.",
     "Copiar proyecto",
     "{FFFFFF}Escribe abajo el nombre de la copia de este proyecto.\n\nActual: {"#HEX_DEFAULT"}%s{FFFFFF}",
-    ""#MESSAGE_GREEN"El proyecto {CCCCCC}\"%s\"{FFFFFF} se copio correctamente."
+    ""#MESSAGE_GREEN"El proyecto {CCCCCC}\"%s\"{FFFFFF} se copio correctamente.",
+    ""#MESSAGE_GREEN"Los textdraws del grupo {CCCCCC}\"%s\"{FFFFFF} se exportaron. Revisa la carpeta scriptfiles.",
+    "Papelera (%d/%d)",
+    ""#MESSAGE_RED"Tu papelera esta vacia.",
+    ""#MESSAGE_GREEN"El textdraw se restauro desde la papelera correctamente.",
+    ""#MESSAGE_RED"No hay espacio libre para restaurar este textdraw.",
+    ""#MESSAGE_GREEN"El ultimo cambio se deshizo correctamente.",
+    ""#MESSAGE_RED"No hay nada que deshacer."

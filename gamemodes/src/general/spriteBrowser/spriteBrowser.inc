@@ -508,8 +508,13 @@ DialogMod:D_SPRITEBROWSEROPTIONS(playerid, response, inputtext[], listitem) {
 
                     SpriteBrowser_Close(playerid);
 
+                    Undo_Begin();
+
                     new index = SessionTextDrawData_Create(E_TYPEITEM_SPRITE);
                     SessionTextDrawData_SetString(index, sprite);
+
+                    Undo_End();
+
                     TaskBarTextDraw_Select(playerid, index, false);
                 }
             }
